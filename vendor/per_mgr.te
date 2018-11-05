@@ -6,6 +6,10 @@ init_daemon_domain(per_mgr);
 
 add_service(per_mgr, per_mgr_service)
 
+# TODO(b/35870313): Remove once per_mgr uses vendor binder
+typeattribute per_mgr binder_in_vendor_violators;
+binder_use(per_mgr)
+
 vndbinder_use(per_mgr)
 binder_call(per_mgr, hal_gnss)
 binder_call(per_mgr, per_proxy)

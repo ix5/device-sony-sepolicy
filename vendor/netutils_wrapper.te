@@ -3,6 +3,8 @@ allow netutils_wrapper netmgrd:fd use;
 allow netutils_wrapper netmgrd:fifo_file { getattr read write append };
 allow netutils_wrapper netmgrd:file r_file_perms;
 
+r_dir_file(netutils_wrapper, sysfs_soc);
+
 dontaudit netutils_wrapper netmgrd:socket { read write };
 dontaudit netutils_wrapper netmgrd:unix_stream_socket { read write };
 dontaudit netutils_wrapper netmgrd:netlink_socket { getattr read write append };

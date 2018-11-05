@@ -7,6 +7,10 @@ net_domain(wcnss_service)
 vndbinder_use(wcnss_service)
 binder_call(wcnss_service, per_mgr)
 
+# TODO(b/35870313): Remove once per_mgr uses vendor binder:
+typeattribute wcnss_service binder_in_vendor_violators;
+binder_use(wcnss_service)
+
 allow wcnss_service per_mgr_service:service_manager find;
 allow wcnss_service proc_net:file rw_file_perms;
 

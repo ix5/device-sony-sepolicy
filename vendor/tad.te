@@ -9,6 +9,9 @@ allow tad ta_block_device:blk_file rw_file_perms;
 # Read access to pseudo filesystems.
 r_dir_file(tad, proc)
 
+allow tad proc_cmdline:file read;
+allow tad kernel:system module_request;
+
 ###################
 ### tftp_server ###
 ###################

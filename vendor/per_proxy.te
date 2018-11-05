@@ -7,6 +7,10 @@ init_daemon_domain(per_proxy)
 allow per_proxy per_mgr_service:service_manager find;
 allow per_proxy default_android_service:service_manager find;
 
+typeattribute per_proxy binder_in_vendor_violators; # TODO(b/35870313): Remove once per_proxy uses vendor binder
+binder_use(per_proxy)
+allow per_proxy binder_device:chr_file rw_file_perms;
+
 vndbinder_use(per_proxy)
 binder_call(per_proxy, per_mgr)
 r_dir_file(per_proxy, sysfs_msm_subsys)

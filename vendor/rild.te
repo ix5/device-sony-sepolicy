@@ -1,4 +1,9 @@
 vndbinder_use(rild)
+
+typeattribute rild binder_in_vendor_violators; # TODO(b/35870313): Remove once rild uses vendor binder
+binder_use(rild)
+allow rild binder_device:chr_file rw_file_perms;
+
 binder_call(rild, per_mgr)
 
 allow rild per_mgr_service:service_manager find;
