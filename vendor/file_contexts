@@ -91,8 +91,12 @@
 /(system/vendor|vendor)/bin/hw/android\.hardware\.drm@1\.1-service\.clearkey                 u:object_r:hal_drm_clearkey_exec:s0
 
 # sysfs paths
+# CASH
 /sys/devices/virtual/input/input[0-9]+/enable_ps_sensor                                      u:object_r:sysfs_tof_sensor:s0
 /sys/devices/virtual/input/input[0-9]+/set_use_case                                          u:object_r:sysfs_tof_sensor:s0
+# double-tap-to-wake (input3 on tone)
+# TODO: not sure if this should live here or in device-sony-tone
+/sys/devices/virtual/input/input[0-9]+/wakeup_gesture                                        u:object_r:sysfs_input_wakeup:s0
 
 ###############################################
 # same-process HAL files and their dependencies
