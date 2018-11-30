@@ -34,3 +34,7 @@ r_dir_file(hal_camera_default, sysfs_soc)
 
 allow hal_camera_default camera_vendor_data_file:dir rw_dir_perms;
 allow hal_camera_default camera_vendor_data_file:file create_file_perms;
+
+# BAD BAD BAD
+# avc: denied { create } for comm="android.hardwar" scontext=u:r:hal_camera_default:s0 tcontext=u:r:hal_camera_default:s0 tclass=socket permissive=1
+#allow hal_camera_default self:socket { create };

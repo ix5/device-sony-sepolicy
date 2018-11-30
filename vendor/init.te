@@ -20,6 +20,12 @@ allow init qdsp_file:lnk_file read;
 
 # enable_ramdumps:
 allow init sysfs_msm_subsys_restart:file rw_file_perms;
+# BAD BAD BAD
+# avc: denied { setattr } for comm="init" name="scheduler" dev="sysfs" ino=45146 scontext=u:r:init:s0 tcontext=u:object_r:sysfs:s0 tclass=file permissive=1
+# avc: denied { write } for comm="init" name="sleep_millisecs" dev="sysfs" ino=26820 scontext=u:r:init:s0 tcontext=u:object_r:sysfs:s0 tclass=file permissive=1
+# avc: denied { open } for comm="init" path="/sys/kernel/mm/ksm/sleep_millisecs" dev="sysfs" ino=26820 scontext=u:r:init:s0 tcontext=u:object_r:sysfs:s0 tclass=file permissive=1
+#allow init sysfs:file { setattr open write };
+allow init sysfs_sleep_msecs:file { setattr open write };
 
 allow init nativetest_data_file:dir { getattr open read };
 allow init nativetest_data_file:file getattr;

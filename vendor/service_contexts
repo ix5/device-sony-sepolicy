@@ -1,3 +1,4 @@
 com.sony.timekeep                       u:object_r:timekeep_service:s0
 # TODO(b/35870313): Remove once per_mgr uses vendor binder
 vendor.qcom.PeripheralManager           u:object_r:per_mgr_service:s0
+com.sony.qcrilam.QcRilAmService         u:object_r:qcrilam_service:s0

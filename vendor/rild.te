@@ -25,3 +25,10 @@ allow rild self:socket ioctl;
 allowxperm rild self:socket ioctl msm_sock_ipc_ioctls;
 
 allow rild secure_element:binder call;
+allow secure_element rild:binder { call transfer };
+
+# BAD BAD BAD
+# avc:  denied  { set } for property=persist.vendor.radio.adb_log_on pid=753 uid=1001 gid=1001 scontext=u:r:rild:s0 tcontext=u:object_r:vendor_default_prop:s0 tclass=property_service permissive=1
+allow rild vendor_default_prop:property_service set;
+# avc: denied { call } for scontext=u:r:rild:s0 tcontext=u:r:platform_app:s0:c512,c768 tclass=binder permissive=0
+allow rild platform_app:binder { call };

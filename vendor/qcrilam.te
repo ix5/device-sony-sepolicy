@@ -1,0 +1,22 @@
+type qcrilam, domain;
+#type qcrilam_service, domain;
+#type qcrilam_exec, exec_type, vendor_file_type, file_type;
+
+#init_daemon_domain(qcrilam);
+#init_daemon_domain(qcrilam_service);
+
+add_service(qcrilam, qcrilam_service)
+
+typeattribute qcrilam binder_in_vendor_violators;
+binder_use(qcrilam)
+
+vndbinder_use(qcrilam)
+binder_call(qcrilam, rild)
+
+allow qcrilam_service self:service_manager add;
+allow qcrilam_service hal_telephony_hwservice:hwservice_manager find;
+
+binder_call(qcrilam_service, hal_telephony_server)
+binder_call(hal_telephony_server, qcrilam_service)
+
+#hal_client_domain(platform_app, qcrilam)

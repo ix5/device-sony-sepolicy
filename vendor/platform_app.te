@@ -1,1 +1,11 @@
 allow platform_app nfc_service:service_manager find;
+# avc: denied { call } for comm="om.sony.qcrilam" scontext=u:r:platform_app:s0:c512,c768 tcontext=u:r:rild:s0 tclass=binder permissive=1
+# om.sony.qcrilam: type=1400 audit(0.0:24): avc: denied { call } for scontext=u:r:platform_app:s0:c512,c768 tcontext=u:r:rild:s0 tclass=binder permissive=1
+# avc: denied { transfer } for comm="om.sony.qcrilam" scontext=u:r:platform_app:s0:c512,c768 tcontext=u:r:rild:s0 tclass=binder permissive=1
+# om.sony.qcrilam: type=1400 audit(0.0:25): avc: denied { transfer } for scontext=u:r:platform_app:s0:c512,c768 tcontext=u:r:rild:s0 tclass=binder permissive=1
+# BAD BAD BAD
+allow platform_app rild:binder { call transfer };
+
+# Allow platform apps to interact with dtseagleservice
+binder_call(platform_app, hal_telephony_server)
+allow platform_app hal_telephony_hwservice:hwservice_manager find;
