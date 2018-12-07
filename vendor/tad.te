@@ -62,3 +62,8 @@ allow tad kmsg_device:chr_file w_file_perms;
 neverallow { domain -tad -kernel -recovery -init -vendor_init userdebug_or_eng(`-su') } rfs_file:dir create_dir_perms;
 neverallow { domain -tad -kernel -recovery -init -vendor_init userdebug_or_eng(`-su') } rfs_file:file create_file_perms;
 allow tad proc_cmdline:file { open read };
+
+allow tad kernel:system module_request;
+allow tad mnt_vendor_file:dir search;
+allow tad persist_file:lnk_file read;
+allow tad self:capability { chown };

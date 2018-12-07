@@ -13,3 +13,4 @@ wakelock_use(ta_qmi)
 dontaudit ta_qmi self:capability { dac_override };
 
 allow ta_qmi self:capability net_raw;
+allow ta_qmi kernel:system module_request;
