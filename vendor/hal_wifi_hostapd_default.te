@@ -1,0 +1,2 @@
+# W hostapd : type=1400 audit(0.0:34): avc: denied { search } for name="wifi" dev="mmcblk0p54" ino=212998 scontext=u:r:hal_wifi_hostapd_default:s0 tcontext=u:object_r:wifi_vendor_data_file:s0 tclass=dir permissive=0
+allow hal_wifi_hostapd_default wifi_vendor_data_file:dir search;
