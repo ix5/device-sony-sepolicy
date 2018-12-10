@@ -11,3 +11,13 @@ allow sscrpcd self:capability {
 allow sscrpcd persist_sensors_file:dir { open read search };
 allow sscrpcd persist_sensors_file:file { getattr open read };
 allow sscrpcd qdsp_device:chr_file ioctl;
+
+# TODO: Make this more specific, convert (file_)contexts to use persist_sensors_file
+# QUESTION: Which files?
+# TODO: Remove auditallow statements
+allow sscrpcd persist_file:dir search;
+auditallow sscrpcd persist_file:dir search;
+allow sscrpcd persist_file:lnk_file read;
+auditallow sscrpcd persist_file:lnk_file read;
+allow sscrpcd qdsp_file:lnk_file read;
+auditallow sscrpcd qdsp_file:lnk_file read;

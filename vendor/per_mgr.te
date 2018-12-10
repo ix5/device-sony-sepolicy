@@ -6,7 +6,7 @@ init_daemon_domain(per_mgr);
 
 add_service(per_mgr, per_mgr_service)
 
-# TODO(b/35870313): Remove once per_mgr uses vendor binder
+# TODO(b/vndbinder): Remove once per_mgr uses vendor binder
 typeattribute per_mgr binder_in_vendor_violators;
 binder_use(per_mgr)
 
@@ -19,7 +19,23 @@ binder_call(per_mgr, wcnss_service)
 allow per_mgr self:capability net_bind_service;
 
 allow per_mgr self:socket create_socket_perms;
+# TODO: Is this necessary?
 allowxperm per_mgr self:socket ioctl msm_sock_ipc_ioctls;
 allow per_mgr ssr_device:chr_file { open read };
 
 r_dir_file(per_mgr, sysfs_msm_subsys)
+
+# avc: denied { module_request } for comm="pm-service" kmod="net-pf-42" scontext=u:r:per_mgr:s0 tcontext=u:r:kernel:s0 tclass=system
+# avc: denied { module_request } for kmod="net-pf-42" scontext=u:r:per_mgr:s0 tcontext=u:r:kernel:s0 tclass=system
+# TODO: Is this necessary?
+# QUESTION: Which modules?
+allow per_mgr kernel:system module_request;
+auditallow per_mgr kernel:system module_request;
+
+# TODO: Make this more specific
+# QUESTION: Which files?
+allow per_mgr sysfs:file { read open };
+auditallow per_mgr sysfs:file { read open };
+
+# TODO(v/vndbinder): Switch to vndservice
+allow per_mgr servicemanager:binder { call transfer };

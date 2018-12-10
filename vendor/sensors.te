@@ -25,3 +25,8 @@ allow sensors sysfs_soc:dir r_dir_perms;
 allow sensors sysfs_soc:file r_file_perms;
 
 r_dir_file(sensors, sysfs_msm_subsys)
+
+# avc: denied { module_request } for kmod="net-pf-42" scontext=u:r:sensors:s0 tcontext=u:r:kernel:s0 tclass=system
+# TODO: find out why sensors.qcom wants net-pf-42
+allow sensors kernel:system { module_request };
+auditallow sensors kernel:system { module_request };

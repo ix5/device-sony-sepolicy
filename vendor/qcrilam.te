@@ -1,22 +1,97 @@
+#type qcrilam, domain, coredomain;
 type qcrilam, domain;
-#type qcrilam_service, domain;
 #type qcrilam_exec, exec_type, vendor_file_type, file_type;
 
-#init_daemon_domain(qcrilam);
-#init_daemon_domain(qcrilam_service);
+# TODO: Check if we need system or app domain
+#app_domain(qcrilam)
+#init_daemon_domain(qcrilam)
 
-add_service(qcrilam, qcrilam_service)
+#allow qcrilam { app_api_service }:service_manager find;
 
-typeattribute qcrilam binder_in_vendor_violators;
-binder_use(qcrilam)
+# TODO: Don't set group etc in QcRilAm apk?
+# E SELinux : selinux_android_setcontext:  Error setting context for app with uid 1000, seinfo platform:privapp:targetSdkVersion=28:complete: Permission denied
+# F zygote64: jni_internal.cc:616] JNI FatalError called: (com.sony.timekeep) frameworks/base/core/jni/com_android_internal_os_Zygote.cpp:750: selinux_android_setcontext(1000, 0, "platform:privapp:targetSdkVersion=28:complete", "com.sony.timekeep") failed
 
+#
 vndbinder_use(qcrilam)
-binder_call(qcrilam, rild)
-
 allow qcrilam_service self:service_manager add;
+auditallow qcrilam_service self:service_manager add;
 allow qcrilam_service hal_telephony_hwservice:hwservice_manager find;
-
+auditallow qcrilam_service hal_telephony_hwservice:hwservice_manager find;
 binder_call(qcrilam_service, hal_telephony_server)
 binder_call(hal_telephony_server, qcrilam_service)
+binder_call(vnd_qcril_audio_hwservice, hal_telephony_server)
+binder_call(hal_telephony_server, vnd_qcril_audio_hwservice)
+#
 
-#hal_client_domain(platform_app, qcrilam)
+add_service(qcrilam, qcrilam_service)
+auditallow qcrilam qcrilam_service:service_manager { add find };
+# TODO: Which one?
+#add_hwservice(qcrilam, qcrilam_service)
+#auditallow qcrilam qcrilam_service:hwservice_manager { add find };
+
+typeattribute qcrilam binder_in_vendor_violators;
+
+binder_use(qcrilam)
+binder_use(qcrilam_service)
+auditallow qcrilam servicemanager:binder { call transfer };
+auditallow servicemanager qcrilam:binder { call transfer };
+auditallow qcrilam_service servicemanager:binder { call transfer };
+auditallow servicemanager qcrilam_service:binder { call transfer };
+
+hwbinder_use(qcrilam)
+auditallow qcrilam hwservicemanager:binder { call transfer };
+auditallow hwservicemanager qcrilam:binder { call transfer };
+
+# TODO: Use this?
+#binder_service(qcrilam)
+# -> typeattribute $1 binderservicedomain
+# not what we need
+# see binderservicedomain.te
+
+#attribute untrusted_app_visible_hwservice;
+#attribute data_between_core_and_vendor_violators;
+
+
+# TODO(b/vndbinder): Switch to vndbinder
+#vndbinder_use(qcrilam)
+
+# TODO: Is this necessary? And shouldn't it be qcrilam_service?
+#allow qcrilam vnd_qcril_audio_hwservice:hwservice_manager { find };
+#auditallow qcrilam vnd_qcril_audio_hwservice:hwservice_manager { find };
+# Can't use { add } because of neverallow from rild!
+# > add_hwservice(rild, vnd_qcril_audio_hwservice)
+# gets converted to:
+# -> neverallow { domain -rild } vnd_qcril_audio_hwservice:hwservice_manager add;
+# OR: leave rild only with { find } perms and add hwserver via qcrilam:
+#add_hwservice(qcrilam, vnd_qcril_audio_hwservice)
+allow qcrilam_service vnd_qcril_audio_hwservice:hwservice_manager { find };
+auditallow qcrilam_service vnd_qcril_audio_hwservice:hwservice_manager { find };
+#auditallow qcrilam vnd_qcril_audio_hwservice:hwservice_manager { find add };
+#allow qcrilam_service vnd_qcril_audio_hwservice:hwservice_manager { find add };
+# TODO: Remove me. try with regular service_manager?
+#allow qcrilam vnd_qcril_audio_hwservice:service_manager { find add };
+#allow qcrilam_service vnd_qcril_audio_hwservice:service_manager { find add };
+#allow qcrilam app_api_service:service_manager { find add };
+#allow qcrilam_service app_api_service:service_manager { find add };
+
+# from marlin
+allow qcrilam cgroup:file w_file_perms;
+
+# TODO: Is this necessary?
+binder_call(qcrilam, vnd_qcril_audio_hwservice)
+auditallow qcrilam vnd_qcril_audio_hwservice:binder { call transfer };
+
+# Instead of binder_call(platform_app, rild)
+binder_call(qcrilam, rild)
+auditallow qcrilam rild:binder { call transfer };
+
+# Instead of binder_call(platform_app, per_mgr)
+# TODO: Is this necessary?
+binder_call(qcrilam, per_mgr)
+auditallow qcrilam per_mgr:binder { call transfer };
+
+# TODO(b/vndbinder(: Switch to vndbinder
+# (except vndbinder_call doesn't exist...)
+#vndbinder_call(qcrilam_service, hal_telephony_server)
+#vndbinder_call(hal_telephony_server, qcrilam_service)

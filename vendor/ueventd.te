@@ -1,6 +1,8 @@
 r_dir_file(ueventd, firmware_file)
 r_dir_file(ueventd, persist_file)
 
+allow ueventd input_device:lnk_file { relabelto };
+
 allow ueventd {
     { sysfs_type - usermodehelper }
 }:file w_file_perms;

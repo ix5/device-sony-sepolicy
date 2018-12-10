@@ -14,3 +14,8 @@ allowxperm pd_mapper self:socket ioctl IPC_ROUTER_IOCTL_BIND_CONTROL_PORT;
 
 r_dir_file(pd_mapper, sysfs_msm_subsys)
 r_dir_file(pd_mapper, firmware_file)
+
+# TODO: make this more specific
+# QUESTION: Which files?
+allow pd_mapper sysfs:file { open read };
+auditallow pd_mapper sysfs:file { open read };

@@ -1,7 +1,10 @@
 type timekeep, domain;
 type timekeep_exec, exec_type, vendor_file_type, file_type;
 
+#app_domain(timekeep)
 init_daemon_domain(timekeep)
+
+allow timekeep { app_api_service }:service_manager find;
 
 # Grant permission to set system time and to set the real-time lock
 allow timekeep self:capability { fowner sys_time };
@@ -11,4 +14,23 @@ allow timekeep timekeep_vendor_data_file:file create_file_perms;
 
 set_prop(timekeep, timekeep_prop)
 
+# TODO: Move to sysfs_rtc instea
 r_dir_file(timekeep, sysfs_msm_subsys)
+auditallow timekeep sysfs_msm_subsys:dir r_dir_perms;
+auditallow timekeep sysfs_msm_subsys:{ file lnk_file } r_file_perms;
+#allow $1 $2:dir r_dir_perms;
+#allow $1 $2:{ file lnk_file } r_file_perms;
+
+allow timekeep sysfs_rtc:dir { search };
+auditallow timekeep sysfs_rtc:dir { search };
+allow timekeep sysfs_rtc:{ file lnk_file } r_file_perms;
+
+# TimeKeep Java service
+allow timekeep timekeep_vendor_data_file:dir create_dir_perms;
+allow timekeep timekeep_vendor_data_file:file create_file_perms;
+set_prop(timekeep, timekeep_prop)
+
+# Instead of binder_call(system_app, per_mgr)
+# TODO: might not be necessary
+binder_call(timekeep, per_mgr)
+auditallow timekeep per_mgr:binder { call transfer };

@@ -7,4 +7,6 @@ allow sct self:socket create_socket_perms;
 allowxperm sct self:socket ioctl msm_sock_ipc_ioctls;
 
 allow sct self:capability net_raw;
+# TODO: Make this more specific
 allow sct kernel:system module_request;
+auditallow sct kernel:system module_request;

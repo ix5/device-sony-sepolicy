@@ -14,3 +14,12 @@ set_prop(system_app, timekeep_prop)
 
 binder_call(system_app, per_mgr)
 binder_call(system_app, wificond)
+
+# TODO: Find out which system_apps are using these
+# TODO: Remove auditallow statements
+allow system_app fs_bpf:dir search;
+auditallow system_app fs_bpf:dir search;
+allow system_app proc_pagetypeinfo:file read;
+auditallow system_app proc_pagetypeinfo:file read;
+allow system_app sysfs_zram:dir search;
+auditallow system_app sysfs_zram:dir search;

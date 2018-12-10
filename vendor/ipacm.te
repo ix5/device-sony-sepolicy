@@ -3,3 +3,7 @@ type ipacm_exec, exec_type, vendor_file_type, file_type;
 
 net_domain(ipacm)
 init_daemon_domain(ipacm)
+
+# TODO: Fine-tune this
+allow ipacm ipacm_socket:sock_file { create read write };
+allow ipacm self:socket { create read write };

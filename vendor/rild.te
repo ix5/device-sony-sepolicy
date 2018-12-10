@@ -1,18 +1,47 @@
+# TODO(b/vndbinder): switch to vndbinder for rild
 vndbinder_use(rild)
-
-typeattribute rild binder_in_vendor_violators; # TODO(b/35870313): Remove once rild uses vendor binder
-binder_use(rild)
-allow rild binder_device:chr_file rw_file_perms;
-
 binder_call(rild, per_mgr)
 
+# TODO(b/vndbinder): Remove once rild uses vendor binder
+typeattribute rild binder_in_vendor_violators;
+# TODO(b/36644492): Remove data_between_core_and_vendor_violators once
+# rild no longer directly accesses the radio app's data type.
+#typeattribute rild data_between_core_and_vendor_violators;
+
+binder_use(rild)
+
+hwbinder_use(rild)
+add_hwservice(rild, vnd_qcril_audio_hwservice)
+#allow rild vnd_qcril_audio_hwservice:hwservice_manager { find };
+#auditallow rild vnd_qcril_audio_hwservice:hwservice_manager { find };
+
+# callback into telephony app
+# from marlin sepolicy
+# risky imo, but google does it this way
+binder_call(rild, platform_app);
+auditallow rild platform_app:binder { call transfer };
+# better:
+binder_call(rild, qcrilam);
+auditallow rild qcrilam:binder { call transfer };
+binder_call(rild, qcrilam_service);
+auditallow rild qcrilam_service:binder { call transfer };
+
+binder_call(rild, vnd_qcril_audio_hwservice);
+auditallow rild vnd_qcril_audio_hwservice:binder { call transfer };
+#binder_call(rild, qcrilam_service);
+
 allow rild per_mgr_service:service_manager find;
+auditallow rild per_mgr_service:service_manager find;
 
 allow rild radio_vendor_data_file:dir create_dir_perms;
 allow rild radio_vendor_data_file:file create_file_perms;
 
 # odm/radio/qcril_database/qcril.db
+# TODO: check if execute_no_trans is necessary
+# TODO: convert to allowxperm for ioctl
+# -> get ioctl via auditd!
 allow rild vendor_file:file { ioctl lock };
+auditallow rild vendor_file:file { ioctl lock };
 
 allow rild qmuxd_socket:dir w_dir_perms;
 allow rild qmuxd_socket:sock_file create_file_perms;
@@ -21,14 +50,17 @@ unix_socket_connect(rild, qmuxd, qmuxd)
 allow rild netmgrd_socket:dir search;
 unix_socket_connect(rild, netmgrd, netmgrd)
 
+# TODO: convert to allowxperm for ioctl?
+# Leave this in for now because somehow the below happens
 allow rild self:socket ioctl;
+auditallow rild self:socket ioctl;
 allowxperm rild self:socket ioctl msm_sock_ipc_ioctls;
+# TODO: Why does this happen? 0x304 is within msm_sock_ipc_ioctls
+# avc: denied { ioctl } for comm="rild" path="socket:[52646]" dev="sockfs" ino=52646 ioctlcmd=0xc304 scontext=u:r:rild:s0 tcontext=u:r:rild:s0 tclass=socket
 
 allow rild secure_element:binder call;
-allow secure_element rild:binder { call transfer };
 
-# BAD BAD BAD
-# avc:  denied  { set } for property=persist.vendor.radio.adb_log_on pid=753 uid=1001 gid=1001 scontext=u:r:rild:s0 tcontext=u:object_r:vendor_default_prop:s0 tclass=property_service permissive=1
-allow rild vendor_default_prop:property_service set;
-# avc: denied { call } for scontext=u:r:rild:s0 tcontext=u:r:platform_app:s0:c512,c768 tclass=binder permissive=0
-allow rild platform_app:binder { call };
+# avc: denied { set } for property=persist.vendor.radio.adb_log_on scontext=u:r:rild:s0 tcontext=u:object_r:vendor_default_prop:s0 tclass=property_service
+# TODO: vendor_radio_prop is introduced in property_contexts, now use it!
+set_prop(rild, radio_prop)
+set_prop(rild, vendor_radio_prop)

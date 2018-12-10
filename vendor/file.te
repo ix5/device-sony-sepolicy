@@ -14,8 +14,8 @@ type sysfs_bluetooth, sysfs_type, fs_type;
 type sysfs_pcc_profile, sysfs_type, fs_type;
 type sysfs_timekeep, sysfs_type, fs_type;
 type sysfs_usb_supply, sysfs_type, fs_type;
-type sysfs_sleep_msecs, sysfs_type, fs_type;
 type sysfs_input_wakeup, sysfs_type, fs_type;
+type sysfs_input_name, sysfs_type, fs_type;
 
 type debugfs_clk, debugfs_type, fs_type;
 type debugfs_ion, debugfs_type, fs_type;
@@ -32,6 +32,7 @@ type qmuxd_socket, file_type;
 type netmgrd_socket, file_type;
 type powerhal_socket, file_type;
 type cashsvr_socket, file_type;
+type ipacm_socket, file_type;
 type qdsp_file, file_type, mlstrustedobject;
 type tad_socket, file_type;
 type ims_socket, file_type;
@@ -84,3 +85,5 @@ type sysfs_boot_wlan, fs_type, sysfs_type;
 
 # ToF sensor
 type sysfs_tof_sensor, fs_type, sysfs_type;
+# RGBCIR sensor
+type sysfs_rgbc_sensor, fs_type, sysfs_type;

@@ -2,4 +2,14 @@
 allow hal_sensors_default self:socket { create ioctl read write };
 allowxperm hal_sensors_default self:socket ioctl msm_sock_ipc_ioctls;
 r_dir_file(hal_sensors_default, sysfs_msm_subsys);
+# TODO: decide what is needed here
 allow hal_sensors_default kernel:system module_request;
+auditallow hal_sensors_default kernel:system module_request;
+#dontaudit hal_sensors_default kernel:system module_request;
+
+allow hal_sensors_default persist_file:dir search;
+allow hal_sensors_default persist_sensors_file:dir search;
+
+# TODO: overly broad, which files exactly?
+allow hal_sensors_default sysfs:file { open read };
+auditallow hal_sensors_default sysfs:file { open read };

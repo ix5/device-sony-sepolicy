@@ -14,3 +14,15 @@ r_dir_rw_file(msm_irqbalance, proc_irq)
 allow msm_irqbalance sysfs_irq:file r_file_perms;
 allow msm_irqbalance proc_stat:file r_file_perms;
 allow msm_irqbalance proc_interrupts:file r_file_perms;
+
+# msm_irqbalance wants dac_override, but that is not a good idea
+# and there is a neverallow that forbids this anyway
+# TODO: fix msm_irqbalance to not request dac_override
+# sepolicy guides say:
+# Instead of granting them it is usually better to add the domain to
+# a Unix group or change the permissions of a file.
+#
+# msm_irqbalance already gets setgid and setuid, that should be ample
+# For now, just ignore it(that's bad as well, IRQs shouldn't be ignored under
+# any circumstance!)
+dontaudit msm_irqbalance self:capability dac_override;
