@@ -28,9 +28,13 @@ unix_socket_connect(hal_camera_default, cashsvr, cashsvr)
 allow hal_camera_default cashsvr_socket:dir search;
 allow hal_camera_default cashsvr_socket:sock_file write;
 
-allow hal_camera_default sysfs_msm_subsys:dir r_dir_perms;
-allow hal_camera_default sysfs_msm_subsys:file r_file_perms;
+#allow hal_camera_default sysfs_msm_subsys:dir r_dir_perms;
+#allow hal_camera_default sysfs_msm_subsys:file r_file_perms;
+# avc: denied { open } for path="/sys/bus/esoc/devices" dev="sysfs" ino=28289 scontext=u:r:hal_camera_default:s0 tcontext=u:object_r:sysfs_bus_esoc:s0 tclass=dir
+# TODO: Check if this is sufficient
+# /sys/bus/esoc/devices is now sysfs_bus_esoc
 r_dir_file(hal_camera_default, sysfs_soc)
+r_dir_file(hal_camera_default, sysfs_bus_esoc)
 
 allow hal_camera_default camera_vendor_data_file:dir rw_dir_perms;
 allow hal_camera_default camera_vendor_data_file:file create_file_perms;

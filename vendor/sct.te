@@ -1,3 +1,4 @@
+# TODO: Explain what sct is!
 type sct, domain;
 type sct_exec, exec_type, vendor_file_type, file_type;
 
@@ -7,6 +8,6 @@ allow sct self:socket create_socket_perms;
 allowxperm sct self:socket ioctl msm_sock_ipc_ioctls;
 
 allow sct self:capability net_raw;
-# TODO: Make this more specific
+# TODO: Is this needed?
+# avc: granted { module_request } for comm="sct_service" kmod="net-pf-42" scontext=u:r:sct:s0 tcontext=u:r:kernel:s0 tclass=system
 allow sct kernel:system module_request;
-auditallow sct kernel:system module_request;

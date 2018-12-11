@@ -1,43 +1,100 @@
-# TODO(b/vndbinder): switch to vndbinder for rild
-vndbinder_use(rild)
-binder_call(rild, per_mgr)
-
 # TODO(b/vndbinder): Remove once rild uses vendor binder
 typeattribute rild binder_in_vendor_violators;
-# TODO(b/36644492): Remove data_between_core_and_vendor_violators once
-# rild no longer directly accesses the radio app's data type.
-#typeattribute rild data_between_core_and_vendor_violators;
 
+
+### ============================
+### Services and service_manager
+### ============================
+
+# TODO(b/vndbinder): switch to vndbinder for rild
+vndbinder_use(rild)
+
+# TODO: ?
 binder_use(rild)
+# avc: granted { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:servicemanager:s0 tclass=binder
+# avc: granted { search } for comm="servicemanager" name="attr" dev="proc" ino=26820 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=dir
+# avc: granted { read } for comm="servicemanager" name="current" dev="proc" ino=26821 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=file
+auditallow rild servicemanager:binder { call transfer };
+auditallow servicemanager rild:dir search;
+auditallow servicemanager rild:file { read open };
+auditallow servicemanager rild:process getattr;
 
+# TODO: ?
 hwbinder_use(rild)
+# avc: granted { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:hwservicemanager:s0 tclass=binder
+# avc: granted { transfer } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:hwservicemanager:s0 tclass=binder
+# avc: granted { transfer } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:hwservicemanager:s0 tclass=binder
+auditallow rild hwservicemanager:binder { call transfer };
+auditallow hwservicemanager rild:dir search;
+auditallow hwservicemanager rild:file { read open };
+auditallow hwservicemanager rild:process getattr;
+
+# avc:  granted  { find } for service=vendor.qcom.PeripheralManager pid=700 uid=1001 scontext=u:r:rild:s0 tcontext=u:object_r:per_mgr_service:s0 tclass=service_manager
+allow rild per_mgr_service:service_manager find;
+
+# Definitely needed!
 add_hwservice(rild, vnd_qcril_audio_hwservice)
+auditallow rild vnd_qcril_audio_hwservice:hwservice_manager { add find };
+auditallow rild hidl_base_hwservice:hwservice_manager add;
 #allow rild vnd_qcril_audio_hwservice:hwservice_manager { find };
 #auditallow rild vnd_qcril_audio_hwservice:hwservice_manager { find };
+
+
+### ============================
+### Binder calls
+### ============================
+
+# TODO: (most likely done)
+binder_call(rild, per_mgr)
+auditallow rild per_mgr:binder { call transfer };
+auditallow per_mgr rild:binder { transfer };
 
 # callback into telephony app
 # from marlin sepolicy
 # risky imo, but google does it this way
-binder_call(rild, platform_app);
-auditallow rild platform_app:binder { call transfer };
+# avc: granted { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:platform_app:s0:c512,c768 tclass=binder
+#binder_call(rild, platform_app);
+#auditallow rild platform_app:binder { call transfer };
+#auditallow platform_app rild:binder { transfer };
+# (use system_app instead of platform_app:)
+# TODO: ?
+binder_call(rild, system_app);
+auditallow rild system_app:binder { call transfer };
+auditallow system_app rild:binder { transfer };
 # better:
-binder_call(rild, qcrilam);
-auditallow rild qcrilam:binder { call transfer };
-binder_call(rild, qcrilam_service);
-auditallow rild qcrilam_service:binder { call transfer };
+#binder_call(rild, qcrilam);
+#auditallow rild qcrilam:binder { call transfer };
+#auditallow qcrilam rild:binder { transfer };
+#binder_call(rild, qcrilam_service);
+#auditallow rild qcrilam_service:binder { call transfer };
+#auditallow qcrilam_service rild:binder { transfer };
 
+#binder_call(rild, qcrilam_app);
+#auditallow rild qcrilam_app:binder { call transfer };
+#auditallow qcrilam_app rild:binder { transfer };
+
+# TODO: ?
 binder_call(rild, vnd_qcril_audio_hwservice);
 auditallow rild vnd_qcril_audio_hwservice:binder { call transfer };
-#binder_call(rild, qcrilam_service);
+auditallow vnd_qcril_audio_hwservice rild:binder { transfer };
 
-allow rild per_mgr_service:service_manager find;
-auditallow rild per_mgr_service:service_manager find;
+binder_call(rild, secure_element);
+# avc: denied { call } for scontext=u:r:secure_element:s0:c44,c260,c512,c768 tcontext=u:r:rild:s0 tclass=binder
+# avc: denied { transfer } for comm="com.android.se" scontext=u:r:secure_element:s0:c44,c260,c512,c768 tcontext=u:r:rild:s0 tclass=binder
+allow secure_element rild:binder call;
+# binder_call(secure_element, rild)
+# (not necessary, only call is needed)
 
+
+### ============================
+### Files
+### ============================
+
+# /data/vendor/radio/qcril.db and others
 allow rild radio_vendor_data_file:dir create_dir_perms;
 allow rild radio_vendor_data_file:file create_file_perms;
 
 # odm/radio/qcril_database/qcril.db
-# TODO: check if execute_no_trans is necessary
 # TODO: convert to allowxperm for ioctl
 # -> get ioctl via auditd!
 allow rild vendor_file:file { ioctl lock };
@@ -53,14 +110,23 @@ unix_socket_connect(rild, netmgrd, netmgrd)
 # TODO: convert to allowxperm for ioctl?
 # Leave this in for now because somehow the below happens
 allow rild self:socket ioctl;
-auditallow rild self:socket ioctl;
+#auditallow rild self:socket ioctl;
 allowxperm rild self:socket ioctl msm_sock_ipc_ioctls;
 # TODO: Why does this happen? 0x304 is within msm_sock_ipc_ioctls
 # avc: denied { ioctl } for comm="rild" path="socket:[52646]" dev="sockfs" ino=52646 ioctlcmd=0xc304 scontext=u:r:rild:s0 tcontext=u:r:rild:s0 tclass=socket
+# avc: denied { ioctl } for comm="rild" path="socket:[25459]" dev="sockfs" ino=25459 ioctlcmd=0xc302 scontext=u:r:rild:s0 tcontext=u:r:rild:s0 tclass=socket
 
-allow rild secure_element:binder call;
+
+### ===========================================================================
+### Properties
+### ===========================================================================
 
 # avc: denied { set } for property=persist.vendor.radio.adb_log_on scontext=u:r:rild:s0 tcontext=u:object_r:vendor_default_prop:s0 tclass=property_service
-# TODO: vendor_radio_prop is introduced in property_contexts, now use it!
-set_prop(rild, radio_prop)
+# avc: granted { read } for path="/dev/__properties__/u:object_r:vendor_radio_prop:s0" dev="tmpfs" ino=13592 scontext=u:r:rild:s0 tcontext=u:object_r:vendor_radio_prop:s0 tclass=file
+# avc: denied { open } for comm="rild" path="/dev/__properties__/u:object_r:vendor_radio_prop:s0" dev="tmpfs" ino=6661 scontext=u:r:rild:s0 tcontext=u:object_r:vendor_radio_prop:s0 tclass=file
+get_prop(rild, vendor_radio_prop)
 set_prop(rild, vendor_radio_prop)
+# TODO: Remove once nothing uses ro.vendor.ril
+# avc:  denied  { set } for property=ro.vendor.ril.svlte1x pid=687 uid=1001 gid=1001 scontext=u:r:rild:s0 tcontext=u:object_r:vendor_default_prop:s0 tclass=property_service
+#get_prop(rild, radio_prop)
+#set_prop(rild, radio_prop)

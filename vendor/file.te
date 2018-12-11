@@ -1,6 +1,10 @@
 type sysfs_camera, sysfs_type, fs_type;
 type sysfs_clkscale, sysfs_type, fs_type;
 type sysfs_console_suspend, sysfs_type, fs_type;
+# TODO: Convert all users of sysfs_msm_subsys to sysfs_bus_esoc
+# for /sys/bus/esoc/devices
+#type sysfs_bus_esoc, sysfs_msm_subsys, sysfs_type, fs_type;
+type sysfs_bus_esoc, sysfs_type, fs_type;
 type sysfs_fingerprint, sysfs_type, fs_type;
 type sysfs_graphics, sysfs_type, fs_type;
 type sysfs_mdss_mdp_caps, sysfs_type, fs_type;
@@ -62,10 +66,11 @@ type wifi_vendor_data_file, file_type, data_file_type;
 type bluetooth_vendor_data_file, file_type, data_file_type;
 type audio_vendor_data_file, file_type, data_file_type;
 type camera_vendor_data_file, file_type, data_file_type;
+type ipa_vendor_data_file, file_type, data_file_type;
 
 type vendor_firmware_file, vendor_file_type, file_type;
 
-#diag sysfs files
+# diag sysfs files
 type sysfs_diag, fs_type, sysfs_type;
 
 # input files
@@ -77,8 +82,12 @@ typeattribute sysfs_batteryinfo mlstrustedobject;
 
 # msm_irqbalance
 type proc_irq, proc_type, fs_type;
-type sysfs_irq, sysfs_type, fs_type;
+type sysfs_irq, fs_type, sysfs_type;
 type irqbalance_socket, file_type;
+
+# /proc/sys/kernel/*
+type proc_kernel_sched, proc_type, fs_type;
+type proc_kernel_printk, proc_type, fs_type;
 
 # /sys/kernel/boot_wlan/boot_wlan
 type sysfs_boot_wlan, fs_type, sysfs_type;

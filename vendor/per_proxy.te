@@ -4,12 +4,10 @@ type per_proxy_exec, exec_type, vendor_file_type, file_type;
 
 init_daemon_domain(per_proxy)
 
+# avc:  granted  { find } for service=vendor.qcom.PeripheralManager pid=637 uid=1000 scontext=u:r:per_proxy:s0 tcontext=u:object_r:per_mgr_service:s0 tclass=service_manager
 allow per_proxy per_mgr_service:service_manager find;
-# TODO: Remove auditallow statements
-auditallow per_proxy per_mgr_service:service_manager find;
-# TODO: Which denial?
-allow per_proxy default_android_service:service_manager find;
-auditallow per_proxy default_android_service:service_manager find;
+# TODO: Which denial? -> can't confirm this on tone
+#allow per_proxy default_android_service:service_manager find;
 
 # TODO(b/vndbinder): Remove once per_proxy uses vendor binder
 typeattribute per_proxy binder_in_vendor_violators;

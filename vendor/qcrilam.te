@@ -1,16 +1,30 @@
-#type qcrilam, domain, coredomain;
 type qcrilam, domain;
-#type qcrilam_exec, exec_type, vendor_file_type, file_type;
+# TODO: coredomain for coredomain_hwservice?
+#type qcrilam, domain, coredomain;
+# All core domains (as opposed to vendor/device-specific domains)
+#attribute coredomain;
+
+# TODO: Is this necessary?
+typeattribute qcrilam binder_in_vendor_violators;
+
+# TODO(b/vndbinder): Switch to vndbinder
+#vndbinder_use(qcrilam)
 
 # TODO: Check if we need system or app domain
 #app_domain(qcrilam)
-#init_daemon_domain(qcrilam)
 
 #allow qcrilam { app_api_service }:service_manager find;
 
 # TODO: Don't set group etc in QcRilAm apk?
 # E SELinux : selinux_android_setcontext:  Error setting context for app with uid 1000, seinfo platform:privapp:targetSdkVersion=28:complete: Permission denied
 # F zygote64: jni_internal.cc:616] JNI FatalError called: (com.sony.timekeep) frameworks/base/core/jni/com_android_internal_os_Zygote.cpp:750: selinux_android_setcontext(1000, 0, "platform:privapp:targetSdkVersion=28:complete", "com.sony.timekeep") failed
+
+# avc: granted { call } for comm="om.sony.qcrilam" scontext=u:r:platform_app:s0:c512,c768 tcontext=u:r:rild:s0 tclass=binder
+# avc: granted { call } for scontext=u:r:platform_app:s0:c512,c768 tcontext=u:r:rild:s0 tclass=binder
+# avc: granted { call } for comm="om.sony.qcrilam" scontext=u:r:platform_app:s0:c512,c768 tcontext=u:r:rild:s0 tclass=binder
+# avc: granted { transfer } for comm="om.sony.qcrilam" scontext=u:r:platform_app:s0:c512,c768 tcontext=u:r:rild:s0 tclass=binder
+# avc: granted { call } for scontext=u:r:platform_app:s0:c512,c768 tcontext=u:r:rild:s0 tclass=binder
+# avc: granted { transfer } for scontext=u:r:platform_app:s0:c512,c768 tcontext=u:r:rild:s0 tclass=binder
 
 #
 vndbinder_use(qcrilam)
@@ -24,8 +38,10 @@ binder_call(vnd_qcril_audio_hwservice, hal_telephony_server)
 binder_call(hal_telephony_server, vnd_qcril_audio_hwservice)
 #
 
-add_service(qcrilam, qcrilam_service)
-auditallow qcrilam qcrilam_service:service_manager { add find };
+#add_service(qcrilam, qcrilam_service)
+#auditallow qcrilam qcrilam_service:service_manager { add find };
+allow qcrilam qcrilam_service:service_manager find;
+auditallow qcrilam qcrilam_service:service_manager find;
 # TODO: Which one?
 #add_hwservice(qcrilam, qcrilam_service)
 #auditallow qcrilam qcrilam_service:hwservice_manager { add find };
@@ -33,28 +49,22 @@ auditallow qcrilam qcrilam_service:service_manager { add find };
 typeattribute qcrilam binder_in_vendor_violators;
 
 binder_use(qcrilam)
-binder_use(qcrilam_service)
 auditallow qcrilam servicemanager:binder { call transfer };
-auditallow servicemanager qcrilam:binder { call transfer };
+allow servicemanager qcrilam:dir search;
+allow servicemanager qcrilam:file { read open };
+allow servicemanager qcrilam:process getattr;
+binder_use(qcrilam_service)
 auditallow qcrilam_service servicemanager:binder { call transfer };
-auditallow servicemanager qcrilam_service:binder { call transfer };
+allow servicemanager qcrilam_service:dir search;
+allow servicemanager qcrilam_service:file { read open };
+allow servicemanager qcrilam_service:process getattr;
 
 hwbinder_use(qcrilam)
 auditallow qcrilam hwservicemanager:binder { call transfer };
 auditallow hwservicemanager qcrilam:binder { call transfer };
 
-# TODO: Use this?
-#binder_service(qcrilam)
-# -> typeattribute $1 binderservicedomain
-# not what we need
-# see binderservicedomain.te
-
 #attribute untrusted_app_visible_hwservice;
 #attribute data_between_core_and_vendor_violators;
-
-
-# TODO(b/vndbinder): Switch to vndbinder
-#vndbinder_use(qcrilam)
 
 # TODO: Is this necessary? And shouldn't it be qcrilam_service?
 #allow qcrilam vnd_qcril_audio_hwservice:hwservice_manager { find };
@@ -76,7 +86,7 @@ auditallow qcrilam_service vnd_qcril_audio_hwservice:hwservice_manager { find };
 #allow qcrilam_service app_api_service:service_manager { find add };
 
 # from marlin
-allow qcrilam cgroup:file w_file_perms;
+#allow qcrilam cgroup:file w_file_perms;
 
 # TODO: Is this necessary?
 binder_call(qcrilam, vnd_qcril_audio_hwservice)
@@ -90,8 +100,3 @@ auditallow qcrilam rild:binder { call transfer };
 # TODO: Is this necessary?
 binder_call(qcrilam, per_mgr)
 auditallow qcrilam per_mgr:binder { call transfer };
-
-# TODO(b/vndbinder(: Switch to vndbinder
-# (except vndbinder_call doesn't exist...)
-#vndbinder_call(qcrilam_service, hal_telephony_server)
-#vndbinder_call(hal_telephony_server, qcrilam_service)

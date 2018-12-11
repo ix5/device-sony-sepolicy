@@ -3,6 +3,7 @@ type cashsvr_exec, exec_type, vendor_file_type, file_type;
 
 init_daemon_domain(cashsvr)
 
+# For dropping permissions
 allow cashsvr self:capability { chown setuid };
 
 allow cashsvr cashsvr_socket:dir rw_dir_perms;

@@ -74,4 +74,3 @@ allow tad self:capability chown;
 allow tad vendor_data_file:dir { add_name create setattr write };
 
 allow tad proc_cmdline:file read;
-auditallow tad proc_cmdline:file read;

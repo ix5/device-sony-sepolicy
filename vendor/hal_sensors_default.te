@@ -1,15 +1,38 @@
 # interact with the sensors low power island (SLPI) CPU
 allow hal_sensors_default self:socket { create ioctl read write };
 allowxperm hal_sensors_default self:socket ioctl msm_sock_ipc_ioctls;
-r_dir_file(hal_sensors_default, sysfs_msm_subsys);
+
+# TODO: Narrow this down
+#r_dir_file(hal_sensors_default, sysfs_msm_subsys);
+allow hal_sensors_default sysfs_msm_subsys:dir { search read };
+# avc: granted { read } for comm="android.hardwar" name="devices" dev="sysfs" ino=17768 scontext=u:r:hal_sensors_default:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
+# $ find /sys -inum 17768
+# /sys/kernel/debug/clk/gpll0/clk_phase
+# /sys/bus/msm_subsys/devices
+# $ readlink /sys/bus/msm_subsys/devices/*
+# /sys/devices/platform/soc/ce0000.qcom,venus/subsys0
+# /sys/devices/platform/soc/soc:qcom,kgsl-hyp/subsys1
+# /sys/devices/platform/soc/9300000.qcom,lpass/subsys2
+# /sys/devices/platform/soc/1c00000.qcom,ssc/subsys3
+# /sys/devices/platform/soc/2080000.qcom,mss/subsys4
+
+# TODO: Overly broad, which files exactly?
+#allow hal_sensors_default sysfs:file { open read };
+# Better:
+#r_dir_file(hal_sensors_default, sysfs_bus_esoc);
+#userdebug_or_eng(`
+#  auditallow hal_sensors_default sysfs_msm_subsys:dir r_dir_perms;
+#  auditallow hal_sensors_default sysfs_msm_subsys:file r_file_perms;
+#  auditallow hal_sensors_default sysfs_bus_esoc:dir r_dir_perms;
+#  auditallow hal_sensors_default sysfs_bus_esoc:file r_file_perms;
+#')
+# TODO: Probably needs search perm for parent dirs as well
+allow hal_sensors_default sysfs_bus_esoc:dir { getattr open read };
+# avc: granted { getattr } for comm="android.hardwar" path="/sys/bus/esoc/devices" dev="sysfs" ino=28289 scontext=u:r:hal_sensors_default:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
+
 # TODO: decide what is needed here
+# avc: granted { module_request } for comm="android.hardwar" kmod="net-pf-42" scontext=u:r:hal_sensors_default:s0 tcontext=u:r:kernel:s0 tclass=system
 allow hal_sensors_default kernel:system module_request;
-auditallow hal_sensors_default kernel:system module_request;
-#dontaudit hal_sensors_default kernel:system module_request;
 
 allow hal_sensors_default persist_file:dir search;
 allow hal_sensors_default persist_sensors_file:dir search;
-
-# TODO: overly broad, which files exactly?
-allow hal_sensors_default sysfs:file { open read };
-auditallow hal_sensors_default sysfs:file { open read };

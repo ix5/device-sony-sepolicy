@@ -11,22 +11,26 @@ allow sensors self:capability {
 allow sensors self:socket create_socket_perms;
 allowxperm sensors self:socket ioctl msm_sock_ipc_ioctls;
 
-allow sensors persist_sensors_file:dir rw_dir_perms;
-allow sensors persist_sensors_file:file create_file_perms;
-allow sensors persist_file:dir { getattr search };
+# TODO: All of this is quite broad
+# TODO: Re-enable, this is only temporary for permissive!
+#allow sensors persist_sensors_file:dir rw_dir_perms;
+#allow sensors persist_sensors_file:file create_file_perms;
+#allow sensors persist_file:dir { getattr search };
 
-allow sensors sensors_vendor_data_file:dir create_dir_perms;
-allow sensors sensors_vendor_data_file:file create_file_perms;
+#allow sensors sensors_vendor_data_file:dir create_dir_perms;
+#allow sensors sensors_vendor_data_file:file create_file_perms;
 
-allow sensors system_file:dir r_dir_perms;
+#allow sensors system_file:dir r_dir_perms;
+# avc: denied { ioctl } for comm="sensors.qcom" path="/dev/sensors" dev="tmpfs" ino=18589 ioctlcmd=0x6403 scontext=u:r:sensors:s0 tcontext=u:object_r:sensors_device:s0 tclass=chr_file
 allow sensors sensors_device:chr_file rw_file_perms;
+# TODO: use allowxperm
+#allowxperm ioctl 0x6403
 
-allow sensors sysfs_soc:dir r_dir_perms;
-allow sensors sysfs_soc:file r_file_perms;
+#allow sensors sysfs_soc:dir r_dir_perms;
+#allow sensors sysfs_soc:file r_file_perms;
 
-r_dir_file(sensors, sysfs_msm_subsys)
+#r_dir_file(sensors, sysfs_msm_subsys)
 
-# avc: denied { module_request } for kmod="net-pf-42" scontext=u:r:sensors:s0 tcontext=u:r:kernel:s0 tclass=system
-# TODO: find out why sensors.qcom wants net-pf-42
+# avc: granted { module_request } for comm="sensors.qcom" kmod="net-pf-42" scontext=u:r:sensors:s0 tcontext=u:r:kernel:s0 tclass=system
+# TODO: Is this needed?
 allow sensors kernel:system { module_request };
-auditallow sensors kernel:system { module_request };

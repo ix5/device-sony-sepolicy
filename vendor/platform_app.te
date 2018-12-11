@@ -14,6 +14,8 @@ auditallow platform_app vnd_qcril_audio_hwservice:hwservice_manager find;
 # See marlin sepolicy
 binder_call(platform_app, rild);
 auditallow platform_app rild:binder { call transfer };
+auditallow rild platform_app:binder { transfer };
 
 binder_call(platform_app, per_mgr)
 auditallow platform_app per_mgr:binder { call transfer };
+auditallow per_mgr platform_app:binder { transfer };

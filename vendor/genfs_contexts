@@ -1,4 +1,52 @@
 genfscon proc /irq                                    u:object_r:proc_irq:s0
+# Definitely needed:
+genfscon proc /sys/kernel/sched_boost                 u:object_r:proc_kernel_sched:s0
+genfscon proc /sys/kernel/sched_downmigrate           u:object_r:proc_kernel_sched:s0
+genfscon proc /sys/kernel/sched_upmigrate             u:object_r:proc_kernel_sched:s0
+# Might be needed as well(from marlin):
+genfscon proc /sys/kernel/sched_freq_dec_notify       u:object_r:proc_kernel_sched:s0
+genfscon proc /sys/kernel/sched_freq_inc_notify       u:object_r:proc_kernel_sched:s0
+genfscon proc /sys/kernel/sched_init_task_load        u:object_r:proc_kernel_sched:s0
+genfscon proc /sys/kernel/sched_migration_cost_ns     u:object_r:proc_kernel_sched:s0
+genfscon proc /sys/kernel/sched_migration_fixup       u:object_r:proc_kernel_sched:s0
+genfscon proc /sys/kernel/sched_small_task            u:object_r:proc_kernel_sched:s0
+genfscon proc /sys/kernel/sched_spill_nr_run          u:object_r:proc_kernel_sched:s0
+# From crosshatch:
+#genfscon proc /sys/kernel/sched_autogroup_enabled     u:object_r:proc_sysctl_autogroup:s0
+# For reference, all of tone:
+#u:object_r:proc:s0           sched_boost
+#u:object_r:proc:s0           sched_cfs_boost
+#u:object_r:proc_sched:s0     sched_child_runs_first
+#u:object_r:proc:s0           sched_cpu_high_irqload
+#u:object_r:proc:s0           sched_cstate_aware
+#u:object_r:proc:s0           sched_domain
+#u:object_r:proc:s0           sched_downmigrate
+#u:object_r:proc:s0           sched_group_downmigrate
+#u:object_r:proc:s0           sched_group_upmigrate
+#u:object_r:proc:s0           sched_initial_task_util
+#u:object_r:proc_sched:s0     sched_latency_ns
+#u:object_r:proc:s0           sched_migration_cost_ns
+#u:object_r:proc:s0           sched_min_granularity_ns
+#u:object_r:proc:s0           sched_nr_migrate
+#u:object_r:proc:s0           sched_rr_timeslice_ms
+#u:object_r:proc_sched:s0     sched_rt_period_us
+#u:object_r:proc_sched:s0     sched_rt_runtime_us
+#u:object_r:proc_sched:s0     sched_schedstats
+#u:object_r:proc:s0           sched_shares_window_ns
+#u:object_r:proc:s0           sched_sync_hint_enable
+#u:object_r:proc:s0           sched_time_avg_ms
+#u:object_r:proc_sched:s0     sched_tunable_scaling
+#u:object_r:proc:s0           sched_upmigrate
+#u:object_r:proc_sched:s0     sched_wakeup_granularity_ns
+#u:object_r:proc:s0           sched_walt_rotate_big_tasks
+
+genfscon proc /sys/kernel/printk                      u:object_r:proc_kernel_printk:s0
+# For reference, all of tone:
+#u:object_r:proc:s0           printk
+#u:object_r:proc:s0           printk_delay
+#u:object_r:proc:s0           printk_devkmsg
+#u:object_r:proc:s0           printk_ratelimit
+#u:object_r:proc:s0           printk_ratelimit_burst
 
 genfscon sysfs /devices/soc/soc:qcom,cpubw            u:object_r:sysfs_msm_subsys:s0
 genfscon sysfs /devices/soc/soc:qcom,mincpubw         u:object_r:sysfs_msm_subsys:s0
@@ -14,6 +62,8 @@ genfscon sysfs /devices/platform/soc/soc:qcom,memlat-cpu0               u:object
 genfscon sysfs /devices/platform/soc/soc:qcom,memlat-cpu4               u:object_r:sysfs_msm_subsys:s0
 
 genfscon sysfs /class/uio                                               u:object_r:sysfs_uio:s0
+# TODO: Set this in platform dirs!
+genfscon sysfs /bus/esoc/devices                                        u:object_r:sysfs_bus_esoc:s0
 genfscon sysfs /devices/soc/soc:bt_wcn3990                              u:object_r:sysfs_bluetooth_writable:s0
 genfscon sysfs /devices/soc/soc:qcom,gpubw                              u:object_r:sysfs_msm_subsys:s0
 genfscon sysfs /devices/soc/soc:qcom,kgsl-hyp                           u:object_r:sysfs_msm_subsys:s0

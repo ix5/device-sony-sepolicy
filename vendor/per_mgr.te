@@ -23,19 +23,21 @@ allow per_mgr self:socket create_socket_perms;
 allowxperm per_mgr self:socket ioctl msm_sock_ipc_ioctls;
 allow per_mgr ssr_device:chr_file { open read };
 
-r_dir_file(per_mgr, sysfs_msm_subsys)
-
-# avc: denied { module_request } for comm="pm-service" kmod="net-pf-42" scontext=u:r:per_mgr:s0 tcontext=u:r:kernel:s0 tclass=system
-# avc: denied { module_request } for kmod="net-pf-42" scontext=u:r:per_mgr:s0 tcontext=u:r:kernel:s0 tclass=system
-# TODO: Is this necessary?
-# QUESTION: Which modules?
-allow per_mgr kernel:system module_request;
-auditallow per_mgr kernel:system module_request;
-
+#r_dir_file(per_mgr, sysfs_msm_subsys)
+# TODO: Confirm this works on all platforms
+# (at least tama doesn't have /sys/bus/* in platform contexts)
+# /sys/bus/esoc/devices is now sysfs_bus_esoc
+allow per_mgr sysfs_bus_esoc:dir { read open };
 # TODO: Make this more specific
 # QUESTION: Which files?
 allow per_mgr sysfs:file { read open };
 auditallow per_mgr sysfs:file { read open };
 
+# TODO: Is this necessary?
+# avc: denied { module_request } for comm="pm-service" kmod="net-pf-42" scontext=u:r:per_mgr:s0 tcontext=u:r:kernel:s0 tclass=system
+# avc: denied { module_request } for kmod="net-pf-42" scontext=u:r:per_mgr:s0 tcontext=u:r:kernel:s0 tclass=system
+allow per_mgr kernel:system module_request;
+
 # TODO(v/vndbinder): Switch to vndservice
+# avc:  granted  { find } for service=vendor.qcom.PeripheralManager pid=662 uid=1000 scontext=u:r:per_proxy:s0 tcontext=u:object_r:per_mgr_service:s0 tclass=service_manager
 allow per_mgr servicemanager:binder { call transfer };
