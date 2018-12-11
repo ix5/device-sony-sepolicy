@@ -28,8 +28,12 @@ allow sensors sensors_device:chr_file rw_file_perms;
 
 #allow sensors sysfs_soc:dir r_dir_perms;
 #allow sensors sysfs_soc:file r_file_perms;
-
 #r_dir_file(sensors, sysfs_msm_subsys)
+allow sensors sysfs_msm_subsys:dir { search open read };
+allow sensors sysfs_msm_subsys:file { open read };
+# TODO: Check if this is sufficient
+# avc: denied { read } for comm="sensors.qcom" name="devices" dev="sysfs" ino=28289 scontext=u:r:sensors:s0 tcontext=u:object_r:sysfs_bus_esoc:s0 tclass=dir
+allow sensors sysfs_bus_esoc:dir { search open read };
 
 # avc: granted { module_request } for comm="sensors.qcom" kmod="net-pf-42" scontext=u:r:sensors:s0 tcontext=u:r:kernel:s0 tclass=system
 # TODO: Is this needed?

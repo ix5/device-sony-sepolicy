@@ -9,7 +9,7 @@ typeattribute rild binder_in_vendor_violators;
 # TODO(b/vndbinder): switch to vndbinder for rild
 vndbinder_use(rild)
 
-# TODO: ?
+# Needed!
 binder_use(rild)
 # avc: granted { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:servicemanager:s0 tclass=binder
 # avc: granted { search } for comm="servicemanager" name="attr" dev="proc" ino=26820 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=dir
@@ -30,56 +30,37 @@ auditallow hwservicemanager rild:dir search;
 auditallow hwservicemanager rild:file { read open };
 auditallow hwservicemanager rild:process getattr;
 
+# Needed!
 # avc:  granted  { find } for service=vendor.qcom.PeripheralManager pid=700 uid=1001 scontext=u:r:rild:s0 tcontext=u:object_r:per_mgr_service:s0 tclass=service_manager
 allow rild per_mgr_service:service_manager find;
 
-# Definitely needed!
+# TODO: Needed?
 add_hwservice(rild, vnd_qcril_audio_hwservice)
 auditallow rild vnd_qcril_audio_hwservice:hwservice_manager { add find };
-auditallow rild hidl_base_hwservice:hwservice_manager add;
-#allow rild vnd_qcril_audio_hwservice:hwservice_manager { find };
-#auditallow rild vnd_qcril_audio_hwservice:hwservice_manager { find };
+auditallow rild hidl_base_hwservice:hwservice_manager { add find };
 
 
 ### ============================
 ### Binder calls
 ### ============================
 
-# TODO: (most likely done)
-binder_call(rild, per_mgr)
+# TODO: Needed?
+binder_call(rild, per_mgr) # from master-with-alins-patch, so needed?
 auditallow rild per_mgr:binder { call transfer };
 auditallow per_mgr rild:binder { transfer };
 
-# callback into telephony app
-# from marlin sepolicy
-# risky imo, but google does it this way
-# avc: granted { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:platform_app:s0:c512,c768 tclass=binder
-#binder_call(rild, platform_app);
-#auditallow rild platform_app:binder { call transfer };
-#auditallow platform_app rild:binder { transfer };
-# (use system_app instead of platform_app:)
-# TODO: ?
-binder_call(rild, system_app);
-auditallow rild system_app:binder { call transfer };
-auditallow system_app rild:binder { transfer };
-# better:
-#binder_call(rild, qcrilam);
-#auditallow rild qcrilam:binder { call transfer };
-#auditallow qcrilam rild:binder { transfer };
-#binder_call(rild, qcrilam_service);
-#auditallow rild qcrilam_service:binder { call transfer };
-#auditallow qcrilam_service rild:binder { transfer };
-
+# Needed!
 binder_call(rild, qcrilam_app);
 # avc: denied { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:qcrilam_app:s0 tclass=binder
 auditallow rild qcrilam_app:binder { call transfer };
 auditallow qcrilam_app rild:binder { transfer };
 
-# TODO: ?
+# TODO: Needed?
 binder_call(rild, vnd_qcril_audio_hwservice);
 auditallow rild vnd_qcril_audio_hwservice:binder { call transfer };
 auditallow vnd_qcril_audio_hwservice rild:binder { transfer };
 
+# Needed!
 binder_call(rild, secure_element);
 # avc: denied { call } for scontext=u:r:secure_element:s0:c44,c260,c512,c768 tcontext=u:r:rild:s0 tclass=binder
 # avc: denied { transfer } for comm="com.android.se" scontext=u:r:secure_element:s0:c44,c260,c512,c768 tcontext=u:r:rild:s0 tclass=binder

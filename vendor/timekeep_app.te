@@ -1,38 +1,39 @@
-# TODO: All of this is probably(?) unused since com.sony.timekeep
-# just gets executed as a system_app
-
-# ???????????????????????????????????????
-# ???????????????????????????????????????
-# ???????????????????????????????????????
-# ???????????????????????????????????????
-# ???????????????????????????????????????
-# ???????????????????????????????????????
-# ???????????????????????????????????????
-
 type timekeep_app, domain;
 
 app_domain(timekeep_app)
 
+# TODO: Fix this denial! Even though we don't need the app dir
+# Or ignore it
+# avc: denied { getattr } for comm="m.sony.timekeep" path="/data/data/com.sony.timekeep" dev="mmcblk0p54" ino=868375 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:system_app_data_file:s0 tclass=dir
+
+# TODO: Can't find audits for this
+# Probably because it is a BootReceiver oneshot and can't be started in
+# background?
 add_service(timekeep_app, timekeep_service)
 auditallow timekeep_app timekeep_service:service_manager { add find };
 
+# Needed!
 allow timekeep_app activity_service:service_manager find;
-auditallow timekeep_app activity_service:service_manager find;
+# avc:  granted  { find } for service=activity pid=2414 uid=1000 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:activity_service:s0 tclass=service_manager
 
-# per-mgr is probably not needed
+# TODO: per-mgr is probably not needed
 binder_call(timekeep_app, per_mgr)
 auditallow timekeep_app per_mgr:binder { call transfer };
 auditallow per_mgr timekeep_app:binder { transfer };
 
+# Should only read from /data/vendor/time/ats_2
 allow timekeep_app timekeep_vendor_data_file:dir create_dir_perms;
 auditallow timekeep_app timekeep_vendor_data_file:dir create_dir_perms;
 allow timekeep_app timekeep_vendor_data_file:file create_file_perms;
 auditallow timekeep_app timekeep_vendor_data_file:file create_file_perms;
 
+# avc: granted { search } for comm="m.sony.timekeep" name="rtc" dev="sysfs" ino=27336 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:sysfs_rtc:s0 tclass=dir
 allow timekeep_app sysfs_rtc:dir { search };
-auditallow timekeep_app sysfs_rtc:dir { search };
+# avc: granted { read } for comm="m.sony.timekeep" name="rtc0" dev="sysfs" ino=41349 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:sysfs_rtc:s0 tclass=lnk_file
 allow timekeep_app sysfs_rtc:{ file lnk_file } r_file_perms;
-auditallow timekeep_app sysfs_rtc:{ file lnk_file } r_file_perms;
+# TODO: Maybe ignore this instead of allowing search on all of sysfs_msm_subsys
+# avc: denied { search } for name="400f000.qcom,spmi" dev="sysfs" ino=19045 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
+allow timekeep_app sysfs_msm_subsys:dir { search };
 
+# avc: granted { read } for comm="main" name="u:object_r:timekeep_prop:s0" dev="tmpfs" ino=18507 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:timekeep_prop:s0 tclass=file
 set_prop(timekeep_app, timekeep_prop)
-auditallow timekeep_app timekeep_prop:file r_file_perms;
