@@ -37,9 +37,9 @@ auditallow rild hidl_base_hwservice:hwservice_manager { add find };
 ### ============================
 
 # TODO: Needed?
-binder_call(rild, per_mgr) # from master-with-alins-patch, so needed?
-auditallow rild per_mgr:binder { call transfer };
-auditallow per_mgr rild:binder { transfer };
+binder_call(rild, per_mgr)
+# avc: granted { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:per_mgr:s0 tclass=binder
+# avc: granted { transfer } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:per_mgr:s0 tclass=binder
 
 # Needed!
 # avc: denied { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:qcrilam_app:s0 tclass=binder
