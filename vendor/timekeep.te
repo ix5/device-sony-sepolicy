@@ -11,12 +11,12 @@ type timekeep_exec, exec_type, vendor_file_type, file_type;
 # Grant permission to set system time and to set the real-time lock
 allow timekeep self:capability { fowner sys_time };
 
-# (initially from system_app for TimeKeep Java service)
-# TODO: Seems not needed? Timekeep can write because it is root?
+# Write to /data/vendor/time/ats_2
+# avc: granted { search } for name="time" dev="mmcblk0p54" ino=245787 scontext=u:r:timekeep:s0 tcontext=u:object_r:timekeep_vendor_data_file:s0 tclass=dir
 allow timekeep timekeep_vendor_data_file:dir create_dir_perms;
-auditallow timekeep timekeep_vendor_data_file:dir create_dir_perms;
+# avc: granted { write open } for path="/data/vendor/time/ats_2" dev="mmcblk0p54" ino=245805 scontext=u:r:timekeep:s0 tcontext=u:object_r:timekeep_vendor_data_file:s0 tclass=file
+# avc: granted { getattr } for comm="timekeep" path="/data/vendor/time/ats_2" dev="mmcblk0p54" ino=245805 scontext=u:r:timekeep:s0 tcontext=u:object_r:timekeep_vendor_data_file:s0 tclass=file
 allow timekeep timekeep_vendor_data_file:file create_file_perms;
-auditallow timekeep timekeep_vendor_data_file:file create_file_perms;
 
 set_prop(timekeep, timekeep_prop)
 

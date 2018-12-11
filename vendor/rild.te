@@ -14,10 +14,6 @@ binder_use(rild)
 # avc: granted { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:servicemanager:s0 tclass=binder
 # avc: granted { search } for comm="servicemanager" name="attr" dev="proc" ino=26820 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=dir
 # avc: granted { read } for comm="servicemanager" name="current" dev="proc" ino=26821 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=file
-auditallow rild servicemanager:binder { call transfer };
-auditallow servicemanager rild:dir search;
-auditallow servicemanager rild:file { read open };
-auditallow servicemanager rild:process getattr;
 
 # Needed!
 hwbinder_use(rild)
@@ -25,10 +21,6 @@ hwbinder_use(rild)
 # avc: granted { transfer } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:hwservicemanager:s0 tclass=binder
 # avc: granted { transfer } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:hwservicemanager:s0 tclass=binder
 # avc: granted { search } for comm="hwservicemanage" name="780" dev="proc" ino=21162 scontext=u:r:hwservicemanager:s0 tcontext=u:r:rild:s0 tclass=dir
-auditallow rild hwservicemanager:binder { call transfer };
-auditallow hwservicemanager rild:dir search;
-auditallow hwservicemanager rild:file { read open };
-auditallow hwservicemanager rild:process getattr;
 
 # Needed!
 # avc:  granted  { find } for service=vendor.qcom.PeripheralManager pid=700 uid=1001 scontext=u:r:rild:s0 tcontext=u:object_r:per_mgr_service:s0 tclass=service_manager
@@ -50,10 +42,10 @@ auditallow rild per_mgr:binder { call transfer };
 auditallow per_mgr rild:binder { transfer };
 
 # Needed!
-binder_call(rild, qcrilam_app);
 # avc: denied { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:qcrilam_app:s0 tclass=binder
-auditallow rild qcrilam_app:binder { call transfer };
-auditallow qcrilam_app rild:binder { transfer };
+allow rild qcrilam_app:binder call;
+# This is not needed, but includes the above:
+#binder_call(rild, qcrilam_app);
 
 # TODO: Needed?
 binder_call(rild, vnd_qcril_audio_hwservice);

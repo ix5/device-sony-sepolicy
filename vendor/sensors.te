@@ -17,8 +17,10 @@ allowxperm sensors self:socket ioctl msm_sock_ipc_ioctls;
 #allow sensors persist_sensors_file:file create_file_perms;
 #allow sensors persist_file:dir { getattr search };
 
-#allow sensors sensors_vendor_data_file:dir create_dir_perms;
-#allow sensors sensors_vendor_data_file:file create_file_perms;
+# avc: denied { getattr read open } for comm="sensors.qcom" path="/data/vendor/sensors" dev="mmcblk0p54" ino=245783 scontext=u:r:sensors:s0 tcontext=u:object_r:sensors_vendor_data_file:s0 tclass=dir
+allow sensors sensors_vendor_data_file:dir create_dir_perms;
+# avc: denied { getattr read write open } for comm="sensors.qcom" name="sns.reg" dev="mmcblk0p54" ino=245788 scontext=u:r:sensors:s0 tcontext=u:object_r:sensors_vendor_data_file:s0 tclass=file
+allow sensors sensors_vendor_data_file:file create_file_perms;
 
 #allow sensors system_file:dir r_dir_perms;
 # avc: denied { ioctl } for comm="sensors.qcom" path="/dev/sensors" dev="tmpfs" ino=18589 ioctlcmd=0x6403 scontext=u:r:sensors:s0 tcontext=u:object_r:sensors_device:s0 tclass=chr_file
