@@ -38,13 +38,13 @@ binder_use(qcrilam_app)
 # avc: granted { search } for comm="servicemanager" name="1603" dev="proc" ino=13148 scontext=u:r:servicemanager:s0 tcontext=u:r:qcrilam_app:s0 tclass=dir
 
 # TODO: Needed?
-allow qcrilam_app vnd_qcril_audio_hwservice:hwservice_manager { find };
-auditallow qcrilam_app vnd_qcril_audio_hwservice:hwservice_manager { find };
+allow qcrilam_app vnd_qcrilhook_hwservice:hwservice_manager { find };
+auditallow qcrilam_app vnd_qcrilhook_hwservice:hwservice_manager { find };
 
 # TODO: Needed?
-binder_call(qcrilam_app, vnd_qcril_audio_hwservice)
-auditallow qcrilam_app vnd_qcril_audio_hwservice:binder { call transfer };
-auditallow vnd_qcril_audio_hwservice qcrilam_app:binder { transfer };
+binder_call(qcrilam_app, vnd_qcrilhook_hwservice)
+auditallow qcrilam_app vnd_qcrilhook_hwservice:binder { call transfer };
+auditallow vnd_qcrilhook_hwservice qcrilam_app:binder { transfer };
 
 # Needed!
 binder_call(qcrilam_app, rild)

@@ -36,6 +36,13 @@ allow per_mgr sysfs_bus_esoc:dir { read open };
 # QUESTION: Which files?
 #allow per_mgr sysfs:file { read open };
 #auditallow per_mgr sysfs:file { read open };
+# TODO: drop cpuset_device or find a better way
+#allow vendor_init cpuset_device:dir search;
+#allow vendor_init cpuset_device:file { create write open };
+allow vendor_init device:dir search;
+auditallow vendor_init device:dir search;
+allow vendor_init device:file { create write open };
+auditallow vendor_init device:file { create write open };
 
 # TODO: Is this necessary?
 # avc: denied { module_request } for comm="pm-service" kmod="net-pf-42" scontext=u:r:per_mgr:s0 tcontext=u:r:kernel:s0 tclass=system

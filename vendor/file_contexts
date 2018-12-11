@@ -1,6 +1,7 @@
 # dev nodes
 /dev/btpower                                    u:object_r:bt_device:s0
-/dev/cpuset(/.*)?                               u:object_r:cpuset_device:s0
+# TODO: Drop cpuset_device or find a better way
+#/dev/cpuset(/.*)?                               u:object_r:cpuset_device:s0
 #/dev/cpuset/foreground/tasks
 #/dev/cpuset/system-background/tasks
 #/dev/cpuset/foreground/cpus
@@ -201,3 +202,12 @@
 /mnt/vendor/persist/rfs(/.*)?        u:object_r:persist_rfs_file:s0
 /mnt/vendor/persist/sensors(/.*)?    u:object_r:persist_sensors_file:s0
 /mnt/vendor/persist/time(/.*)?       u:object_r:persist_time_file:s0
+# TODO: FIXME: Only temporary until paths are final
+/persist(/.*)?            u:object_r:persist_file:s0
+/persist/data(/.*)?       u:object_r:persist_data_file:s0
+/persist/display(/.*)?    u:object_r:persist_display_file:s0
+/persist/drm(/.*)?        u:object_r:persist_drm_file:s0
+/persist/hlos_rfs(/.*)?   u:object_r:persist_rfs_file:s0
+/persist/rfs(/.*)?        u:object_r:persist_rfs_file:s0
+/persist/sensors(/.*)?    u:object_r:persist_sensors_file:s0
+/persist/time(/.*)?       u:object_r:persist_time_file:s0

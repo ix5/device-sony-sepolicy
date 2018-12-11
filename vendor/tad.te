@@ -51,6 +51,7 @@ r_dir_file(tad, firmware_file)
 allow tad self:capability {
     setuid
     setgid
+    chown
     setpcap
     net_bind_service
 };
@@ -64,13 +65,12 @@ neverallow { domain -tad -kernel -recovery -init -vendor_init userdebug_or_eng(`
 allow tad proc_cmdline:file { open read };
 
 # TODO: Is this necessary?
-# QUESTION: Which modules?
+# QUESTION: Which modules? -> cannot reproduce on tone
 allow tad kernel:system module_request;
 auditallow tad kernel:system module_request;
 
 allow tad mnt_vendor_file:dir search;
 allow tad persist_file:lnk_file read;
-allow tad self:capability chown;
 allow tad vendor_data_file:dir { add_name create setattr write };
 
 allow tad proc_cmdline:file read;
