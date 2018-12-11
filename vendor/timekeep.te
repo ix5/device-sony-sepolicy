@@ -19,7 +19,6 @@ allow timekeep timekeep_vendor_data_file:file create_file_perms;
 auditallow timekeep timekeep_vendor_data_file:file create_file_perms;
 
 set_prop(timekeep, timekeep_prop)
-auditallow timekeep timekeep_prop:file r_file_perms;
 
 # Needed because the open() call in timekeep.c will traverse parent
 # folders as well

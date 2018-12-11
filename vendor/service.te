@@ -2,7 +2,7 @@ type timekeep_service, service_manager_type;
 # TODO(b/vndbinder): Eventually, this should be a vndservice
 #type qcrilam_service, service_manager_type;
 # TODO: Maybe system_api_service is right?
-type qcrilam_service, system_api_service, service_manager_type;
+type qcrilam_service, service_manager_type;
 
 # TODO: Explore the following from public/attributes:
 

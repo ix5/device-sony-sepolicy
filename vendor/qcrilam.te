@@ -15,6 +15,12 @@ typeattribute qcrilam binder_in_vendor_violators;
 
 #allow qcrilam { app_api_service }:service_manager find;
 
+# TODO: FIXME: IMPORTANT
+# ??????????????????????????
+# ??????????????????????????
+# ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.startService:1531 android.content.ContextWrapper.startService:664 android.content.ContextWrapper.startService:664 com.sony.qcrilam.BootReceiver.onReceive:21 android.app.ActivityThread.handleReceiver:3417
+# avc: granted { transfer } for comm="om.sony.qcrilam" scontext=u:r:system_app:s0 tcontext=u:r:rild:s0 tclass=binder
+
 # TODO: Don't set group etc in QcRilAm apk?
 # E SELinux : selinux_android_setcontext:  Error setting context for app with uid 1000, seinfo platform:privapp:targetSdkVersion=28:complete: Permission denied
 # F zygote64: jni_internal.cc:616] JNI FatalError called: (com.sony.timekeep) frameworks/base/core/jni/com_android_internal_os_Zygote.cpp:750: selinux_android_setcontext(1000, 0, "platform:privapp:targetSdkVersion=28:complete", "com.sony.timekeep") failed

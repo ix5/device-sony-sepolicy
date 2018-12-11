@@ -39,3 +39,7 @@ auditallow rild qcrilam_app:binder { transfer };
 binder_call(qcrilam_app, per_mgr)
 auditallow qcrilam_app per_mgr:binder { call transfer };
 auditallow per_mgr qcrilam_app:binder { transfer };
+
+# Extra permissions:
+control_logd(qcrilam_app)
+get_prop(qcrilam_app, device_logging_prop)
