@@ -1,7 +1,8 @@
 #user=_app isPrivApp=true seinfo=timekeep name=com.sony.timekeep domain=timekeep_app type=app_data_file levelFrom=all
 #user=system seinfo=timekeep name=com.sony.timekeep domain=timekeep_app type=system_app_data_file
 # TODO: testing as _app instead of system user
-user=system seinfo=platform name=com.sony.timekeep domain=timekeep_app type=system_app_data_file
+#user=system seinfo=platform name=com.sony.timekeep domain=timekeep_app type=system_app_data_file
+user=system seinfo=platform name=com.sony.timekeep domain=timekeep_app
 #user=system seinfo=qcrilam_app name=com.sony.qcrilam domain=qcrilam_app type=app_data_file
 #user=system isPrivApp=true seinfo=platform name=com.sony.qcrilam domain=qcrilam_app
 user=system seinfo=platform name=com.sony.qcrilam domain=qcrilam_app

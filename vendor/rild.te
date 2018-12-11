@@ -19,11 +19,12 @@ auditallow servicemanager rild:dir search;
 auditallow servicemanager rild:file { read open };
 auditallow servicemanager rild:process getattr;
 
-# TODO: ?
+# Needed!
 hwbinder_use(rild)
 # avc: granted { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:hwservicemanager:s0 tclass=binder
 # avc: granted { transfer } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:hwservicemanager:s0 tclass=binder
 # avc: granted { transfer } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:hwservicemanager:s0 tclass=binder
+# avc: granted { search } for comm="hwservicemanage" name="780" dev="proc" ino=21162 scontext=u:r:hwservicemanager:s0 tcontext=u:r:rild:s0 tclass=dir
 auditallow rild hwservicemanager:binder { call transfer };
 auditallow hwservicemanager rild:dir search;
 auditallow hwservicemanager rild:file { read open };
@@ -69,9 +70,10 @@ auditallow system_app rild:binder { transfer };
 #auditallow rild qcrilam_service:binder { call transfer };
 #auditallow qcrilam_service rild:binder { transfer };
 
-#binder_call(rild, qcrilam_app);
-#auditallow rild qcrilam_app:binder { call transfer };
-#auditallow qcrilam_app rild:binder { transfer };
+binder_call(rild, qcrilam_app);
+# avc: denied { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:qcrilam_app:s0 tclass=binder
+auditallow rild qcrilam_app:binder { call transfer };
+auditallow qcrilam_app rild:binder { transfer };
 
 # TODO: ?
 binder_call(rild, vnd_qcril_audio_hwservice);

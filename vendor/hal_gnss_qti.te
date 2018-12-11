@@ -8,9 +8,11 @@ init_daemon_domain(hal_gnss_qti)
 # TODO: Check if this is sufficient
 # /sys/bus/esoc/devices is now sysfs_bus_esoc
 # sysfs_msm_subsys seems not needed, even as parent search dir
-allow hal_gnss_qti sysfs_msm_subsys:dir { search };
-auditallow hal_gnss_qti sysfs_msm_subsys:dir { search };
-r_dir_file(hal_gnss_qti, sysfs_soc)
+# avc: denied { open } for path="/sys/devices/platform/soc/1c00000.qcom,ssc/subsys3/name" dev="sysfs" ino=49693 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=file
+# avc: denied { read } for comm="Loc_hal" name="name" dev="sysfs" ino=49693 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=file
+allow hal_gnss_qti sysfs_msm_subsys:dir { search read open };
+allow hal_gnss_qti sysfs_msm_subsys:file { read open };
+r_dir_file(hal_gnss_qti, sysfs_bus_esoc)
 
 vndbinder_use(hal_gnss_qti)
 

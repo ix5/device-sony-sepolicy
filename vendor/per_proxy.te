@@ -18,4 +18,7 @@ allow per_proxy binder_device:chr_file rw_file_perms;
 
 vndbinder_use(per_proxy)
 binder_call(per_proxy, per_mgr)
+# TODO: Check if needed
 r_dir_file(per_proxy, sysfs_msm_subsys)
+# avc: denied { read } for name="devices" dev="sysfs" ino=28289 scontext=u:r:per_proxy:s0 tcontext=u:object_r:sysfs_bus_esoc:s0 tclass=dir
+allow per_mgr sysfs_bus_esoc:dir { search open read };

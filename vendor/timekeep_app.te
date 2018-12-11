@@ -12,15 +12,17 @@
 type timekeep_app, domain;
 
 app_domain(timekeep_app)
+
 add_service(timekeep_app, timekeep_service)
+auditallow timekeep_app timekeep_service:service_manager { add find };
 
 allow timekeep_app activity_service:service_manager find;
 auditallow timekeep_app activity_service:service_manager find;
-#binder_call(timekeep_app, hal_radioext_default)
-#allow timekeep_app hal_radioext_hwservice:hwservice_manager find;
 
+# per-mgr is probably not needed
 binder_call(timekeep_app, per_mgr)
 auditallow timekeep_app per_mgr:binder { call transfer };
+auditallow per_mgr timekeep_app:binder { transfer };
 
 allow timekeep_app timekeep_vendor_data_file:dir create_dir_perms;
 auditallow timekeep_app timekeep_vendor_data_file:dir create_dir_perms;

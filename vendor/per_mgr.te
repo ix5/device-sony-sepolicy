@@ -24,14 +24,18 @@ allowxperm per_mgr self:socket ioctl msm_sock_ipc_ioctls;
 allow per_mgr ssr_device:chr_file { open read };
 
 #r_dir_file(per_mgr, sysfs_msm_subsys)
+# avc: denied { search } for comm="pm-service" name="msm_subsys" dev="sysfs" ino=17766 scontext=u:r:per_mgr:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
+# avc: denied { open } for comm="pm-service" path="/sys/bus/msm_subsys/devices" dev="sysfs" ino=17768 scontext=u:r:per_mgr:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
+allow per_mgr sysfs_msm_subsys:dir { search open read };
+allow per_mgr sysfs_msm_subsys:file { open read };
 # TODO: Confirm this works on all platforms
 # (at least tama doesn't have /sys/bus/* in platform contexts)
 # /sys/bus/esoc/devices is now sysfs_bus_esoc
 allow per_mgr sysfs_bus_esoc:dir { read open };
 # TODO: Make this more specific
 # QUESTION: Which files?
-allow per_mgr sysfs:file { read open };
-auditallow per_mgr sysfs:file { read open };
+#allow per_mgr sysfs:file { read open };
+#auditallow per_mgr sysfs:file { read open };
 
 # TODO: Is this necessary?
 # avc: denied { module_request } for comm="pm-service" kmod="net-pf-42" scontext=u:r:per_mgr:s0 tcontext=u:r:kernel:s0 tclass=system

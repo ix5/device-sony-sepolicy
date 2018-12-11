@@ -12,17 +12,36 @@
 type qcrilam_app, domain;
 
 # TODO: Is this necessary?
-typeattribute qcrilam_app binder_in_vendor_violators;
+#typeattribute qcrilam_app binder_in_vendor_violators;
 
 app_domain(qcrilam_app)
 
 # TODO: Neat idea? from private/system_app.te
+# binder_service(domain)
+# Mark a domain as being a Binder service domain.
+# Used to allow binder IPC to the various system services.
+#define(`binder_service', `
+#typeattribute $1 binderservicedomain;
+#')
+# Important because audioserver can call us via binder then
+#binder_call(audioserver, binderservicedomain)
+# Also:
+# Receive and write to a pipe received over Binder from an app.
+#allow binderservicedomain appdomain:fd use;
+#allow binderservicedomain appdomain:fifo_file write;
 binder_service(qcrilam_app)
 
-add_service(qcrilam_app, qcrilam_service)
-auditallow qcrilam_app qcrilam_service:service_manager { add find };
+# avc: denied { find } for service=activity pid=2061 uid=1000 scontext=u:r:qcrilam_app:s0 tcontext=u:object_r:activity_service:s0 tclass=service_manager
+allow qcrilam_app activity_service:service_manager find;
+
+# TODO: Can't find audits for this
+#add_service(qcrilam_app, qcrilam_service)
+#auditallow qcrilam_app qcrilam_service:service_manager { add find };
 
 binder_use(qcrilam_app)
+# avc: granted { call } for comm="HwBinder:2061_1" scontext=u:r:qcrilam_app:s0 tcontext=u:r:servicemanager:s0 tclass=binder
+# avc: granted { call } for comm="re-initialized>" scontext=u:r:qcrilam_app:s0 tcontext=u:r:servicemanager:s0 tclass=binder
+# TODO: Odd, why HwBinder and not regular binder? and why not over hwservicemanager?
 auditallow qcrilam_app servicemanager:binder { call transfer };
 
 allow qcrilam_app vnd_qcril_audio_hwservice:hwservice_manager { find };
@@ -32,14 +51,20 @@ binder_call(qcrilam_app, vnd_qcril_audio_hwservice)
 auditallow qcrilam_app vnd_qcril_audio_hwservice:binder { call transfer };
 auditallow vnd_qcril_audio_hwservice qcrilam_app:binder { transfer };
 
+# Needed!
 binder_call(qcrilam_app, rild)
+# avc: granted { call } for comm="om.sony.qcrilam" scontext=u:r:qcrilam_app:s0 tcontext=u:r:rild:s0 tclass=binder
+# avc: granted { transfer } for comm="om.sony.qcrilam" scontext=u:r:qcrilam_app:s0 tcontext=u:r:rild:s0 tclass=binder
 auditallow qcrilam_app rild:binder { call transfer };
 auditallow rild qcrilam_app:binder { transfer };
+# avc: denied { find } for service=media.audio_flinger pid=2061 uid=1000 scontext=u:r:qcrilam_app:s0 tcontext=u:object_r:audioserver_service:s0 tclass=service_manager
+allow qcrilam_app audioserver_service:service_manager { find };
 
 binder_call(qcrilam_app, per_mgr)
 auditallow qcrilam_app per_mgr:binder { call transfer };
 auditallow per_mgr qcrilam_app:binder { transfer };
 
 # Extra permissions:
+# TODO: Remove me
 control_logd(qcrilam_app)
 get_prop(qcrilam_app, device_logging_prop)

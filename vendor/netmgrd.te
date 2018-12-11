@@ -30,8 +30,11 @@ allow netmgrd sysfs_net:file rw_file_perms;
 #r_dir_file(netmgrd, sysfs_msm_subsys)
 # TODO: Check if this is sufficient
 # /sys/bus/esoc/devices is now sysfs_bus_esoc
-allow netmgrd sysfs_msm_subsys:dir { search };
+allow netmgrd sysfs_msm_subsys:dir { search read open };
+# avc: denied { open } for path="/sys/devices/platform/soc/1c00000.qcom,ssc/subsys3/name" dev="sysfs" ino=49693 scontext=u:r:netmgrd:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=file
+allow netmgrd sysfs_msm_subsys:file { read open };
 r_dir_file(netmgrd, sysfs_soc)
+r_dir_file(netmgrd, sysfs_bus_esoc)
 
 wakelock_use(netmgrd)
 
