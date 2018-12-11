@@ -28,8 +28,10 @@ allow rild per_mgr_service:service_manager find;
 
 # TODO: Needed?
 add_hwservice(rild, vnd_qcrilhook_hwservice)
-auditallow rild vnd_qcrilhook_hwservice:hwservice_manager { add find };
-auditallow rild hidl_base_hwservice:hwservice_manager { add find };
+userdebug_or_eng(`
+  auditallow rild vnd_qcrilhook_hwservice:hwservice_manager { add find };
+  auditallow rild hidl_base_hwservice:hwservice_manager { add find };
+')
 
 
 ### ============================
@@ -49,8 +51,10 @@ allow rild qcrilam_app:binder call;
 
 # TODO: Needed?
 binder_call(rild, vnd_qcrilhook_hwservice);
-auditallow rild vnd_qcrilhook_hwservice:binder { call transfer };
-auditallow vnd_qcrilhook_hwservice rild:binder { transfer };
+userdebug_or_eng(`
+  auditallow rild vnd_qcrilhook_hwservice:binder { call transfer };
+  auditallow vnd_qcrilhook_hwservice rild:binder { transfer };
+')
 
 # Needed!
 binder_call(rild, secure_element);
@@ -73,7 +77,9 @@ allow rild radio_vendor_data_file:file create_file_perms;
 # TODO: convert to allowxperm for ioctl
 # -> get ioctl via auditd!
 allow rild vendor_file:file { ioctl lock };
-auditallow rild vendor_file:file { ioctl lock };
+userdebug_or_eng(`
+  auditallow rild vendor_file:file { ioctl lock };
+')
 
 allow rild qmuxd_socket:dir w_dir_perms;
 allow rild qmuxd_socket:sock_file create_file_perms;

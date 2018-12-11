@@ -7,38 +7,20 @@ r_dir_rw_file(system_app, sysfs_pcc_profile)
 set_prop(system_app, adbtcpes_prop)
 set_prop(system_app, dispcal_prop)
 
-# TimeKeep Java service
-allow system_app timekeep_vendor_data_file:dir create_dir_perms;
-allow system_app timekeep_vendor_data_file:file create_file_perms;
-# TODO: Needed? Will the Java service try to traverse parent folders as well?
-allow system_app sysfs_msm_subsys:dir search;
-auditallow system_app sysfs_msm_subsys:dir search;
-allow system_app sysfs_rtc:dir search;
-auditallow system_app sysfs_rtc:dir search;
-allow system_app sysfs_rtc:{ file lnk_file } r_file_perms;
-
-# Not only timekeep service!
+# Needed by system "main" and others
+# Different system_apps need this, independent from timekeep.c or
+# TimeKeep.java, so keep it in here
 # avc: granted { read } for comm="main" name="u:object_r:timekeep_prop:s0" dev="tmpfs" ino=13587 scontext=u:r:system_app:s0 tcontext=u:object_r:timekeep_prop:s0 tclass=file
 set_prop(system_app, timekeep_prop)
-
-# Instead of platform_app, for qcrilam
-# TODO: Is this needed?
-binder_call(system_app, rild)
-auditallow platform_app rild:binder { call transfer };
-auditallow rild platform_app:binder { transfer };
 
 # For android setttings
 binder_call(system_app, per_mgr)
 binder_call(system_app, wificond)
 
-allow system_app vnd_qcrilhook_hwservice:hwservice_manager find;
-auditallow system_app vnd_qcrilhook_hwservice:hwservice_manager find;
-
 # TODO: Find out which system_apps are using these
 allow system_app fs_bpf:dir search;
 allow system_app proc_pagetypeinfo:file read;
 allow system_app sysfs_zram:dir search;
-# TODO: Remove auditallow statements
 userdebug_or_eng(`
   auditallow system_app fs_bpf:dir search;
   auditallow system_app proc_pagetypeinfo:file read;

@@ -2,10 +2,15 @@
 allow hal_sensors_default self:socket { create ioctl read write };
 allowxperm hal_sensors_default self:socket ioctl msm_sock_ipc_ioctls;
 
-# TODO: Narrow this down
+# TODO: Narrow this down, check if it is only opportunistic or really needs to
+# travers those paths
 #r_dir_file(hal_sensors_default, sysfs_msm_subsys);
 allow hal_sensors_default sysfs_msm_subsys:dir { search read open };
 allow hal_sensors_default sysfs_msm_subsys:file { read open };
+userdebug_or_eng(`
+  allow hal_sensors_default sysfs_msm_subsys:dir { search read open };
+  allow hal_sensors_default sysfs_msm_subsys:file { read open };
+')
 # avc: denied { open } for comm="android.hardwar" path="/sys/bus/msm_subsys/devices" dev="sysfs" ino=17768 scontext=u:r:hal_sensors_default:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
 # avc: denied { open } for comm="android.hardwar" path="/sys/devices/platform/soc/1c00000.qcom,ssc/subsys3/name" dev="sysfs" ino=49692 scontext=u:r:hal_sensors_default:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=file
 # -> name = slpi
@@ -24,17 +29,11 @@ allow hal_sensors_default sysfs_msm_subsys:file { read open };
 #allow hal_sensors_default sysfs:file { open read };
 # Better:
 #r_dir_file(hal_sensors_default, sysfs_bus_esoc);
-#userdebug_or_eng(`
-#  auditallow hal_sensors_default sysfs_msm_subsys:dir r_dir_perms;
-#  auditallow hal_sensors_default sysfs_msm_subsys:file r_file_perms;
-#  auditallow hal_sensors_default sysfs_bus_esoc:dir r_dir_perms;
-#  auditallow hal_sensors_default sysfs_bus_esoc:file r_file_perms;
-#')
-# TODO: Probably needs search perm for parent dirs as well
-allow hal_sensors_default sysfs_bus_esoc:dir { getattr open read };
+# TODO: Probably needs search perm for parent dirs as well (see above)
 # avc: granted { getattr } for comm="android.hardwar" path="/sys/bus/esoc/devices" dev="sysfs" ino=28289 scontext=u:r:hal_sensors_default:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
+allow hal_sensors_default sysfs_bus_esoc:dir { getattr open read };
 
-# TODO: decide what is needed here
+# TODO: Decide what is needed here
 # avc: granted { module_request } for comm="android.hardwar" kmod="net-pf-42" scontext=u:r:hal_sensors_default:s0 tcontext=u:r:kernel:s0 tclass=system
 allow hal_sensors_default kernel:system module_request;
 

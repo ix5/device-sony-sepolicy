@@ -39,15 +39,17 @@ allow vendor_init proc_irq:file w_file_perms;
 # TODO: Drop cpuset_device or find a better way
 #allow vendor_init cpuset_device:dir search;
 #allow vendor_init cpuset_device:file { create write open };
+# avc: granted { search } for comm="init" name="/" dev="tmpfs" ino=13499 scontext=u:r:vendor_init:s0 tcontext=u:object_r:device:s0 tclass=dir
 allow vendor_init device:dir search;
-auditallow vendor_init device:dir search;
 allow vendor_init device:file { create write };
 
 # from crosshatch:
 # TODO: Check and maybe remove
 # So far, not needed
 allow vendor_init unlabeled:dir { getattr relabelfrom };
-auditallow vendor_init unlabeled:dir { getattr relabelfrom };
+userdebug_or_eng(`
+  auditallow vendor_init unlabeled:dir { getattr relabelfrom };
+')
 
 # avc: denied { relabelfrom } for comm="init" name="persist" dev="rootfs" ino=1245 scontext=u:r:vendor_init:s0 tcontext=u:object_r:rootfs:s0 tclass=lnk_file
 # avc: granted { relabelfrom } for comm="init" name="dsp" dev="rootfs" ino=13246 scontext=u:r:vendor_init:s0 tcontext=u:object_r:rootfs:s0 tclass=lnk_file

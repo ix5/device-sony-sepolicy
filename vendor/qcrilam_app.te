@@ -1,28 +1,13 @@
 type qcrilam_app, domain;
 
-# TODO: Is this necessary?
-#typeattribute qcrilam_app binder_in_vendor_violators;
-
 app_domain(qcrilam_app)
 
-# TODO: Neat idea? from private/system_app.te
-# binder_service(domain)
-# Mark a domain as being a Binder service domain.
-# Used to allow binder IPC to the various system services.
-#define(`binder_service', `
-#typeattribute $1 binderservicedomain;
-#')
-# Important because audioserver can call us via binder then
-#binder_call(audioserver, binderservicedomain)
-# Also:
-# Receive and write to a pipe received over Binder from an app.
-#allow binderservicedomain appdomain:fd use;
-#allow binderservicedomain appdomain:fifo_file write;
-# TODO: Needed?
-#binder_service(qcrilam_app)
-
-# TODO: Fix this denial!
-# avc: denied { getattr } for path="/data/data/com.sony.qcrilam" dev="mmcblk0p54" ino=868390 scontext=u:r:qcrilam_app:s0 tcontext=u:object_r:system_app_data_file:s0 tclass=dir
+# Needed to get access to /data/data/com.sony.qcrilam
+# Also possible to use system_data_app_file, but better to have less privileges
+# avc: granted { search } for comm="om.sony.qcrilam" name="com.sony.qcrilam" dev="mmcblk0p54" ino=311305 scontext=u:r:qcrilam_app:s0 tcontext=u:object_r:app_data_file:s0 tclass=dir
+# avc: granted { getattr } for path="/data/data/com.sony.qcrilam" dev="mmcblk0p54" ino=868390 scontext=u:r:qcrilam_app:s0 tcontext=u:object_r:app_data_file:s0 tclass=dir
+allow qcrilam_app app_data_file:dir { getattr search };
+allow qcrilam_app app_data_file:file rw_file_perms;
 
 # avc: denied { find } for service=activity pid=2061 uid=1000 scontext=u:r:qcrilam_app:s0 tcontext=u:object_r:activity_service:s0 tclass=service_manager
 allow qcrilam_app activity_service:service_manager find;
@@ -30,6 +15,9 @@ allow qcrilam_app activity_service:service_manager find;
 # TODO: Can't find audits for this
 #add_service(qcrilam_app, qcrilam_service)
 #auditallow qcrilam_app qcrilam_service:service_manager { add find };
+
+# TODO(vndbinder): Switch to vndbinder
+#vndbinder_use(qcrilam_app)
 
 # Needed!
 binder_use(qcrilam_app)
@@ -39,12 +27,14 @@ binder_use(qcrilam_app)
 
 # TODO: Needed?
 allow qcrilam_app vnd_qcrilhook_hwservice:hwservice_manager { find };
-auditallow qcrilam_app vnd_qcrilhook_hwservice:hwservice_manager { find };
+userdebug_or_eng(`
+  auditallow qcrilam_app vnd_qcrilhook_hwservice:hwservice_manager { find };
+')
 
 # TODO: Needed?
-binder_call(qcrilam_app, vnd_qcrilhook_hwservice)
-auditallow qcrilam_app vnd_qcrilhook_hwservice:binder { call transfer };
-auditallow vnd_qcrilhook_hwservice qcrilam_app:binder { transfer };
+#binder_call(qcrilam_app, vnd_qcrilhook_hwservice)
+#auditallow qcrilam_app vnd_qcrilhook_hwservice:binder { call transfer };
+#auditallow vnd_qcrilhook_hwservice qcrilam_app:binder { transfer };
 
 # Needed!
 binder_call(qcrilam_app, rild)
@@ -55,7 +45,7 @@ binder_call(qcrilam_app, rild)
 # avc: denied { find } for service=media.audio_flinger pid=2061 uid=1000 scontext=u:r:qcrilam_app:s0 tcontext=u:object_r:audioserver_service:s0 tclass=service_manager
 allow qcrilam_app audioserver_service:service_manager { find };
 
-# TODO: Needed?
-binder_call(qcrilam_app, per_mgr)
-auditallow qcrilam_app per_mgr:binder { call transfer };
-auditallow per_mgr qcrilam_app:binder { transfer };
+# TODO: Needed? Probably not, no denials yet
+#binder_call(qcrilam_app, per_mgr)
+#auditallow qcrilam_app per_mgr:binder { call transfer };
+#auditallow per_mgr qcrilam_app:binder { transfer };

@@ -1,9 +1,11 @@
 get_prop(vold, tee_listener_prop)
 
 # TODO: Is this necessary?
-# QUESTION: Which modules?
+# Cannot reproduce on tone
 allow vold kernel:system module_request;
-auditallow vold kernel:system module_request;
+userdebug_or_eng(`
+  auditallow vold kernel:system module_request;
+')
 
 allow vold persist_file:dir r_dir_perms;
 

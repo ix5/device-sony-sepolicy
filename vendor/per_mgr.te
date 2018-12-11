@@ -8,9 +8,13 @@ add_service(per_mgr, per_mgr_service)
 
 # TODO(b/vndbinder): Remove once per_mgr uses vendor binder
 typeattribute per_mgr binder_in_vendor_violators;
+
+# TODO(v/vndbinder): Switch to vndservice
+vndbinder_use(per_mgr)
+
+# avc:  granted  { find } for service=vendor.qcom.PeripheralManager pid=662 uid=1000 scontext=u:r:per_proxy:s0 tcontext=u:object_r:per_mgr_service:s0 tclass=service_manager
 binder_use(per_mgr)
 
-vndbinder_use(per_mgr)
 binder_call(per_mgr, hal_gnss)
 binder_call(per_mgr, per_proxy)
 binder_call(per_mgr, rild)
@@ -32,23 +36,19 @@ allow per_mgr sysfs_msm_subsys:file { open read };
 # (at least tama doesn't have /sys/bus/* in platform contexts)
 # /sys/bus/esoc/devices is now sysfs_bus_esoc
 allow per_mgr sysfs_bus_esoc:dir { read open };
-# TODO: Make this more specific
-# QUESTION: Which files?
-#allow per_mgr sysfs:file { read open };
-#auditallow per_mgr sysfs:file { read open };
 # TODO: drop cpuset_device or find a better way
 #allow vendor_init cpuset_device:dir search;
 #allow vendor_init cpuset_device:file { create write open };
 allow vendor_init device:dir search;
-auditallow vendor_init device:dir search;
 allow vendor_init device:file { create write open };
-auditallow vendor_init device:file { create write open };
+userdebug_or_eng(`
+  auditallow vendor_init device:dir search;
+  auditallow vendor_init device:file { create write open };
+')
+# This was too broad:
+#allow per_mgr sysfs:file { read open };
 
 # TODO: Is this necessary?
 # avc: denied { module_request } for comm="pm-service" kmod="net-pf-42" scontext=u:r:per_mgr:s0 tcontext=u:r:kernel:s0 tclass=system
 # avc: denied { module_request } for kmod="net-pf-42" scontext=u:r:per_mgr:s0 tcontext=u:r:kernel:s0 tclass=system
 allow per_mgr kernel:system module_request;
-
-# TODO(v/vndbinder): Switch to vndservice
-# avc:  granted  { find } for service=vendor.qcom.PeripheralManager pid=662 uid=1000 scontext=u:r:per_proxy:s0 tcontext=u:object_r:per_mgr_service:s0 tclass=service_manager
-allow per_mgr servicemanager:binder { call transfer };

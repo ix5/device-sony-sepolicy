@@ -36,13 +36,23 @@ r_dir_file(wcnss_service, sysfs_msm_subsys)
 allow wcnss_service sysfs_soc:dir search;
 allow wcnss_service sysfs_soc:file r_file_perms;
 
+# TODO: Which service exactly?
 allow wcnss_service default_android_service:service_manager find;
+userdebug_or_eng(`
+  auditallow wcnss_service default_android_service:service_manager find;
+')
+
+# TODO: Cannot reproduce on tone
 binder_use(wcnss_service)
 # instead of:
 #allow wcnss_service servicemanager:binder call;
-auditallow wcnss_service servicemanager:binder { call transfer };
+userdebug_or_eng(`
+  auditallow wcnss_service servicemanager:binder { call transfer };
+')
 
-# TODO: Is this necessary?
+# TODO: Is this necessary? Cannot reproduce on tone
 # QUESTION: Which modules?
 allow wcnss_service kernel:system module_request;
-auditallow wcnss_service kernel:system module_request;
+userdebug_or_eng(`
+  auditallow wcnss_service kernel:system module_request;
+')
