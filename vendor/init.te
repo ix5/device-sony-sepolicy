@@ -1,9 +1,6 @@
 # symlink /sdcard to backing block
 allow init tmpfs:lnk_file create;
 
-allow init configfs:file rw_file_perms;
-allow init configfs:lnk_file { create unlink };
-
 allow init { mnt_vendor_file vendor_firmware_file qdsp_file }:dir mounton;
 allow init vendor_firmware_file:filesystem { mount relabelfrom };
 
@@ -29,16 +26,12 @@ allow init msm_irqbalance_exec:file execute;
 # Allow the init process to read and write default_smp_affinity:
 allow init proc_irq:file rw_file_perms;
 
+# avc: granted { getattr } for comm="init" path="/dev" dev="tmpfs" ino=12662 scontext=u:r:init:s0 tcontext=u:object_r:device:s0 tclass=dir
 # avc: granted { write } for comm="init" name="/" dev="tmpfs" ino=14067 scontext=u:r:init:s0 tcontext=u:object_r:device:s0 tclass=dir
 # avc: granted { mounton } for comm="init" path="/dev/usb-ffs/adb" dev="tmpfs" ino=20822 scontext=u:r:init:s0 tcontext=u:object_r:device:s0 tclass=dir
 allow init device:dir { mounton rw_dir_perms };
 # avc: granted { write open } for comm="init" path="/dev/cpuset/system-background/tasks" dev="tmpfs" ino=2578 scontext=u:r:init:s0 tcontext=u:object_r:device:s0 tclass=file
 allow init device:file rw_file_perms;
-userdebug_or_eng(`
-  auditallow init device:dir mounton;
-  # Suppress search messages:
-  auditallow init device:dir { open getattr read ioctl write add_name remove_name lock };
-')
 
 # TODO: Narrow this down
 allow init sysfs_msm_subsys:file { open setattr write };

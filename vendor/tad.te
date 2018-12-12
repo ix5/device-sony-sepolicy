@@ -5,7 +5,10 @@ init_daemon_domain(tad)
 
 allow tad block_device:dir { getattr search };
 allow tad ta_block_device:blk_file rw_file_perms;
+# TODO: collect denials for the following three
 allow tad mnt_vendor_file:dir search;
+allow tad persist_file:lnk_file read;
+allow tad vendor_data_file:dir { add_name create setattr write };
 
 # Read access to pseudo filesystems.
 r_dir_file(tad, proc)
@@ -65,13 +68,8 @@ neverallow { domain -tad -kernel -recovery -init -vendor_init userdebug_or_eng(`
 neverallow { domain -tad -kernel -recovery -init -vendor_init userdebug_or_eng(`-su') } rfs_file:file create_file_perms;
 allow tad proc_cmdline:file { open read };
 
-# TODO: Is this necessary?
-# QUESTION: Which modules? -> cannot reproduce on tone
+# TODO: Is this necessary? -> cannot reproduce on tone
 allow tad kernel:system module_request;
 userdebug_or_eng(`
   auditallow tad kernel:system module_request;
 ')
-
-allow tad mnt_vendor_file:dir search;
-allow tad persist_file:lnk_file read;
-allow tad vendor_data_file:dir { add_name create setattr write };

@@ -1,3 +1,4 @@
+# pd_mapper is used by 8998 and sdm845 to control the modem
 type pd_mapper, domain;
 
 type pd_mapper_exec, exec_type, vendor_file_type, file_type;
@@ -16,8 +17,7 @@ r_dir_file(pd_mapper, sysfs_msm_subsys)
 r_dir_file(pd_mapper, vendor_firmware_file)
 
 # TODO: Make this more specific
-# QUESTION: Which files? Cannot reproduce on tone
-# At least use only sysfs_msm_subsys or something similar
+# At least try to use only sysfs_msm_subsys or something similar
 allow pd_mapper sysfs:file { open read };
 userdebug_or_eng(`
   auditallow pd_mapper sysfs:file { open read };

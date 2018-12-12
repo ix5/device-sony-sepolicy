@@ -45,10 +45,6 @@ allow vendor_init device:file { create write };
 userdebug_or_eng(`
   auditallow vendor_init device:file { create write };
 ')
-# TODO: From normal init, to create /config/*
-# Command 'mkdir /config/usb_gadget/g1/functions/cser.dun.0' action=boot (/vendor/etc/init/init.usb.rc:66) took 0ms and failed: mkdir() failed: Permission denied
-allow init configfs:file rw_file_perms;
-allow init configfs:lnk_file { create unlink };
 
 # avc: denied { relabelfrom } for comm="init" name="persist" dev="rootfs" ino=1245 scontext=u:r:vendor_init:s0 tcontext=u:object_r:rootfs:s0 tclass=lnk_file
 # avc: granted { relabelfrom } for comm="init" name="dsp" dev="rootfs" ino=13246 scontext=u:r:vendor_init:s0 tcontext=u:object_r:rootfs:s0 tclass=lnk_file

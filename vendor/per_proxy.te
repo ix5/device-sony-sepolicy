@@ -4,20 +4,24 @@ type per_proxy_exec, exec_type, vendor_file_type, file_type;
 
 init_daemon_domain(per_proxy)
 
-# avc:  granted  { find } for service=vendor.qcom.PeripheralManager pid=637 uid=1000 scontext=u:r:per_proxy:s0 tcontext=u:object_r:per_mgr_service:s0 tclass=service_manager
-allow per_proxy per_mgr_service:service_manager find;
-# TODO: Which denial? -> can't confirm this on tone
-#allow per_proxy default_android_service:service_manager find;
-
 # TODO(b/vndbinder): Remove once per_proxy uses vendor binder
 typeattribute per_proxy binder_in_vendor_violators;
+# TODO(b/vndbinder): Switch to vndbinder
+vndbinder_use(per_proxy)
+
 binder_use(per_proxy)
-# instead of:
-#allow per_proxy servicemanager:binder call;
 allow per_proxy binder_device:chr_file rw_file_perms;
 
-vndbinder_use(per_proxy)
+# avc: granted { find } for service=vendor.qcom.PeripheralManager pid=637 uid=1000 scontext=u:r:per_proxy:s0 tcontext=u:object_r:per_mgr_service:s0 tclass=service_manager
+allow per_proxy per_mgr_service:service_manager find;
+# TODO: Which denial/specific service? -> can't confirm this on tone
+allow per_proxy default_android_service:service_manager find;
+userdebug_or_eng(`
+  auditallow per_proxy default_android_service:service_manager find;
+')
+
 binder_call(per_proxy, per_mgr)
+
 # TODO: Check if needed
 r_dir_file(per_proxy, sysfs_msm_subsys)
 # avc: denied { read } for name="devices" dev="sysfs" ino=28289 scontext=u:r:per_proxy:s0 tcontext=u:object_r:sysfs_bus_esoc:s0 tclass=dir
