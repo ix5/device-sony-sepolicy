@@ -9,10 +9,10 @@ init_daemon_domain(hal_gnss_qti)
 # avc: denied { open } for path="/sys/devices/platform/soc/1c00000.qcom,ssc/subsys3/name" dev="sysfs" ino=49693 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=file
 # avc: denied { read } for comm="Loc_hal" name="name" dev="sysfs" ino=49693 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=file
 r_dir_file(hal_gnss_qti, sysfs_msm_subsys)
-# /sys/bus/esoc/devices is now sysfs_bus_esoc
-# avc: granted { getattr } for comm="Loc_hal" path="/sys/bus/esoc/devices" dev="sysfs" ino=28289 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_bus_esoc:s0 tclass=dir
-# avc: granted { read } for comm="Loc_hal" name="devices" dev="sysfs" ino=28289 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_bus_esoc:s0 tclass=dir
-r_dir_file(hal_gnss_qti, sysfs_bus_esoc)
+# /sys/bus/esoc/devices is now sysfs_esoc
+# avc: granted { getattr } for comm="Loc_hal" path="/sys/bus/esoc/devices" dev="sysfs" ino=28289 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_esoc:s0 tclass=dir
+# avc: granted { read } for comm="Loc_hal" name="devices" dev="sysfs" ino=28289 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_esoc:s0 tclass=dir
+r_dir_file(hal_gnss_qti, sysfs_esoc)
 # TODO: Narrow this down (sysfs_msm_subsys might be enough)
 allow hal_gnss_qti sysfs:file { open read };
 userdebug_or_eng(`

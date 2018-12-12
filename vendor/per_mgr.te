@@ -37,8 +37,8 @@ r_dir_file(per_mgr, sysfs_msm_subsys)
 # avc: denied { open } for comm="pm-service" path="/sys/bus/msm_subsys/devices" dev="sysfs" ino=17768 scontext=u:r:per_mgr:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
 # TODO: Confirm this works on all platforms
 # (at least tama doesn't have /sys/bus/* in platform contexts)
-# /sys/bus/esoc/devices is now sysfs_bus_esoc
-allow per_mgr sysfs_bus_esoc:dir { read open };
+# /sys/bus/esoc/devices is now sysfs_esoc
+allow per_mgr sysfs_esoc:dir { read open };
 # This is too broad, but test on tama etc:
 allow per_mgr sysfs:file { read open };
 userdebug_or_eng(`

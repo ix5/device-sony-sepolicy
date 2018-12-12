@@ -1,10 +1,10 @@
 type sysfs_camera, sysfs_type, fs_type;
 type sysfs_clkscale, sysfs_type, fs_type;
 type sysfs_console_suspend, sysfs_type, fs_type;
-# TODO: Convert all users of sysfs_msm_subsys to sysfs_bus_esoc
+# TODO: Convert all users of sysfs_msm_subsys to sysfs_esoc
 # for /sys/bus/esoc/devices
-#type sysfs_bus_esoc, sysfs_msm_subsys, sysfs_type, fs_type;
-type sysfs_bus_esoc, sysfs_type, fs_type;
+#type sysfs_esoc, sysfs_msm_subsys, sysfs_type, fs_type;
+type sysfs_esoc, sysfs_type, fs_type;
 type sysfs_fingerprint, sysfs_type, fs_type;
 type sysfs_graphics, sysfs_type, fs_type;
 type sysfs_mdss_mdp_caps, sysfs_type, fs_type;
