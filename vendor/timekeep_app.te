@@ -36,7 +36,8 @@ allow timekeep_app sysfs_rtc:{ file lnk_file } r_file_perms;
 # avc: denied { search } for name="400f000.qcom,spmi" dev="sysfs" ino=19045 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
 # TODO: FIXME: Only temporary! But should be fine as it is granted
 # lnk_file read perms on sysfs_rtc, no need to traverse the real path hopefully
-#allow timekeep_app sysfs_msm_subsys:dir { search };
+# EDIT: Apprently not, need to leave search perms for sysfs_msm_subsys in for java app as well
+allow timekeep_app sysfs_msm_subsys:dir { search };
 
 # avc: granted { read } for comm="main" name="u:object_r:timekeep_prop:s0" dev="tmpfs" ino=18507 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:timekeep_prop:s0 tclass=file
 set_prop(timekeep_app, timekeep_prop)
