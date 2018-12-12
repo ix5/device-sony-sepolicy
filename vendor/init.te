@@ -29,21 +29,13 @@ allow init msm_irqbalance_exec:file execute;
 # Allow the init process to read and write default_smp_affinity:
 allow init proc_irq:file rw_file_perms;
 
-# avc: denied { write open } for path="/dev/cpuset/system-background/tasks" dev="tmpfs" ino=19643 scontext=u:r:init:s0 tcontext=u:object_r:cpuset_device:s0 tclass=file
-#allow init cpuset_device:file { mounton create write open };
-# avc: denied { mounton } for comm="init" path="/dev/cpuset" dev="tmpfs" ino=2678 scontext=u:r:init:s0 tcontext=u:object_r:cpuset_device:s0 tclass=dir
-#allow init cpuset_device:dir mounton;
-# Command 'write /dev/cpuset/foreground/cpus 0-3' action=boot (/vendor/etc/init/init.tone.rc:21) took 0ms and failed: Unable to write to file '/dev/cpuset/foreground/cpus': open() failed: Permission denied
-#allow init cpuset_device:dir rw_dir_perms;
-#auditallow init cpuset_device:dir rw_dir_perms;
-#allow init cpuset_device:file rw_file_perms;
-#auditallow init cpuset_device:file rw_file_perms;
-#allow init device:dir mounton;
-#allow init device:file { write open };
-allow init device:dir rw_dir_perms;
+# avc: granted { search } for comm="init" name="/" dev="tmpfs" ino=2218 scontext=u:r:vendor_init:s0 tcontext=u:object_r:device:s0 tclass=dir
+allow init device:dir search;
+# TODO: Check these, also with new mounts
+allow init device:dir { mounton rw_dir_perms };
 allow init device:file rw_file_perms;
 userdebug_or_eng(`
-  auditallow init device:dir rw_dir_perms;
+  auditallow init device:dir { mounton rw_dir_perms };
   auditallow init device:file rw_file_perms;
 ')
 

@@ -22,11 +22,18 @@ allow system_server netmgrd_socket:dir r_dir_perms;
 rw_dir_file(system_server, qmuxd_socket)
 
 # rtc: hctosys gets acessed by AlarmManagerService via system_server
-# Felix:
-# AlarmManagerService: Unable to set rtc to 1544520598: Invalid argument ?????
+# Felix: What is this??? AlarmManagerService: Unable to set rtc to 1544520598: Invalid argument
 allow system_server sysfs_rtc:dir r_dir_perms;
 allow system_server sysfs_rtc:{ file lnk_file } r_file_perms;
 
 # TODO: Is this necessary? Probably yes.
 # avc: granted { syslog_read } for comm="Thread-9" scontext=u:r:system_server:s0 tcontext=u:r:kernel:s0 tclass=system
 allow system_server kernel:system syslog_read;
+
+# avc: denied { read open } for comm="Binder:1181_7" path="/mnt/media_rw/0A3C-120F/Android/data" dev="mmcblk1p1" ino=75 scontext=u:r:system_server:s0 tcontext=u:object_r:vfat:s0 tclass=dir
+# TODO: Which system_server service?
+# Read access to external sdcard is fine even with denial though
+allow system_server vfat:dir r_dir_perms;
+userdebug_or_eng(`
+  auditallow system_server vfat:dir r_dir_perms;
+')
