@@ -7,21 +7,23 @@ init_daemon_domain(ipacm)
 # TODO: Fine-tune this
 allow ipacm ipacm_socket:sock_file { create read write };
 allow ipacm self:socket { create read write };
+userdebug_or_eng(`
+  auditallow ipacm ipacm_socket:sock_file { create read write };
+  auditallow ipacm self:socket { create read write };
+')
 
 # avc: denied { write } for name="ipa" dev="mmcblk0p54" ino=213035 scontext=u:r:ipacm:s0 tcontext=u:object_r:vendor_data_file:s0 tclass=dir
 # avc: denied { add_name } for name="ipacm.pid" scontext=u:r:ipacm:s0 tcontext=u:object_r:vendor_data_file:s0 tclass=dir
 # avc: denied { create } for name="ipacm.pid" scontext=u:r:ipacm:s0 tcontext=u:object_r:vendor_data_file:s0 tclass=file
 # avc: denied { read write open } for path="/data/vendor/ipa/ipacm.pid" dev="mmcblk0p54" ino=213036 scontext=u:r:ipacm:s0 tcontext=u:object_r:vendor_data_file:s0 tclass=file
 # avc: denied { lock } for path="/data/vendor/ipa/ipacm.pid" dev="mmcblk0p54" ino=213036 scontext=u:r:ipacm:s0 tcontext=u:object_r:vendor_data_file:s0 tclass=file
-allow ipacm ipa_vendor_data_file:dir { write add_name search };
+allow ipacm ipa_vendor_data_file:dir create_dir_perms;
 allow ipacm ipa_vendor_data_file:file create_file_perms;
 
 # avc: denied { call } for comm="ipacm" scontext=u:r:ipacm:s0 tcontext=u:r:hwservicemanager:s0 tclass=binder
 # avc: denied { transfer } for comm="ipacm" scontext=u:r:ipacm:s0 tcontext=u:r:hwservicemanager:s0 tclass=binder
 # avc: denied { search } for comm="hwservicemanage" name="662" dev="proc" ino=21174 scontext=u:r:hwservicemanager:s0 tcontext=u:r:ipacm:s0 tclass=dir
 hwbinder_use(ipacm)
-allow ipacm hwservicemanager:binder { call transfer };
-allow hwservicemanager ipacm:dir { search };
 
 # avc: denied { read } for name="u:object_r:hwservicemanager_prop:s0" dev="tmpfs" ino=16651 scontext=u:r:ipacm:s0 tcontext=u:object_r:hwservicemanager_prop:s0 tclass=file permissive=0
 allow ipacm hwservicemanager_prop:file r_file_perms;

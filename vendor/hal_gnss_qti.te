@@ -4,17 +4,28 @@ hal_server_domain(hal_gnss_qti, hal_gnss)
 type hal_gnss_qti_exec, exec_type, vendor_file_type, file_type;
 init_daemon_domain(hal_gnss_qti)
 
+# avc: granted { search } for comm="Loc_hal" name="msm_subsys" dev="sysfs" ino=17766 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
+# avc: granted { read } for comm="Loc_hal" name="devices" dev="sysfs" ino=17768 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
 # avc: denied { open } for path="/sys/devices/platform/soc/1c00000.qcom,ssc/subsys3/name" dev="sysfs" ino=49693 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=file
 # avc: denied { read } for comm="Loc_hal" name="name" dev="sysfs" ino=49693 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=file
-#r_dir_file(hal_gnss_qti, sysfs_msm_subsys)
-# TODO: Get the denial for the dir
-allow hal_gnss_qti sysfs_msm_subsys:dir { search read open };
-allow hal_gnss_qti sysfs_msm_subsys:file { read open };
-userdebug_or_eng(`
-  auditallow hal_gnss_qti sysfs_msm_subsys:dir { search read open };
-')
+r_dir_file(hal_gnss_qti, sysfs_msm_subsys)
 # /sys/bus/esoc/devices is now sysfs_bus_esoc
+# TODO: Get denial here
 r_dir_file(hal_gnss_qti, sysfs_bus_esoc)
+userdebug_or_eng(`
+  auditallow hal_gnss_qti sysfs_bus_esoc:dir r_dir_perms;
+  auditallow hal_gnss_qti sysfs_bus_esoc:file r_file_perms;
+')
+# TODO: Narrow this down (sysfs_msm_subsys might be enough)
+allow hal_gnss_qti sysfs:file { open read };
+userdebug_or_eng(`
+  auditallow hal_gnss_qti sysfs:file { open read };
+')
+userdebug_or_eng(`
+  # TODO: Get denial and check if this should run in user builds
+  allow hal_gnss_qti diag_device:chr_file { read write };
+  auditallow hal_gnss_qti diag_device:chr_file { read write };
+')
 
 vndbinder_use(hal_gnss_qti)
 
@@ -52,7 +63,5 @@ allow hal_gnss_qti self:netlink_route_socket { bind create nlmsg_read read write
 # libqdi and have all its clients use netlink route
 # sockets.
 dontaudit hal_gnss_qti self:udp_socket create;
-
-allow hal_gnss_qti kernel:system module_request;
-allow hal_gnss_qti sysfs:file { open read };
-allow hal_gnss_qti diag_device:chr_file { read write };
+# Follow crosshatch sepolicy and ignore:
+dontaudit hal_gnss_qti kernel:system module_request;

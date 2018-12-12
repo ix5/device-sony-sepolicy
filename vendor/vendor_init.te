@@ -40,11 +40,9 @@ allow vendor_init proc_irq:file w_file_perms;
 
 # avc: granted { search } for comm="init" name="/" dev="tmpfs" ino=13499 scontext=u:r:vendor_init:s0 tcontext=u:object_r:device:s0 tclass=dir
 allow vendor_init device:dir search;
-# TODO: Collect denial for file operations
+# avc: granted { create } for comm="init" name="cpus" scontext=u:r:vendor_init:s0 tcontext=u:object_r:device:s0 tclass=file
+# avc: granted { write } for comm="init" path="/dev/cpuset/foreground/cpus" dev="tmpfs" ino=21626 scontext=u:r:vendor_init:s0 tcontext=u:object_r:device:s0 tclass=file
 allow vendor_init device:file { create write };
-userdebug_or_eng(`
-  auditallow vendor_init device:file { create write };
-')
 
 # avc: denied { relabelfrom } for comm="init" name="persist" dev="rootfs" ino=1245 scontext=u:r:vendor_init:s0 tcontext=u:object_r:rootfs:s0 tclass=lnk_file
 # avc: granted { relabelfrom } for comm="init" name="dsp" dev="rootfs" ino=13246 scontext=u:r:vendor_init:s0 tcontext=u:object_r:rootfs:s0 tclass=lnk_file
