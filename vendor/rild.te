@@ -26,6 +26,7 @@ hwbinder_use(rild)
 # avc:  granted  { find } for service=vendor.qcom.PeripheralManager pid=700 uid=1001 scontext=u:r:rild:s0 tcontext=u:object_r:per_mgr_service:s0 tclass=service_manager
 allow rild per_mgr_service:service_manager find;
 
+add_hwservice(rild, vnd_ims_radio_hwservice)
 # TODO: Needed?
 add_hwservice(rild, vnd_qcrilhook_hwservice)
 userdebug_or_eng(`

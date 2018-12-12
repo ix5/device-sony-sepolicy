@@ -23,5 +23,5 @@ vendor.all.modules.ready   u:object_r:vendor_device_prop:s0
 ro.vendor.bt.              u:object_r:vendor_bluetooth_prop:s0
 # TODO: How to name vendor.ims props:
 # vendor_ims_prop, ims_prop, radio_prop?
-vendor.ims.                u:object_r:vendor_ims_prop:s0
-persist.vendor.ims.        u:object_r:vendor_ims_prop:s0
+vendor.ims.                u:object_r:ims_prop:s0
+persist.vendor.ims.        u:object_r:ims_prop:s0
