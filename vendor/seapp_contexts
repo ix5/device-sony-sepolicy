@@ -1,28 +1,2 @@
-#user=_app isPrivApp=true seinfo=timekeep name=com.sony.timekeep domain=timekeep_app type=app_data_file levelFrom=all
-#user=system seinfo=timekeep name=com.sony.timekeep domain=timekeep_app type=system_app_data_file
-# TODO: testing as _app instead of system user
-#user=system seinfo=platform name=com.sony.timekeep domain=timekeep_app type=system_app_data_file
 user=system seinfo=platform name=com.sony.timekeep domain=timekeep_app type=app_data_file
-#user=system seinfo=platform name=com.sony.timekeep domain=timekeep_app
-#user=system seinfo=qcrilam_app name=com.sony.qcrilam domain=qcrilam_app type=app_data_file
-#user=system isPrivApp=true seinfo=platform name=com.sony.qcrilam domain=qcrilam_app
-# FIXME: This one is golden:
-#user=system seinfo=platform name=com.sony.qcrilam domain=qcrilam_app
-# But this one has /data/data/com.sony.qcrilam perms, hopefully:
-#user=system seinfo=platform name=com.sony.qcrilam domain=qcrilam_app type=system_app_data_file
 user=system seinfo=platform name=com.sony.qcrilam domain=qcrilam_app type=app_data_file
-# avc: denied { getattr } for path="/data/data/com.sony.qcrilam" dev="mmcblk0p54" ino=868390 scontext=u:r:qcrilam_app:s0 tcontext=u:object_r:system_app_data_file:s0 tclass=dir
-
-#user=system seinfo=platform name=com.sony.qcrilam domain=qcrilam_app type=system_app_data_file
-#user=system seinfo=platform name=com.sony.timekeep domain=system_app type=system_app_data_file
-# TODO: use levelFrom like crosshatch?
-#user=system seinfo=platform name=com.sony.qcrilam domain=qcrilam type=system_app_data_file levelFrom=all
-#user=system seinfo=platform name=com.sony.qcrilam domain=system_app type=system_app_data_file
-#user=system seinfo=qcrilam_app name=com.sony.qcrilam domain=qcrilam_app type=system_app_data_file
-
-# From private/seapp_contexts:
-# system domains should never be assigned outside of system uid
-#neverallow user=((?!system).)* domain=system_app
-#neverallow user=((?!system).)* type=system_app_data_file
-
-# type= might not be necessary for apps that do not need /data/data dirs
