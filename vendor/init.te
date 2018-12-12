@@ -29,10 +29,8 @@ allow init msm_irqbalance_exec:file execute;
 # Allow the init process to read and write default_smp_affinity:
 allow init proc_irq:file rw_file_perms;
 
-# avc: granted { search } for comm="init" name="/" dev="tmpfs" ino=2218 scontext=u:r:vendor_init:s0 tcontext=u:object_r:device:s0 tclass=dir
-allow init device:dir search;
-# TODO: Check if these are needed as well, also with new mounts
-# (tama etc? new symlinks?)
+# avc: granted { write } for comm="init" name="/" dev="tmpfs" ino=14067 scontext=u:r:init:s0 tcontext=u:object_r:device:s0 tclass=dir
+# avc: granted { mounton } for comm="init" path="/dev/usb-ffs/adb" dev="tmpfs" ino=20822 scontext=u:r:init:s0 tcontext=u:object_r:device:s0 tclass=dir
 allow init device:dir { mounton rw_dir_perms };
 # avc: granted { write open } for comm="init" path="/dev/cpuset/system-background/tasks" dev="tmpfs" ino=2578 scontext=u:r:init:s0 tcontext=u:object_r:device:s0 tclass=file
 allow init device:file rw_file_perms;
