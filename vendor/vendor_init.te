@@ -35,8 +35,13 @@ allow vendor_init proc_security:file write;
 allow vendor_init persist_file:lnk_file read;
 # avc: granted { read } for comm="init" name="dsp" dev="rootfs" ino=1212 scontext=u:r:vendor_init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=lnk_file
 allow vendor_init qdsp_file:lnk_file read;
-# TODO: Might need more perms
-allow vendor_init qdsp_file:dir setattr;
+# TODO: This is a neverallow!
+# Nobody should be doing writes to /system & /vendor
+# These partitions are intended to be read-only and must never be
+# modified. Doing so would violate important Android security guarantees
+# and invalidate dm-verity signatures.
+#allow vendor_init qdsp_file:dir setattr;
+dontaudit vendor_init qdsp_file:dir setattr;
 
 # Allow the vendor init process to read and write default_smp_affinity:
 # avc: denied { write } for comm="init" name="default_smp_affinity" dev="proc" ino=4026531867 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc_irq:s0 tclass=file
