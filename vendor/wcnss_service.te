@@ -26,8 +26,7 @@ allowxperm wcnss_service self:udp_socket ioctl { SIOCIWFIRSTPRIV_05 SIOCSIFFLAGS
 allow wcnss_service self:netlink_generic_socket create_socket_perms_no_ioctl;
 allow wcnss_service self:netlink_socket create_socket_perms_no_ioctl;
 
-# TODO: Change this to { file lnk_file }
-allow wcnss_service vendor_firmware_file:file { read open getattr };
+allow wcnss_service vendor_firmware_file:{ file lnk_file } { read open getattr };
 allow wcnss_service vendor_firmware_file:dir search;
 
 # TODO: Replace wifi_vendor_data_file by hostapd_data_file
