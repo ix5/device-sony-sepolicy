@@ -21,6 +21,10 @@ allow system_server netmgrd_socket:dir r_dir_perms;
 # radio
 rw_dir_file(system_server, qmuxd_socket)
 
+# qcom
+# instead of use_per_mgr() macro
+get_prop(system_server, per_mgr_state_prop);
+
 # rtc: hctosys gets acessed by AlarmManagerService via system_server
 # Felix: What is this??? AlarmManagerService: Unable to set rtc to 1544520598: Invalid argument
 allow system_server sysfs_rtc:dir r_dir_perms;

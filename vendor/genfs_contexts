@@ -66,7 +66,7 @@ genfscon sysfs /class/uio                                               u:object
 #       At least tama doesn't seem to have it
 # FIXME: If you come across any sepolicy build failures, take out the corresponding line
 #        in the platform policy where it labels /sys/bus/esoc as sysfs_something
-genfscon sysfs /bus/esoc/devices                                        u:object_r:sysfs_bus_esoc:s0
+genfscon sysfs /bus/esoc/devices                                        u:object_r:sysfs_esoc:s0
 genfscon sysfs /devices/soc/soc:bt_wcn3990                              u:object_r:sysfs_bluetooth_writable:s0
 genfscon sysfs /devices/soc/soc:qcom,gpubw                              u:object_r:sysfs_msm_subsys:s0
 genfscon sysfs /devices/soc/soc:qcom,kgsl-hyp                           u:object_r:sysfs_msm_subsys:s0

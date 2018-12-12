@@ -45,6 +45,9 @@ userdebug_or_eng(`
   auditallow per_mgr sysfs:file { read open };
 ')
 
+# Set the peripheral state property
+set_prop(per_mgr, per_mgr_state_prop);
+
 # avc: granted { search } for comm="pm-service" name="/" dev="tmpfs" ino=3653 scontext=u:r:per_mgr:s0 tcontext=u:object_r:device:s0 tclass=dir
 allow per_mgr device:dir search;
 allow per_mgr device:file { create write open };

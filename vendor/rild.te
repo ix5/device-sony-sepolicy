@@ -25,6 +25,8 @@ hwbinder_use(rild)
 # Needed!
 # avc:  granted  { find } for service=vendor.qcom.PeripheralManager pid=700 uid=1001 scontext=u:r:rild:s0 tcontext=u:object_r:per_mgr_service:s0 tclass=service_manager
 allow rild per_mgr_service:service_manager find;
+# included in:
+use_per_mgr(rild)
 
 add_hwservice(rild, vnd_ims_radio_hwservice)
 # TODO: Needed?
@@ -33,6 +35,10 @@ userdebug_or_eng(`
   auditallow rild vnd_qcrilhook_hwservice:hwservice_manager { add find };
   auditallow rild hidl_base_hwservice:hwservice_manager { add find };
 ')
+# TODO: neverallow
+#allow rild hal_secure_element_hwservice:hwservice_manager add;
+# Try this instead?
+hal_server_domain(rild, hal_secure_element)
 
 
 ### ============================
