@@ -44,8 +44,3 @@ binder_call(qcrilam_app, rild)
 # Needed!
 # avc: denied { find } for service=media.audio_flinger pid=2061 uid=1000 scontext=u:r:qcrilam_app:s0 tcontext=u:object_r:audioserver_service:s0 tclass=service_manager
 allow qcrilam_app audioserver_service:service_manager { find };
-
-# TODO: Needed? Probably not, no denials yet
-#binder_call(qcrilam_app, per_mgr)
-#auditallow qcrilam_app per_mgr:binder { call transfer };
-#auditallow per_mgr qcrilam_app:binder { transfer };
