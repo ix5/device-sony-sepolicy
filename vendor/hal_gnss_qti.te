@@ -4,14 +4,16 @@ hal_server_domain(hal_gnss_qti, hal_gnss)
 type hal_gnss_qti_exec, exec_type, vendor_file_type, file_type;
 init_daemon_domain(hal_gnss_qti)
 
-#r_dir_file(hal_gnss_qti, sysfs_msm_subsys)
-# TODO: Check if this is sufficient
-# /sys/bus/esoc/devices is now sysfs_bus_esoc
-# sysfs_msm_subsys seems not needed, even as parent search dir
 # avc: denied { open } for path="/sys/devices/platform/soc/1c00000.qcom,ssc/subsys3/name" dev="sysfs" ino=49693 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=file
 # avc: denied { read } for comm="Loc_hal" name="name" dev="sysfs" ino=49693 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=file
+#r_dir_file(hal_gnss_qti, sysfs_msm_subsys)
+# TODO: Get the denial for the dir
 allow hal_gnss_qti sysfs_msm_subsys:dir { search read open };
 allow hal_gnss_qti sysfs_msm_subsys:file { read open };
+userdebug_or_eng(`
+  auditallow hal_gnss_qti sysfs_msm_subsys:dir { search read open };
+')
+# /sys/bus/esoc/devices is now sysfs_bus_esoc
 r_dir_file(hal_gnss_qti, sysfs_bus_esoc)
 
 vndbinder_use(hal_gnss_qti)

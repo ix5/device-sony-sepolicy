@@ -28,15 +28,9 @@ unix_socket_connect(hal_camera_default, cashsvr, cashsvr)
 allow hal_camera_default cashsvr_socket:dir search;
 allow hal_camera_default cashsvr_socket:sock_file write;
 
-# Instead of:
-#allow hal_camera_default sysfs_msm_subsys:dir r_dir_perms;
-#allow hal_camera_default sysfs_msm_subsys:file r_file_perms;
-# TODO: Check if this is sufficient
-allow hal_camera_default sysfs_msm_subsys:dir { search read open };
-allow hal_camera_default sysfs_msm_subsys:file { read open };
 # avc: denied { open } for path="/sys/devices/platform/soc/900000.qcom,mdss_rotator/video4linux/video0/name" dev="sysfs" ino=41736 scontext=u:r:hal_camera_default:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=file
-# TODO: Check if this is sufficient
-r_dir_file(hal_camera_default, sysfs_soc)
+allow hal_camera_default sysfs_msm_subsys:dir r_dir_perms;
+allow hal_camera_default sysfs_msm_subsys:file r_file_perms;
 # avc: denied { open } for path="/sys/bus/esoc/devices" dev="sysfs" ino=28289 scontext=u:r:hal_camera_default:s0 tcontext=u:object_r:sysfs_bus_esoc:s0 tclass=dir
 # /sys/bus/esoc/devices is now sysfs_bus_esoc
 r_dir_file(hal_camera_default, sysfs_bus_esoc)

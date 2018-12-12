@@ -1,13 +1,12 @@
 allow hal_wifi_supplicant_default proc_net:file w_file_perms;
 
+# Use AOSP wpa_data_file instead
 #allow hal_wifi_supplicant_default wifi_vendor_data_file:dir create_dir_perms;
 #allow hal_wifi_supplicant_default wifi_vendor_data_file:file create_file_perms;
 # AOSP policy:
 #/data/vendor/wifi/wpa(/.*)?      u:object_r:wpa_data_file:s0
-# TODO: should already be granted, but check if it tries to scan parent dir
-allow hal_wifi_supplicant_default wpa_data_file:dir create_dir_perms;
-allow hal_wifi_supplicant_default wpa_data_file:file create_file_perms;
+# TODO: Should already be granted, but check if it tries to scan parent dir
+allow hal_wifi_supplicant_default vendor_data_file:dir { search read open };
 userdebug_or_eng(`
-  auditallow hal_wifi_supplicant_default wpa_data_file:dir create_dir_perms;
-  auditallow hal_wifi_supplicant_default wpa_data_file:file create_file_perms;
+  auditallow hal_wifi_supplicant_default vendor_data_file:dir { search read open };
 ')

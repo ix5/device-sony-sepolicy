@@ -1,9 +1,0 @@
-# W hostapd : type=1400 audit(0.0:34): avc: denied { search } for name="wifi" dev="mmcblk0p54" ino=212998 scontext=u:r:hal_wifi_hostapd_default:s0 tcontext=u:object_r:wifi_vendor_data_file:s0 tclass=dir permissive=0
-# TODO: Drop this as AOSP already allows access to hostapd_data_file
-#allow hal_wifi_hostapd_default wifi_vendor_data_file:dir search;
-# TODO: should already be granted, but check if it tries to scan parent dir
-userdebug_or_eng(`
-  auditallow hal_wifi_hostapd_default hostapd_data_file:dir create_dir_perms;
-  auditallow hal_wifi_hostapd_default hostapd_data_file:file create_file_perms;
-  auditallow hal_wifi_hostapd_default hostapd_data_file:sock_file create_file_perms;
-')
