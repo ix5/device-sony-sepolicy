@@ -62,7 +62,10 @@ genfscon sysfs /devices/platform/soc/soc:qcom,memlat-cpu0               u:object
 genfscon sysfs /devices/platform/soc/soc:qcom,memlat-cpu4               u:object_r:sysfs_msm_subsys:s0
 
 genfscon sysfs /class/uio                                               u:object_r:sysfs_uio:s0
-# TODO: Set this in platform dirs!
+# TODO: Decide whether to set sysfs_bus_esoc in platform dirs or here.
+#       At least tama doesn't seem to have it
+# FIXME: If you come across any sepolicy build failures, take out the corresponding line
+#        in the platform policy where it labels /sys/bus/esoc as sysfs_something
 genfscon sysfs /bus/esoc/devices                                        u:object_r:sysfs_bus_esoc:s0
 genfscon sysfs /devices/soc/soc:bt_wcn3990                              u:object_r:sysfs_bluetooth_writable:s0
 genfscon sysfs /devices/soc/soc:qcom,gpubw                              u:object_r:sysfs_msm_subsys:s0
