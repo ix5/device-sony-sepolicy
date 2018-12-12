@@ -2,9 +2,6 @@ userdebug_or_eng(`
   allow domain diag_device:chr_file rw_file_perms;
 ')
 
-#dontaudit domain self:capability sys_module;
-#dontaudit domain kernel:system module_request;
-
 # In order for /sys/kernel/debug/kgsl/proc/<pid>/mem
 # to be created for memory tracking, the domain of
 # the tracked process must have permission to search
