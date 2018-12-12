@@ -1,38 +1,3 @@
 type timekeep_service, service_manager_type;
 # TODO(b/vndbinder): Eventually, this should be a vndservice
-#type qcrilam_service, service_manager_type;
-# TODO: Maybe system_api_service is right?
 type qcrilam_service, service_manager_type;
-
-# TODO: Explore the following from public/attributes:
-
-# All service_manager types created by system_server
-#attribute system_server_service;
-
-# services which should be available to all but isolated apps
-#attribute app_api_service;
-
-# services which should be available to all ephemeral apps
-#attribute ephemeral_app_api_service;
-
-# services which export only system_api
-#attribute system_api_service;
-
-# All types used for services managed by servicemanager.
-#attribute service_manager_type;
-
-# All types used for services managed by hwservicemanager
-#attribute hwservice_manager_type;
-
-# All HwBinder services guaranteed to be passthrough. These services always run
-# in the process of their clients, and thus operate with the same access as
-# their clients.
-#attribute same_process_hwservice;
-
-# All HwBinder services guaranteed to be offered only by core domain components
-#attribute coredomain_hwservice;
-# All core domains (as opposed to vendor/device-specific domains)
-#attribute coredomain;
-
-# All types used for services managed by vndservicemanager
-#attribute vndservice_manager_type;
