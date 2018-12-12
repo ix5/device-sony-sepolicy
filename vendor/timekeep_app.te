@@ -34,7 +34,8 @@ allow timekeep_app sysfs_rtc:dir { search };
 allow timekeep_app sysfs_rtc:{ file lnk_file } r_file_perms;
 # TODO: Maybe ignore this instead of allowing search on all of sysfs_msm_subsys
 # avc: denied { search } for name="400f000.qcom,spmi" dev="sysfs" ino=19045 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
-allow timekeep_app sysfs_msm_subsys:dir { search };
+# TODO: FIXME: Only temporary!
+#allow timekeep_app sysfs_msm_subsys:dir { search };
 
 # avc: granted { read } for comm="main" name="u:object_r:timekeep_prop:s0" dev="tmpfs" ino=18507 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:timekeep_prop:s0 tclass=file
 set_prop(timekeep_app, timekeep_prop)

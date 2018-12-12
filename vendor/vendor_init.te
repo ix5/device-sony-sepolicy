@@ -26,6 +26,10 @@ allow vendor_init proc_kernel_printk:file write;
 
 allow vendor_init proc_security:file write;
 # avc: granted { read } for comm="init" name="persist" dev="rootfs" ino=13269 scontext=u:r:vendor_init:s0 tcontext=u:object_r:persist_file:s0 tclass=lnk_file
+# TODO(c/772de603cae45bb479a9dc19d78daa1de4d88205)
+# vendor_init: permit access to persist_file
+# the init should be able to read the persist_file
+# Signed-off-by: Alin Jerpelea <alin.jerpelea@sony.com>
 allow vendor_init persist_file:lnk_file read;
 # avc: granted { read } for comm="init" name="dsp" dev="rootfs" ino=1212 scontext=u:r:vendor_init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=lnk_file
 allow vendor_init qdsp_file:lnk_file read;
@@ -37,11 +41,19 @@ allow vendor_init proc_irq:file w_file_perms;
 # avc: denied { create } for comm="init" name="cpus" scontext=u:r:vendor_init:s0 tcontext=u:object_r:device:s0 tclass=file
 # avc: denied { write } for comm="init" path="/dev/cpuset/foreground/cpus" dev="tmpfs" ino=25046 scontext=u:r:vendor_init:s0 tcontext=u:object_r:device:s0 tclass=file
 # TODO: Drop cpuset_device or find a better way
+#allow vendor_init cpuset_device:dir rw_dir_perms;
+#auditallow vendor_init cpuset_device:dir rw_dir_perms;
+#allow vendor_init cpuset_device:file rw_file_perms;
+#auditallow vendor_init cpuset_device:file rw_file_perms;
 #allow vendor_init cpuset_device:dir search;
 #allow vendor_init cpuset_device:file { create write open };
 # avc: granted { search } for comm="init" name="/" dev="tmpfs" ino=13499 scontext=u:r:vendor_init:s0 tcontext=u:object_r:device:s0 tclass=dir
 allow vendor_init device:dir search;
 allow vendor_init device:file { create write };
+# TODO: From normal init, to create /config/*
+# Command 'mkdir /config/usb_gadget/g1/functions/cser.dun.0' action=boot (/vendor/etc/init/init.usb.rc:66) took 0ms and failed: mkdir() failed: Permission denied
+allow init configfs:file rw_file_perms;
+allow init configfs:lnk_file { create unlink };
 
 # from crosshatch:
 # TODO: Check and maybe remove

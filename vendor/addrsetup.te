@@ -8,8 +8,20 @@ unix_socket_connect(addrsetup, tad, tad)
 allow addrsetup bluetooth_vendor_data_file:dir rw_dir_perms;
 allow addrsetup bluetooth_vendor_data_file:file create_file_perms;
 
-allow addrsetup wifi_vendor_data_file:dir rw_dir_perms;
-allow addrsetup wifi_vendor_data_file:file create_file_perms;
+# TODO: Replace wifi_vendor_data_file by hostapd_data_file
+# and wpa_data_file AOSP types
+#allow addrsetup wifi_vendor_data_file:dir rw_dir_perms;
+#allow addrsetup wifi_vendor_data_file:file create_file_perms;
+allow addrsetup hostapd_data_file:dir rw_dir_perms;
+allow addrsetup hostapd_data_file:file create_file_perms;
+allow addrsetup wpa_data_file:dir rw_dir_perms;
+allow addrsetup wpa_data_file:file create_file_perms;
+userdebug_or_eng(`
+  auditallow addrsetup hostapd_data_file:dir rw_dir_perms;
+  auditallow addrsetup hostapd_data_file:file create_file_perms;
+  auditallow addrsetup wpa_data_file:dir rw_dir_perms;
+  auditallow addrsetup wpa_data_file:file create_file_perms;
+')
 
 allow addrsetup sysfs_addrsetup:file rw_file_perms;
 

@@ -74,5 +74,3 @@ userdebug_or_eng(`
 allow tad mnt_vendor_file:dir search;
 allow tad persist_file:lnk_file read;
 allow tad vendor_data_file:dir { add_name create setattr write };
-
-allow tad proc_cmdline:file read;

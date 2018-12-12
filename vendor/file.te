@@ -41,9 +41,8 @@ type qdsp_file, file_type, vendor_file_type, mlstrustedobject;
 type tad_socket, file_type;
 type ims_socket, file_type;
 
-type vendor_firmware_file, file_type, vendor_file_type, contextmount_type;
-#type firmware_file, file_type, vendor_file_type, contextmount_type;
-#type bt_firmware_file, file_type, vendor_file_type, contextmount_type;
+type firmware_file, file_type, vendor_file_type, contextmount_type;
+type bt_firmware_file, file_type, vendor_file_type, contextmount_type;
 type firmware_file, fs_type, contextmount_type;
 type bt_firmware_file, fs_type, contextmount_type;
 
@@ -65,13 +64,14 @@ type nfc_vendor_data_file, file_type, data_file_type;
 type radio_vendor_data_file, file_type, data_file_type, mlstrustedobject;
 type sensors_vendor_data_file, file_type, data_file_type;
 type timekeep_vendor_data_file, file_type, data_file_type;
-type wifi_vendor_data_file, file_type, data_file_type;
+# TODO: Drop this in favor of AOSP hostapd_data_file and wpa_data_file
+#type wifi_vendor_data_file, file_type, data_file_type;
 type bluetooth_vendor_data_file, file_type, data_file_type;
 type audio_vendor_data_file, file_type, data_file_type;
 type camera_vendor_data_file, file_type, data_file_type;
 type ipa_vendor_data_file, file_type, data_file_type;
 
-#type vendor_firmware_file, vendor_file_type, file_type;
+type vendor_firmware_file, vendor_file_type, file_type;
 
 # diag sysfs files
 type sysfs_diag, fs_type, sysfs_type;

@@ -1,15 +1,20 @@
 # symlink /sdcard to backing block
 allow init tmpfs:lnk_file create;
+
 allow init configfs:file rw_file_perms;
 allow init configfs:lnk_file { create unlink };
 
 allow init { firmware_file bt_firmware_file persist_file qdsp_file }:dir mounton;
-allow init { vendor_firmware_file }:dir mounton;
+# TODO: vendor_firmware_file is wrong right now
 # TODO: Keep an eye on this during the /persist/ -> /mnt/vendor/persist etc transitions
 # avc: denied { relabelfrom } for comm="init" scontext=u:r:init:s0 tcontext=u:object_r:firmware_file:s0 tclass=filesystem
 # avc: denied { associate } for comm="init" scontext=u:object_r:firmware_file:s0 tcontext=u:object_r:firmware_file:s0 tclass=filesystem
 # avc: denied { mount } for comm="init" name="/" dev="mmcblk0p31" ino=1 scontext=u:r:init:s0 tcontext=u:object_r:firmware_file:s0 tclass=filesystem
 #allow init { firmware_file }:filesystem { relabelfrom associate mount };
+# TODO: Remove all other file/dir/fs types apart from mnt_vendor_file eventually?
+#allow init mnt_vendor_file:dir mounton;
+#allow init { vendor_firmware_file }:dir mounton;
+allow init qdsp_file:lnk_file read;
 
 dontaudit init kernel:system module_request;
 
@@ -21,15 +26,24 @@ allow init msm_irqbalance_exec:file execute;
 
 # Allow the init process to read and write default_smp_affinity:
 allow init proc_irq:file rw_file_perms;
-allow init mnt_vendor_file:dir mounton;
-allow init qdsp_file:lnk_file read;
 
 # avc: denied { write open } for path="/dev/cpuset/system-background/tasks" dev="tmpfs" ino=19643 scontext=u:r:init:s0 tcontext=u:object_r:cpuset_device:s0 tclass=file
 #allow init cpuset_device:file { mounton create write open };
 # avc: denied { mounton } for comm="init" path="/dev/cpuset" dev="tmpfs" ino=2678 scontext=u:r:init:s0 tcontext=u:object_r:cpuset_device:s0 tclass=dir
 #allow init cpuset_device:dir mounton;
-allow init device:dir mounton;
-allow init device:file { write open };
+# Command 'write /dev/cpuset/foreground/cpus 0-3' action=boot (/vendor/etc/init/init.tone.rc:21) took 0ms and failed: Unable to write to file '/dev/cpuset/foreground/cpus': open() failed: Permission denied
+#allow init cpuset_device:dir rw_dir_perms;
+#auditallow init cpuset_device:dir rw_dir_perms;
+#allow init cpuset_device:file rw_file_perms;
+#auditallow init cpuset_device:file rw_file_perms;
+#allow init device:dir mounton;
+#allow init device:file { write open };
+allow init device:dir rw_dir_perms;
+allow init device:file rw_file_perms;
+userdebug_or_eng(`
+  auditallow init device:dir rw_dir_perms;
+  auditallow init device:file rw_file_perms;
+')
 
 # TODO: Narrow this down
 allow init sysfs_msm_subsys:file { open setattr write };

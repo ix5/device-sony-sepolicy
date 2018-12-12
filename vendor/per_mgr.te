@@ -50,5 +50,4 @@ userdebug_or_eng(`
 
 # TODO: Is this necessary?
 # avc: denied { module_request } for comm="pm-service" kmod="net-pf-42" scontext=u:r:per_mgr:s0 tcontext=u:r:kernel:s0 tclass=system
-# avc: denied { module_request } for kmod="net-pf-42" scontext=u:r:per_mgr:s0 tcontext=u:r:kernel:s0 tclass=system
 allow per_mgr kernel:system module_request;

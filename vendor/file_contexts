@@ -2,9 +2,9 @@
 /dev/btpower                                    u:object_r:bt_device:s0
 # TODO: Drop cpuset_device or find a better way
 #/dev/cpuset(/.*)?                               u:object_r:cpuset_device:s0
-#/dev/cpuset/foreground/tasks
-#/dev/cpuset/system-background/tasks
-#/dev/cpuset/foreground/cpus
+#/dev/cpuset/foreground/tasks                    u:object_r:cpuset_device:s0
+#/dev/cpuset/system-background/tasks             u:object_r:cpuset_device:s0
+#/dev/cpuset/foreground/cpus                     u:object_r:cpuset_device:s0
 /dev/diag                                       u:object_r:diag_device:s0
 /dev/kgsl-3d0                                   u:object_r:gpu_device:s0
 /dev/rtc0                                       u:object_r:rtc_device:s0
@@ -178,7 +178,11 @@
 /data/vendor/time(/.*)?                u:object_r:timekeep_vendor_data_file:s0
 /data/vendor/location(/.*)?            u:object_r:location_vendor_data_file:s0
 /data/vendor/bluetooth(/.*)?           u:object_r:bluetooth_vendor_data_file:s0
-/data/vendor/wifi(/.*)?                u:object_r:wifi_vendor_data_file:s0
+# TODO: Drop this
+#/data/vendor/wifi(/.*)?                u:object_r:wifi_vendor_data_file:s0
+# AOSP policy already defines these
+#/data/vendor/wifi/hostapd(/.*)?        u:object_r:hostapd_data_file:s0
+#/data/vendor/wifi/wpa(/.*)?            u:object_r:wpa_data_file:s0
 /data/vendor/audio(/.*)?               u:object_r:audio_vendor_data_file:s0
 /data/vendor/camera(/.*)?              u:object_r:camera_vendor_data_file:s0
 /data/vendor/ipa(/.*)?                 u:object_r:ipa_vendor_data_file:s0
@@ -187,11 +191,8 @@
 /(system/vendor|vendor)/dsp(/.*)?              u:object_r:qdsp_file:s0
 
 # files in firmware
-/(system/vendor|vendor)/firmware_mnt(/.*)?     u:object_r:vendor_firmware_file:s0
-/(system/vendor|vendor)/bt_firmware(/.*)?      u:object_r:vendor_firmware_file:s0
-# TODO: FIXME: Only temporary until paths are final
-/firmware(/.*)?                                u:object_r:firmware_file:s0
-/bt_firmware(/.*)?                             u:object_r:bt_firmware_file:s0
+/firmware(/.*)?           u:object_r:firmware_file:s0
+/bt_firmware(/.*)?        u:object_r:bt_firmware_file:s0
 
 # /persist
 /mnt/vendor/persist(/.*)?            u:object_r:persist_file:s0
