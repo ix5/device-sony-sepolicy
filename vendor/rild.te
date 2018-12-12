@@ -38,7 +38,7 @@ userdebug_or_eng(`
 ### Binder calls
 ### ============================
 
-# TODO: Needed?
+# Needed! (was already there)
 binder_call(rild, per_mgr)
 # avc: granted { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:per_mgr:s0 tclass=binder
 # avc: granted { transfer } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:per_mgr:s0 tclass=binder

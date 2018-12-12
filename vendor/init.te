@@ -31,12 +31,15 @@ allow init proc_irq:file rw_file_perms;
 
 # avc: granted { search } for comm="init" name="/" dev="tmpfs" ino=2218 scontext=u:r:vendor_init:s0 tcontext=u:object_r:device:s0 tclass=dir
 allow init device:dir search;
-# TODO: Check these, also with new mounts
+# TODO: Check if these are needed as well, also with new mounts
+# (tama etc? new symlinks?)
 allow init device:dir { mounton rw_dir_perms };
+# avc: granted { write open } for comm="init" path="/dev/cpuset/system-background/tasks" dev="tmpfs" ino=2578 scontext=u:r:init:s0 tcontext=u:object_r:device:s0 tclass=file
 allow init device:file rw_file_perms;
 userdebug_or_eng(`
-  auditallow init device:dir { mounton rw_dir_perms };
-  auditallow init device:file rw_file_perms;
+  auditallow init device:dir mounton;
+  # Suppress search messages:
+  auditallow init device:dir { open getattr read ioctl write add_name remove_name lock };
 ')
 
 # TODO: Narrow this down
