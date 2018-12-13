@@ -18,7 +18,9 @@ binder_call(system_app, per_mgr)
 binder_call(system_app, wificond)
 # avc: denied { call } for comm=4173796E635461736B202331 scontext=u:r:system_app:s0 tcontext=u:r:storaged:s0 tclass=binder
 # -> storaged is not a public or vendor type, only private can access it.
-dontaudit system_app storaged:binder call;
+# The dontaudit below also does not work because storaged is not in public
+# ERROR 'unknown type storaged
+#dontaudit system_app storaged:binder call;
 # TODO: Is this needed?
 # Allow system_apps to at least find the storage manager:
 allow system_app storaged_service:service_manager find;
