@@ -16,6 +16,9 @@ userdebug_or_eng(`
 ')
 # TODO: Use this instead:
 set_prop(hal_bluetooth_default, vendor_bluetooth_prop)
+userdebug_or_eng(`
+  auditallow hal_bluetooth_default vendor_bluetooth_prop:property_service set;
+')
 # TODO: Check if ro.vendor.bt.* is enough
 
 r_dir_file(hal_bluetooth_default, persist_file)
