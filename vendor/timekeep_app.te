@@ -4,12 +4,14 @@ app_domain(timekeep_app)
 
 # Needed to get access to /data/data/com.sony.timekeep
 # Also possible to use system_data_app_file, but better to have less privileges
-allow timekeep_app app_data_file:dir { getattr search };
-allow timekeep_app app_data_file:file rw_file_perms;
-# TODO: Remove me
+# TODO: Seems it doesn't try to access its dir anyway
+allow timekeep_app system_app_data_file:dir { getattr search };
+# Or make this a dontaudit, since it doesn't need to store any data itself
+#dontaudit timekeep_app system_app_data_file:dir { getattr search };
+# TODO: Remove everything except for { getattr search };
+allow timekeep_app system_app_data_file:file rw_file_perms;
 userdebug_or_eng(`
-  auditallow timekeep_app app_data_file:dir { getattr search };
-  auditallow timekeep_app app_data_file:file rw_file_perms;
+  auditallow timekeep_app system_app_data_file:file rw_file_perms;
 ')
 
 # TODO: Can't find audits for this

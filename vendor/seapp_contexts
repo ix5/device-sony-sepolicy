@@ -1,2 +1,3 @@
-user=system seinfo=platform name=com.sony.timekeep domain=timekeep_app type=app_data_file
-user=system seinfo=platform name=com.sony.qcrilam domain=qcrilam_app type=app_data_file
+# Even though those app dirs are empty, better to protect them as system_app_data_file instead of app_data_file
+user=system seinfo=platform name=com.sony.timekeep domain=timekeep_app type=system_app_data_file
+user=system seinfo=platform name=com.sony.qcrilam domain=qcrilam_app type=system_app_data_file
