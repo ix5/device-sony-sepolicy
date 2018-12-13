@@ -112,9 +112,9 @@ allowxperm rild self:socket ioctl msm_sock_ipc_ioctls;
 # avc: denied { set } for property=persist.vendor.radio.adb_log_on scontext=u:r:rild:s0 tcontext=u:object_r:vendor_default_prop:s0 tclass=property_service
 # avc: granted { read } for path="/dev/__properties__/u:object_r:vendor_radio_prop:s0" dev="tmpfs" ino=13592 scontext=u:r:rild:s0 tcontext=u:object_r:vendor_radio_prop:s0 tclass=file
 # avc: denied { open } for comm="rild" path="/dev/__properties__/u:object_r:vendor_radio_prop:s0" dev="tmpfs" ino=6661 scontext=u:r:rild:s0 tcontext=u:object_r:vendor_radio_prop:s0 tclass=file
-get_prop(rild, vendor_radio_prop)
 set_prop(rild, vendor_radio_prop)
 # TODO: Remove once nothing uses ro.vendor.ril
+# -> seems everything is fixed, uses vendor_radio_prop now
 # avc:  denied  { set } for property=ro.vendor.ril.svlte1x pid=687 uid=1001 gid=1001 scontext=u:r:rild:s0 tcontext=u:object_r:vendor_default_prop:s0 tclass=property_service
 #get_prop(rild, radio_prop)
 #set_prop(rild, radio_prop)

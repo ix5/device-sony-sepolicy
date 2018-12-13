@@ -50,7 +50,6 @@ allow hal_camera_default self:socket { create read write ioctl };
 allowxperm hal_camera self:socket ioctl { IPC_ROUTER_IOCTL_LOOKUP_SERVER IPC_ROUTER_IOCTL_BIND_CONTROL_PORT };
 
 # avc: denied { set } for property=persist.vendor.camera.debug.logfile pid=596 uid=1047 gid=1005 scontext=u:r:hal_camera_default:s0 tcontext=u:object_r:vendor_camera_prop:s0 tclass=property_service
-get_prop(hal_camera_default, vendor_camera_prop)
 set_prop(hal_camera_default, vendor_camera_prop)
 
 # avc: granted { module_request } for comm="android.hardwar" kmod="net-pf-42" scontext=u:r:hal_camera_default:s0 tcontext=u:r:kernel:s0 tclass=system

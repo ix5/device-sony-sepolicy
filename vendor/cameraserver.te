@@ -3,4 +3,3 @@ allow cameraserver gpu_device:chr_file rw_file_perms;
 allow cameraserver system_server:unix_stream_socket { read write };
 # avc:  denied  { set } for property=persist.vendor.camera.debug.logfile pid=583 uid=1047 gid=1005 scontext=u:r:hal_camera_default:s0 tcontext=u:object_r:vendor_camera_prop:s0 tclass=property_service
 set_prop(cameraserver, vendor_camera_prop)
-get_prop(cameraserver, vendor_camera_prop)

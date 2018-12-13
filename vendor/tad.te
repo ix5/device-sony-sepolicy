@@ -68,8 +68,5 @@ neverallow { domain -tad -kernel -recovery -init -vendor_init userdebug_or_eng(`
 neverallow { domain -tad -kernel -recovery -init -vendor_init userdebug_or_eng(`-su') } rfs_file:file create_file_perms;
 allow tad proc_cmdline:file { open read };
 
-# TODO: Is this necessary? -> cannot reproduce on tone
+# Allowed because it is needed
 allow tad kernel:system module_request;
-userdebug_or_eng(`
-  auditallow tad kernel:system module_request;
-')

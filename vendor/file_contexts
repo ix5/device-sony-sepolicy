@@ -116,7 +116,8 @@
 # Input device names, mainly for CASH to enumerate
 /sys/devices/virtual/input/input[0-9]+/name                                                  u:object_r:sysfs_input_name:s0
 # RTC
-/sys/class/rtc/rtc[0-9]+(/.*)?                                                               u:object_r:sysfs_rtc:s0
+# TODO: Was only for rtc0, but still doesn't fix actors that want to search sysfs_msm_subsys
+/sys/class/rtc/(/.*)?                                                                        u:object_r:sysfs_rtc:s0
 
 # double-tap-to-wake
 /sys/devices/virtual/input/input[0-9]+/wakeup_gesture                                        u:object_r:sysfs_input_wakeup:s0

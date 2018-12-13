@@ -10,10 +10,10 @@ allow hal_bluetooth_default self:socket create;
 set_prop(hal_bluetooth_default, wc_prop)
 set_prop(hal_bluetooth_default, bluetooth_prop)
 # This is WRONG! Use vendor_bluetooth_prop instead
-allow hal_bluetooth_default vendor_default_prop:property_service set;
-userdebug_or_eng(`
-  auditallow hal_bluetooth_default vendor_default_prop:property_service set;
-')
+#allow hal_bluetooth_default vendor_default_prop:property_service set;
+#userdebug_or_eng(`
+#  auditallow hal_bluetooth_default vendor_default_prop:property_service set;
+#')
 # TODO: Use this instead:
 set_prop(hal_bluetooth_default, vendor_bluetooth_prop)
 userdebug_or_eng(`
@@ -24,4 +24,13 @@ userdebug_or_eng(`
 r_dir_file(hal_bluetooth_default, persist_file)
 r_dir_file(hal_bluetooth_default, vendor_firmware_file)
 r_dir_rw_file(hal_bluetooth_default, sysfs_bluetooth)
+# TODO: Where does this come from?
+# /mnt/vendor/ is mnt_vendor_file
+# So it might be because it tries to search /mnt/vendor/persist/{bluetooth,*}
+# /mnt/vendor/persist itself is labeled persist_file, everything inside it
+# as well by default
+# TODO: Still cannot reproduce on tone though
 allow hal_bluetooth_default mnt_vendor_file:dir search;
+userdebug_or_eng(`
+  auditallow hal_bluetooth_default mnt_vendor_file:dir search;
+')

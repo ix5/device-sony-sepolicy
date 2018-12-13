@@ -9,13 +9,19 @@ set_prop(ims, ims_prop)
 #set_prop(ims, vendor_ims_prop)
 # TODO: Re-assign whatever vendor_default_prop there is
 
-unix_socket_connect(ims, netmgrd, netmgrd)
+# For reference:
 # define(`unix_socket_connect', `
 # allow $1 $2_socket:sock_file write;
 # allow $1 $3:unix_stream_socket connectto;
 # ')
+unix_socket_connect(ims, netmgrd, netmgrd)
+# TODO: Collect denial
 allow ims init:unix_stream_socket connectto;
 allow ims property_socket:sock_file write;
+userdebug_or_eng(`
+  auditallow ims init:unix_stream_socket connectto;
+  auditallow ims property_socket:sock_file write;
+')
 
 allow ims self:capability net_bind_service;
 
@@ -31,4 +37,8 @@ hwbinder_use(ims)
 
 dontaudit ims kernel:system module_request;
 
+# TODO: Collect denial
 allow ims sysfs_msm_subsys:dir search;
+userdebug_or_eng(`
+  auditallow ims sysfs_msm_subsys:dir search;
+')
