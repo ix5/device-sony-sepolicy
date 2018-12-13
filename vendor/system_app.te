@@ -17,23 +17,26 @@ set_prop(system_app, timekeep_prop)
 binder_call(system_app, per_mgr)
 binder_call(system_app, wificond)
 # avc: denied { call } for comm=4173796E635461736B202331 scontext=u:r:system_app:s0 tcontext=u:r:storaged:s0 tclass=binder
-# -> storaged is not a public or vendor type, only private can access it. No way to suppress the warning, and it's only once at boot.
+# -> storaged is not a public or vendor type, only private can access it.
+dontaudit system_app storaged:binder call;
+# TODO: Is this needed?
 # Allow system_apps to at least find the storage manager:
 allow system_app storaged_service:service_manager find;
 userdebug_or_eng(`
   auditallow system_app storaged_service:service_manager find;
 ')
 # avc: denied { call } for comm=4173796E635461736B202331 scontext=u:r:system_app:s0 tcontext=u:r:perfprofd:s0 tclass=binder
-dontaudit system_app perfprofd:binder call;
 # From private/perfprofd.te:
 # Only servicemanager, statsd, su and systemserver can communicate.
 #neverallow { domain userdebug_or_eng(`-statsd') } perfprofd:binder call;
 #neverallow perfprofd { domain userdebug_or_eng(`-servicemanager -statsd -su -system_server') }:binder call;
+dontaudit system_app perfprofd:binder call;
 
 # TODO: Find out which system_apps are using these
 # avc: granted { search } for comm="SummaryLoader" name="/" dev="bpf" ino=1 scontext=u:r:system_app:s0 tcontext=u:object_r:fs_bpf:s0 tclass=dir
 # avc: granted { search } for comm="ndroid.settings" name="/" dev="bpf" ino=1 scontext=u:r:system_app:s0 tcontext=u:object_r:fs_bpf:s0 tclass=dir
 # TODO: Check if search is enough
+# -> seems search is enough, but test on tama!
 #allow system_app fs_bpf:dir search;
 allow system_app fs_bpf:dir r_dir_perms;
 # avc: denied { open } for comm="ndroid.settings" path="/proc/pagetypeinfo" dev="proc" ino=4026532283 scontext=u:r:system_app:s0 tcontext=u:object_r:proc_pagetypeinfo:s0 tclass=file

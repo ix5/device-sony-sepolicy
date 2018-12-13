@@ -8,6 +8,11 @@ app_domain(qcrilam_app)
 # avc: granted { getattr } for path="/data/data/com.sony.qcrilam" dev="mmcblk0p54" ino=868390 scontext=u:r:qcrilam_app:s0 tcontext=u:object_r:app_data_file:s0 tclass=dir
 allow qcrilam_app app_data_file:dir { getattr search };
 allow qcrilam_app app_data_file:file rw_file_perms;
+# TODO: Remove me
+userdebug_or_eng(`
+  auditallow qcrilam_app app_data_file:dir { getattr search };
+  auditallow qcrilam_app app_data_file:file rw_file_perms;
+')
 
 # avc: denied { find } for service=activity pid=2061 uid=1000 scontext=u:r:qcrilam_app:s0 tcontext=u:object_r:activity_service:s0 tclass=service_manager
 allow qcrilam_app activity_service:service_manager find;

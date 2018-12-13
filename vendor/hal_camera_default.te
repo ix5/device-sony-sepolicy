@@ -39,7 +39,23 @@ allow hal_camera_default camera_vendor_data_file:dir rw_dir_perms;
 allow hal_camera_default camera_vendor_data_file:file create_file_perms;
 
 # avc: denied { create } for comm="android.hardwar" scontext=u:r:hal_camera_default:s0 tcontext=u:r:hal_camera_default:s0 tclass=socket
-allow hal_camera_default self:socket create;
+# avc: denied { read } for comm="CAM_GYRO" scontext=u:r:hal_camera_default:s0 tcontext=u:r:hal_camera_default:s0 tclass=socket
+# avc: denied { write } for comm="CAM_GYRO" scontext=u:r:hal_camera_default:s0 tcontext=u:r:hal_camera_default:s0 tclass=socket
+#allow hal_camera_default self:socket { create read write };
+allow hal_camera_default self:socket { create read write ioctl };
+# avc: denied { ioctl } for comm="CAM_GYRO" path="socket:[24420]" dev="sockfs" ino=24420 ioctlcmd=0xc304 \
+#   scontext=u:r:hal_camera_default:s0 tcontext=u:r:hal_camera_default:s0 tclass=socket permissive=0
+# avc: denied { ioctl } for path="socket:[23121]" dev="sockfs" ino=23121 ioctlcmd=0xc302 \
+#   scontext=u:r:hal_camera_default:s0 tcontext=u:r:hal_camera_default:s0 tclass=socket
+#  inum 23121 is /sys/devices/platform/psci/power/control and labeled u:object_r:sysfs:s0
+# TODO: Why do these not work?
+allowxperm hal_camera_default self:socket ioctl { 0xc304 0xc302 };
+# Grant broad ioctl instead in the meantime
+#allow hal_camera_default self:socket ioctl;
+# Allow everything except what is forbidden by a neverallow:
+# b/68014825 and https://android-review.googlesource.com/516535
+# rfc6093 says that processes should not use the TCP urgent mechanism
+#allowxperm hal_camera_default self:socket ioctl ~0x00008905;
 
 # avc: denied { set } for property=persist.vendor.camera.debug.logfile pid=596 uid=1047 gid=1005 scontext=u:r:hal_camera_default:s0 tcontext=u:object_r:vendor_camera_prop:s0 tclass=property_service
 get_prop(hal_camera_default, vendor_camera_prop)

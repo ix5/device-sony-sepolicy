@@ -1,18 +1,26 @@
 genfscon proc /irq                                    u:object_r:proc_irq:s0
+# TODO: Use wildcard? Doesn't seem to work for genfs_contexts
+#genfscon proc /sys/kernel/sched_(.*)?                 u:object_r:proc_kernel_sched:s0
+# Naming: follow marlin with proc_kernel_sched,
+# crosshatch only labels sched_boost and sched_autogroup_enabled
 # Definitely needed:
 genfscon proc /sys/kernel/sched_boost                 u:object_r:proc_kernel_sched:s0
 genfscon proc /sys/kernel/sched_downmigrate           u:object_r:proc_kernel_sched:s0
 genfscon proc /sys/kernel/sched_upmigrate             u:object_r:proc_kernel_sched:s0
+genfscon proc /sys/kernel/sched_migration_fixup       u:object_r:proc_kernel_sched:s0
+# Needed by Calvin's cluster freq PR:
+genfscon proc /sys/kernel/sched_group_upmigrate       u:object_r:proc_kernel_sched:s0
+genfscon proc /sys/kernel/sched_group_downmigrate     u:object_r:proc_kernel_sched:s0
 # Might be needed as well(from marlin):
 genfscon proc /sys/kernel/sched_freq_dec_notify       u:object_r:proc_kernel_sched:s0
 genfscon proc /sys/kernel/sched_freq_inc_notify       u:object_r:proc_kernel_sched:s0
 genfscon proc /sys/kernel/sched_init_task_load        u:object_r:proc_kernel_sched:s0
 genfscon proc /sys/kernel/sched_migration_cost_ns     u:object_r:proc_kernel_sched:s0
-genfscon proc /sys/kernel/sched_migration_fixup       u:object_r:proc_kernel_sched:s0
 genfscon proc /sys/kernel/sched_small_task            u:object_r:proc_kernel_sched:s0
 genfscon proc /sys/kernel/sched_spill_nr_run          u:object_r:proc_kernel_sched:s0
-# From crosshatch:
+# From crosshatch(the only two labels):
 #genfscon proc /sys/kernel/sched_autogroup_enabled     u:object_r:proc_sysctl_autogroup:s0
+#genfscon proc /sys/kernel/sched_boost                 u:object_r:proc_sysctl_schedboost:s0
 # For reference, all of tone:
 #u:object_r:proc:s0           sched_boost
 #u:object_r:proc:s0           sched_cfs_boost
@@ -62,10 +70,6 @@ genfscon sysfs /devices/platform/soc/soc:qcom,memlat-cpu0               u:object
 genfscon sysfs /devices/platform/soc/soc:qcom,memlat-cpu4               u:object_r:sysfs_msm_subsys:s0
 
 genfscon sysfs /class/uio                                               u:object_r:sysfs_uio:s0
-# TODO: Decide whether to set sysfs_bus_esoc in platform dirs or here.
-#       At least tama doesn't seem to have it
-# FIXME: If you come across any sepolicy build failures, take out the corresponding line
-#        in the platform policy where it labels /sys/bus/esoc as sysfs_something
 genfscon sysfs /bus/esoc/devices                                        u:object_r:sysfs_esoc:s0
 genfscon sysfs /devices/soc/soc:bt_wcn3990                              u:object_r:sysfs_bluetooth_writable:s0
 genfscon sysfs /devices/soc/soc:qcom,gpubw                              u:object_r:sysfs_msm_subsys:s0

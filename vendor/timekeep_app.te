@@ -6,10 +6,15 @@ app_domain(timekeep_app)
 # Also possible to use system_data_app_file, but better to have less privileges
 allow timekeep_app app_data_file:dir { getattr search };
 allow timekeep_app app_data_file:file rw_file_perms;
+# TODO: Remove me
+userdebug_or_eng(`
+  auditallow timekeep_app app_data_file:dir { getattr search };
+  auditallow timekeep_app app_data_file:file rw_file_perms;
+')
 
 # TODO: Can't find audits for this
 # Probably because it is a BootReceiver oneshot and can't be started in
-# background?
+# background? Or because apps already have access to their own services?
 add_service(timekeep_app, timekeep_service)
 userdebug_or_eng(`
   auditallow timekeep_app timekeep_service:service_manager { add find };
@@ -34,9 +39,6 @@ allow timekeep_app sysfs_rtc:dir { search };
 allow timekeep_app sysfs_rtc:{ file lnk_file } r_file_perms;
 # TODO: Maybe ignore this instead of allowing search on all of sysfs_msm_subsys
 # avc: denied { search } for name="400f000.qcom,spmi" dev="sysfs" ino=19045 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
-# TODO: FIXME: Only temporary! But should be fine as it is granted
-# lnk_file read perms on sysfs_rtc, no need to traverse the real path hopefully
-# EDIT: Apprently not, need to leave search perms for sysfs_msm_subsys in for java app as well
 allow timekeep_app sysfs_msm_subsys:dir { search };
 
 # avc: granted { read } for comm="main" name="u:object_r:timekeep_prop:s0" dev="tmpfs" ino=18507 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:timekeep_prop:s0 tclass=file

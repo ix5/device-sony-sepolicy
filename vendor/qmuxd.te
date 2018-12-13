@@ -7,6 +7,9 @@ init_daemon_domain(qmuxd)
 # TODO: Is this necessary?
 # QUESTION: Which modules?
 allow qmuxd kernel:system module_request;
+userdebug_or_eng(`
+  allow qmuxd kernel:system module_request;
+')
 
 allow qmuxd qmuxd_socket:dir w_dir_perms;
 allow qmuxd qmuxd_socket:sock_file create_file_perms;
