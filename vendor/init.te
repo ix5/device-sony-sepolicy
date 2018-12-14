@@ -5,13 +5,12 @@ allow init configfs:lnk_file { create unlink };
 
 allow init { mnt_vendor_file vendor_firmware_file qdsp_file }:dir mounton;
 allow init vendor_firmware_file:filesystem { mount relabelfrom };
-
-# TODO: vendor_firmware_file is wrong right now
-# TODO: Keep an eye on this during the /persist/ -> /mnt/vendor/persist etc transitions
+# (these denies were from before the /mnt/vendor/persist transition!)
 # avc: denied { relabelfrom } for comm="init" scontext=u:r:init:s0 tcontext=u:object_r:firmware_file:s0 tclass=filesystem
 # avc: denied { associate } for comm="init" scontext=u:object_r:firmware_file:s0 tcontext=u:object_r:firmware_file:s0 tclass=filesystem
 # avc: denied { mount } for comm="init" name="/" dev="mmcblk0p31" ino=1 scontext=u:r:init:s0 tcontext=u:object_r:firmware_file:s0 tclass=filesystem
-# TODO: Remove all other file/dir/fs types apart from mnt_vendor_file eventually?
+# TODO: Remove all other file/dir/fs types apart from vendor_firmware_file and
+#       mnt_vendor_file eventually?
 # Should look like this then:
 #allow init mnt_vendor_file:dir mounton;
 #allow init vendor_firmware_file:dir mounton;
