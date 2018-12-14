@@ -8,6 +8,7 @@ add_service(per_mgr, per_mgr_service)
 
 # TODO(b/vndbinder): Remove once per_mgr uses vendor binder
 typeattribute per_mgr binder_in_vendor_violators;
+# avc:  denied  { find } for service=vendor.qcom.PeripheralManager pid=720 uid=1001 scontext=u:r:rild:s0 tcontext=u:object_r:default_android_service:s0 tclass=service_manager
 
 # TODO(v/vndbinder): Switch to vndservice
 vndbinder_use(per_mgr)

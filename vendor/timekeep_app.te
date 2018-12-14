@@ -3,21 +3,13 @@ type timekeep_app, domain;
 app_domain(timekeep_app)
 
 # Needed to get access to /data/data/com.sony.timekeep
-# Also possible to use system_data_app_file, but better to have less privileges
 # TODO: Seems it doesn't try to access its dir anyway
-allow timekeep_app system_app_data_file:dir { getattr search };
-# Or make this a dontaudit, since it doesn't need to store any data itself
-#dontaudit timekeep_app system_app_data_file:dir { getattr search };
-# TODO: Remove everything except for { getattr search };
-allow timekeep_app system_app_data_file:file rw_file_perms;
-userdebug_or_eng(`
-  auditallow timekeep_app system_app_data_file:file rw_file_perms;
-')
+dontaudit timekeep_app system_app_data_file:dir { getattr search };
 
 # TODO: Can't find audits for this
 # Probably because it is a BootReceiver oneshot and can't be started in
 # background? Or because apps already have access to their own services?
-add_service(timekeep_app, timekeep_service)
+#add_service(timekeep_app, timekeep_service)
 userdebug_or_eng(`
   auditallow timekeep_app timekeep_service:service_manager { add find };
 ')
@@ -31,16 +23,16 @@ allow timekeep_app activity_service:service_manager find;
 #auditallow timekeep_app per_mgr:binder { call transfer };
 #auditallow per_mgr timekeep_app:binder { transfer };
 
-# Should only read from /data/vendor/time/ats_2
+# Read from /data/vendor/time/ats_2
 allow timekeep_app timekeep_vendor_data_file:dir create_dir_perms;
 allow timekeep_app timekeep_vendor_data_file:file create_file_perms;
 
 # avc: granted { search } for comm="m.sony.timekeep" name="rtc" dev="sysfs" ino=27336 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:sysfs_rtc:s0 tclass=dir
-allow timekeep_app sysfs_rtc:dir { search };
+allow timekeep_app sysfs_rtc:dir search;
 # avc: granted { read } for comm="m.sony.timekeep" name="rtc0" dev="sysfs" ino=41349 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:sysfs_rtc:s0 tclass=lnk_file
 allow timekeep_app sysfs_rtc:{ file lnk_file } r_file_perms;
 # avc: denied { search } for name="400f000.qcom,spmi" dev="sysfs" ino=19045 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
-allow timekeep_app sysfs_msm_subsys:dir { search };
+allow timekeep_app sysfs_msm_subsys:dir search;
 # TODO(b/sysfs_rtc): Remove once confirmed it was sysfs_rtc mislabeling
 # -> nope, still wants to search parent folders of linked dirs
 # avc: granted { search } for name="400f000.qcom,spmi" dev="sysfs" ino=19045 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir

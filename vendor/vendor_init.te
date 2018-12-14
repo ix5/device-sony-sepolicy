@@ -2,9 +2,6 @@ typeattribute vendor_init data_between_core_and_vendor_violators;
 
 # TODO: These are from crosshatch
 allow vendor_init {
-    # Should this only be for debugging?
-    adb_keys_file
-    #
     audio_data_file
     bluetooth_data_file
     camera_data_file
@@ -13,24 +10,27 @@ allow vendor_init {
     rootfs
     sensors_vendor_data_file
     system_data_file
-    # For early crashes?
-    tombstone_data_file
-    #
     wifi_data_file
 }:dir create_dir_perms;
-# TODO: Remove this
+# TODO: Narrow this down. So far on tone:
+# avc: granted { search } for comm="init" name="/" dev="rootfs" ino=2 scontext=u:r:vendor_init:s0 tcontext=u:object_r:rootfs:s0 tclass=dir
+# avc: granted { search } for comm="init" name="/" dev="mmcblk0p54" ino=2 scontext=u:r:vendor_init:s0 tcontext=u:object_r:system_data_file:s0 tclass=dir
 userdebug_or_eng(`
      auditallow vendor_init {
-         adb_keys_file
+    # Should this be only for debugging?
+    #     adb_keys_file
          audio_data_file
          bluetooth_data_file
          camera_data_file
          dhcp_data_file
          radio_vendor_data_file
-         rootfs
+    # Confirmed needed:
+    #     rootfs
          sensors_vendor_data_file
-         system_data_file
-         tombstone_data_file
+    # Confirmed needed:
+    #     system_data_file
+    # For early crashes?
+    #     tombstone_data_file
          wifi_data_file
      }:dir create_dir_perms;
 ')
@@ -39,6 +39,7 @@ allow vendor_init radio_vendor_data_file:file create_file_perms;
 dontaudit vendor_init kernel:system module_request;
 
 #allow vendor_init proc:file write;
+# -> this used to be for all of proc:file, but can be narrowed down
 # TODO: Check if this suffices
 # avc: granted { write } for comm="init" path="/proc/sys/kernel/dmesg_restrict" dev="proc" ino=21185 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc_security:s0 tclass=file
 allow vendor_init proc_kernel_sched:file write;
@@ -46,8 +47,8 @@ allow vendor_init proc_kernel_sched:file write;
 allow vendor_init proc_kernel_printk:file write;
 # TODO: tama probably needs irqs, but unsure what elese
 allow vendor_init proc_irq:file write;
-
 allow vendor_init proc_security:file write;
+
 # avc: granted { read } for comm="init" name="persist" dev="rootfs" ino=13269 scontext=u:r:vendor_init:s0 tcontext=u:object_r:persist_file:s0 tclass=lnk_file
 # TODO(c/772de603cae45bb479a9dc19d78daa1de4d88205)
 # vendor_init: permit access to persist_file
@@ -77,3 +78,7 @@ allow vendor_init device:file { create write };
 # avc: denied { relabelfrom } for comm="init" name="persist" dev="rootfs" ino=1245 scontext=u:r:vendor_init:s0 tcontext=u:object_r:rootfs:s0 tclass=lnk_file
 # avc: granted { relabelfrom } for comm="init" name="dsp" dev="rootfs" ino=13246 scontext=u:r:vendor_init:s0 tcontext=u:object_r:rootfs:s0 tclass=lnk_file
 allow vendor_init rootfs:lnk_file relabelfrom;
+# TODO: After change to /mnt/vendor/persist, is this still necessary?
+userdebug_or_eng(`
+  auditallow vendor_init rootfs:lnk_file relabelfrom;
+')

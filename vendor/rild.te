@@ -6,6 +6,7 @@ vndbinder_use(rild)
 
 # Needed!
 binder_use(rild)
+# avc: denied { search } for comm="servicemanager" name="678" dev="proc" ino=19168 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=dir
 # avc: granted { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:servicemanager:s0 tclass=binder
 # avc: granted { search } for comm="servicemanager" name="attr" dev="proc" ino=26820 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=dir
 # avc: granted { read } for comm="servicemanager" name="current" dev="proc" ino=26821 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=file
@@ -21,7 +22,7 @@ hwbinder_use(rild)
 # avc:  granted  { find } for service=vendor.qcom.PeripheralManager pid=700 uid=1001 scontext=u:r:rild:s0 tcontext=u:object_r:per_mgr_service:s0 tclass=service_manager
 allow rild per_mgr_service:service_manager find;
 # included in:
-use_per_mgr(rild)
+#use_per_mgr(rild)
 
 add_hwservice(rild, vnd_ims_radio_hwservice)
 # TODO: Added upstream, but is it actually needed? Seems not so on tone
@@ -42,24 +43,27 @@ binder_call(rild, per_mgr)
 
 # Needed!
 # avc: denied { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:qcrilam_app:s0 tclass=binder
-allow rild qcrilam_app:binder call;
+#allow rild qcrilam_app:binder call;
 # This is not needed, but includes the above:
-#binder_call(rild, qcrilam_app);
+# qcrilam_app already includes binder_call(rild, qcrilam_app),
+# thus rild has access to "allow rild qcrilam_app:binder transfer"
+binder_call(rild, qcrilam_app);
 
 # TODO: Needed? -> seems not
-binder_call(rild, vnd_qcrilhook_hwservice);
-userdebug_or_eng(`
-  auditallow rild vnd_qcrilhook_hwservice:binder { call transfer };
-  auditallow vnd_qcrilhook_hwservice rild:binder { transfer };
-')
+#binder_call(rild, vnd_qcrilhook_hwservice);
+#userdebug_or_eng(`
+#  auditallow rild vnd_qcrilhook_hwservice:binder { call transfer };
+#  auditallow vnd_qcrilhook_hwservice rild:binder { transfer };
+#  auditallow rild vnd_qcrilhook_hwservice:fd use;
+#')
 
 # Needed!
 binder_call(rild, secure_element);
 # avc: denied { call } for scontext=u:r:secure_element:s0:c44,c260,c512,c768 tcontext=u:r:rild:s0 tclass=binder
 # avc: denied { transfer } for comm="com.android.se" scontext=u:r:secure_element:s0:c44,c260,c512,c768 tcontext=u:r:rild:s0 tclass=binder
 allow secure_element rild:binder call;
+# avc: denied { call } for scontext=u:r:secure_element:s0:c44,c260,c512,c768 tcontext=u:r:rild:s0 tclass=binder
 # binder_call(secure_element, rild)
-# (not necessary, only call is needed)
 
 # /data/vendor/radio/qcril.db and others
 allow rild radio_vendor_data_file:dir create_dir_perms;

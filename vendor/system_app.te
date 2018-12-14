@@ -7,8 +7,7 @@ r_dir_rw_file(system_app, sysfs_pcc_profile)
 set_prop(system_app, adbtcpes_prop)
 set_prop(system_app, dispcal_prop)
 
-# Needed by system "main" and others
-# Different system_apps need this, independent from timekeep.c or
+# Different system_apps read this value, independent from timekeep.c or
 # TimeKeep.java, so keep it in here
 # avc: granted { read } for comm="main" name="u:object_r:timekeep_prop:s0" dev="tmpfs" ino=13587 scontext=u:r:system_app:s0 tcontext=u:object_r:timekeep_prop:s0 tclass=file
 set_prop(system_app, timekeep_prop)
@@ -23,6 +22,7 @@ binder_call(system_app, wificond)
 #dontaudit system_app storaged:binder call;
 # TODO: Is this needed?
 # Allow system_apps to at least find the storage manager:
+# -> doesn't seem so, but test on tama please
 allow system_app storaged_service:service_manager find;
 userdebug_or_eng(`
   auditallow system_app storaged_service:service_manager find;
