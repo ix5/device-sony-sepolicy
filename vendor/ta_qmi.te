@@ -14,5 +14,5 @@ dontaudit ta_qmi self:capability { dac_override };
 
 allow ta_qmi self:capability net_raw;
 # avc: granted { module_request } for comm="ta_qmi_service" kmod="net-pf-42" scontext=u:r:ta_qmi:s0 tcontext=u:r:kernel:s0 tclass=system
-# Enabled because it is needed
+# Allowed by upsteam
 allow ta_qmi kernel:system module_request;

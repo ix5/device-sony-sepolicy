@@ -9,6 +9,11 @@ allow tad ta_block_device:blk_file rw_file_perms;
 allow tad mnt_vendor_file:dir search;
 allow tad persist_file:lnk_file read;
 allow tad vendor_data_file:dir { add_name create setattr write };
+userdebug_or_eng(`
+  auditallow tad mnt_vendor_file:dir search;
+  auditallow tad persist_file:lnk_file read;
+  auditallow tad vendor_data_file:dir { add_name create setattr write };
+')
 
 # Read access to pseudo filesystems.
 r_dir_file(tad, proc)
@@ -68,5 +73,5 @@ neverallow { domain -tad -kernel -recovery -init -vendor_init userdebug_or_eng(`
 neverallow { domain -tad -kernel -recovery -init -vendor_init userdebug_or_eng(`-su') } rfs_file:file create_file_perms;
 allow tad proc_cmdline:file { open read };
 
-# Allowed because it is needed
+# Allowed by upsteam
 allow tad kernel:system module_request;

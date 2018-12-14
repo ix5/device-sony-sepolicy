@@ -1,11 +1,6 @@
 # TODO(b/vndbinder): Remove once rild uses vendor binder
 typeattribute rild binder_in_vendor_violators;
 
-
-### ============================
-### Services and service_manager
-### ============================
-
 # TODO(b/vndbinder): switch to vndbinder for rild
 vndbinder_use(rild)
 
@@ -29,7 +24,7 @@ allow rild per_mgr_service:service_manager find;
 use_per_mgr(rild)
 
 add_hwservice(rild, vnd_ims_radio_hwservice)
-# TODO: Needed?
+# TODO: Added upstream, but is it actually needed? Seems not so on tone
 add_hwservice(rild, vnd_qcrilhook_hwservice)
 userdebug_or_eng(`
   auditallow rild vnd_qcrilhook_hwservice:hwservice_manager { add find };
@@ -39,11 +34,6 @@ userdebug_or_eng(`
 #allow rild hal_secure_element_hwservice:hwservice_manager add;
 # Try this instead?
 hal_server_domain(rild, hal_secure_element)
-
-
-### ============================
-### Binder calls
-### ============================
 
 # Needed! (was already there)
 binder_call(rild, per_mgr)
@@ -56,7 +46,7 @@ allow rild qcrilam_app:binder call;
 # This is not needed, but includes the above:
 #binder_call(rild, qcrilam_app);
 
-# TODO: Needed?
+# TODO: Needed? -> seems not
 binder_call(rild, vnd_qcrilhook_hwservice);
 userdebug_or_eng(`
   auditallow rild vnd_qcrilhook_hwservice:binder { call transfer };
@@ -70,11 +60,6 @@ binder_call(rild, secure_element);
 allow secure_element rild:binder call;
 # binder_call(secure_element, rild)
 # (not necessary, only call is needed)
-
-
-### ============================
-### Files
-### ============================
 
 # /data/vendor/radio/qcril.db and others
 allow rild radio_vendor_data_file:dir create_dir_perms;
@@ -95,26 +80,16 @@ unix_socket_connect(rild, qmuxd, qmuxd)
 allow rild netmgrd_socket:dir search;
 unix_socket_connect(rild, netmgrd, netmgrd)
 
-# TODO: convert to allowxperm for ioctl?
-# Leave this in for now because somehow the below happens
-allow rild self:socket ioctl;
-#auditallow rild self:socket ioctl;
-allowxperm rild self:socket ioctl msm_sock_ipc_ioctls;
-# TODO: Why does this happen? 0x304 is within msm_sock_ipc_ioctls
 # avc: denied { ioctl } for comm="rild" path="socket:[52646]" dev="sockfs" ino=52646 ioctlcmd=0xc304 scontext=u:r:rild:s0 tcontext=u:r:rild:s0 tclass=socket
 # avc: denied { ioctl } for comm="rild" path="socket:[25459]" dev="sockfs" ino=25459 ioctlcmd=0xc302 scontext=u:r:rild:s0 tcontext=u:r:rild:s0 tclass=socket
-
-
-### ===========================================================================
-### Properties
-### ===========================================================================
+allow rild self:socket ioctl;
+allowxperm rild self:socket ioctl msm_sock_ipc_ioctls;
 
 # avc: denied { set } for property=persist.vendor.radio.adb_log_on scontext=u:r:rild:s0 tcontext=u:object_r:vendor_default_prop:s0 tclass=property_service
 # avc: granted { read } for path="/dev/__properties__/u:object_r:vendor_radio_prop:s0" dev="tmpfs" ino=13592 scontext=u:r:rild:s0 tcontext=u:object_r:vendor_radio_prop:s0 tclass=file
 # avc: denied { open } for comm="rild" path="/dev/__properties__/u:object_r:vendor_radio_prop:s0" dev="tmpfs" ino=6661 scontext=u:r:rild:s0 tcontext=u:object_r:vendor_radio_prop:s0 tclass=file
 set_prop(rild, vendor_radio_prop)
-# TODO: Remove once nothing uses ro.vendor.ril
-# -> seems everything is fixed, uses vendor_radio_prop now
+# TODO: Remove once nothing uses radio_prop
+# -> seems everything is fixed, ro.vendor.ril uses vendor_radio_prop now
 # avc:  denied  { set } for property=ro.vendor.ril.svlte1x pid=687 uid=1001 gid=1001 scontext=u:r:rild:s0 tcontext=u:object_r:vendor_default_prop:s0 tclass=property_service
-#get_prop(rild, radio_prop)
 #set_prop(rild, radio_prop)
