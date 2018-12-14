@@ -1,6 +1,7 @@
 # Policy for the timekeep.c oneshot system service
 # Gets called once during init by vendor timekeep.rc and restores
-# clock from /sys/class/rtc/rtc0/since_epoch
+# clock from persist.sys.timeadjust property, reads
+# /sys/class/rtc/rtc0/since_epoch
 type timekeep, domain;
 type timekeep_exec, exec_type, vendor_file_type, file_type;
 
@@ -13,7 +14,7 @@ allow timekeep self:capability { fowner sys_time };
 
 # Write to /data/vendor/time/ats_2
 # avc: granted { search } for name="time" dev="mmcblk0p54" ino=245787 scontext=u:r:timekeep:s0 tcontext=u:object_r:timekeep_vendor_data_file:s0 tclass=dir
-allow timekeep timekeep_vendor_data_file:dir create_dir_perms;
+allow timekeep timekeep_vendor_data_file:dir rw_dir_perms;
 # avc: granted { write open } for path="/data/vendor/time/ats_2" dev="mmcblk0p54" ino=245805 scontext=u:r:timekeep:s0 tcontext=u:object_r:timekeep_vendor_data_file:s0 tclass=file
 # avc: granted { getattr } for comm="timekeep" path="/data/vendor/time/ats_2" dev="mmcblk0p54" ino=245805 scontext=u:r:timekeep:s0 tcontext=u:object_r:timekeep_vendor_data_file:s0 tclass=file
 allow timekeep timekeep_vendor_data_file:file create_file_perms;

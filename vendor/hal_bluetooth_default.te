@@ -9,16 +9,7 @@ allow hal_bluetooth_default self:socket create;
 
 set_prop(hal_bluetooth_default, wc_prop)
 set_prop(hal_bluetooth_default, bluetooth_prop)
-# This is WRONG! Use vendor_bluetooth_prop instead
-#allow hal_bluetooth_default vendor_default_prop:property_service set;
-#userdebug_or_eng(`
-#  auditallow hal_bluetooth_default vendor_default_prop:property_service set;
-#')
-# TODO: Use this instead:
 set_prop(hal_bluetooth_default, vendor_bluetooth_prop)
-userdebug_or_eng(`
-  auditallow hal_bluetooth_default vendor_bluetooth_prop:property_service set;
-')
 # TODO: Check if ro.vendor.bt.* is enough
 
 r_dir_file(hal_bluetooth_default, persist_file)
