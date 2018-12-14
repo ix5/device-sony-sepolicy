@@ -5,7 +5,6 @@ net_domain(qmuxd)
 init_daemon_domain(qmuxd)
 
 # TODO: Is this necessary?
-# QUESTION: Which modules?
 allow qmuxd kernel:system module_request;
 userdebug_or_eng(`
   allow qmuxd kernel:system module_request;
@@ -16,7 +15,11 @@ allow qmuxd qmuxd_socket:sock_file create_file_perms;
 
 allow qmuxd smd_device:chr_file rw_file_perms;
 
+# TODO: Check if this is necessary
 allow qmuxd diag_device:chr_file { read write };
+userdebug_or_eng(`
+  auditallow qmuxd diag_device:chr_file { read write };
+')
 
 allow qmuxd self:socket create_socket_perms;
 allowxperm qmuxd self:socket ioctl msm_sock_ipc_ioctls;
