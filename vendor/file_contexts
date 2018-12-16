@@ -81,6 +81,13 @@
 /(system/vendor|vendor)/bin/macaddrsetup                                                     u:object_r:addrsetup_exec:s0
 /(system/vendor|vendor)/bin/rdclean\.sh                                                      u:object_r:rdclean_exec:s0
 /(system/vendor|vendor)/bin/init\.qcom\.devstart\.sh                                         u:object_r:init-qcom-devstart-sh_exec:s0
+# TODO: FIXME: Remove me
+#/(system/vendor|vendor)/bin/init\.bombone\.sh          u:object_r:init_bomb_sh_exec:s0
+#/(system/vendor|vendor)/bin/init\.bombtwo\.sh          u:object_r:init_bomb_sh_exec:s0
+#/system/bin/logwrapper                                 u:object_r:logwrapper_exec:s0
+# -> also remove logwrapper from:
+# prebuilts/api/28/private/file_contexts
+# private/file_contexts
 /(system/vendor|vendor)/bin/init\.qcom\.ipastart\.sh                                         u:object_r:init-qcom-ipastart-sh_exec:s0
 /(system/vendor|vendor)/bin/initlight                                                        u:object_r:initlight_exec:s0
 /(system/vendor|vendor)/bin/ipacm                                                            u:object_r:ipacm_exec:s0
@@ -118,9 +125,20 @@
 # RTC
 # TODO: Was only for rtc0, but still doesn't fix actors that want to search sysfs_msm_subsys
 /sys/class/rtc/(/.*)?                                                                        u:object_r:sysfs_rtc:s0
+# TODO: Label the soc path as well
+# I like this one best:
+#/sys/devices/platform/soc/(.*_rtc)+(/.*)?                                                    u:object_r:sysfs_rtc:s0
+# More specific, but not really better
+#/sys/devices/platform/soc/(.*pm.+_rtc)+(/.*)?                                                 u:object_r:sysfs_rtc:s0
+# Should match paths like this one:
+#/sys/devices/platform/soc/400f000.qcom,spmi/spmi-0/spmi0-00/400f000.qcom,spmi:pm8994@0:qcom,pm8994_rtc/rtc/rtc0/time
 
 # double-tap-to-wake
 /sys/devices/virtual/input/input[0-9]+/wakeup_gesture                                        u:object_r:sysfs_input_wakeup:s0
+
+# TODO: Use wildcard here instead of genfscon?
+#/proc/sys/kernel/sched_(.*)?                 u:object_r:proc_ched:s0
+
 
 ###############################################
 # same-process HAL files and their dependencies
@@ -182,9 +200,20 @@
 /persist                             u:object_r:rootfs:s0
 /firmware                            u:object_r:rootfs:s0
 /bt_firmware                         u:object_r:rootfs:s0
+# rootfs is "type rootfs, fs_type;"
 /dsp                                 u:object_r:rootfs:s0
+# /dsp is a symlink to (/system)/vendor/dsp
+# TODO(b/dsp_symlink): Remove these ugly hacks
+#/dsp                                 u:object_r:qdsp_temp_link:s0
+#/dsp(/.*)?                           u:object_r:qdsp_temp_link:s0
+#/persist(/.*)?                       u:object_r:rootfs:s0
+#/firmware(/.*)?                      u:object_r:rootfs:s0
+#/bt_firmware(/.*)?                   u:object_r:rootfs:s0
+#/dsp(/.*)?                           u:object_r:rootfs:s0
 
 # /
+#/(system/vendor|vendor)/dsp                    u:object_r:qdsp_root:s0
+#/(system/vendor|vendor)/dsp/(.*)?              u:object_r:qdsp_file:s0
 /(system/vendor|vendor)/dsp(/.*)?              u:object_r:qdsp_file:s0
 
 # files in firmware

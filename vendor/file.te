@@ -1,9 +1,6 @@
 type sysfs_camera, sysfs_type, fs_type;
 type sysfs_clkscale, sysfs_type, fs_type;
 type sysfs_console_suspend, sysfs_type, fs_type;
-# TODO: Convert all users of sysfs_msm_subsys to sysfs_esoc
-# for /sys/bus/esoc/devices
-#type sysfs_esoc, sysfs_msm_subsys, sysfs_type, fs_type;
 type sysfs_esoc, sysfs_type, fs_type;
 type sysfs_fingerprint, sysfs_type, fs_type;
 type sysfs_graphics, sysfs_type, fs_type;
@@ -18,8 +15,8 @@ type sysfs_bluetooth, sysfs_type, fs_type;
 type sysfs_pcc_profile, sysfs_type, fs_type;
 type sysfs_timekeep, sysfs_type, fs_type;
 type sysfs_usb_supply, sysfs_type, fs_type;
-type sysfs_input_wakeup, sysfs_type, fs_type;
 type sysfs_input_name, sysfs_type, fs_type;
+type sysfs_input_wakeup, sysfs_type, fs_type;
 
 type debugfs_clk, debugfs_type, fs_type;
 type debugfs_ion, debugfs_type, fs_type;
@@ -37,7 +34,16 @@ type netmgrd_socket, file_type;
 type powerhal_socket, file_type;
 type cashsvr_socket, file_type;
 type ipacm_socket, file_type;
-type qdsp_file, file_type, vendor_file_type, mlstrustedobject;
+# TODO(b/dsp_symlink): Remove these ugly hacks
+#type qdsp_temp_link, file_type, vendor_file_type;
+# Can also remove vendor_file_type to get around the neverallow
+# Is that a bad idea?
+#type qdsp_file, file_type, vendor_file_type, mlstrustedobject;
+#type qdsp_file, file_type;
+# TODO: Explore if contextmount_type can go
+type qdsp_file, file_type, vendor_file_type, contextmount_type, mlstrustedobject;
+# TODO: Remove me
+#type adsprpcd_file, file_type;
 type tad_socket, file_type;
 type ims_socket, file_type;
 
@@ -61,14 +67,12 @@ type nfc_vendor_data_file, file_type, data_file_type;
 type radio_vendor_data_file, file_type, data_file_type, mlstrustedobject;
 type sensors_vendor_data_file, file_type, data_file_type;
 type timekeep_vendor_data_file, file_type, data_file_type;
-# TODO: Drop this in favor of AOSP hostapd_data_file and wpa_data_file
-#type wifi_vendor_data_file, file_type, data_file_type;
 type bluetooth_vendor_data_file, file_type, data_file_type;
 type audio_vendor_data_file, file_type, data_file_type;
 type camera_vendor_data_file, file_type, data_file_type;
 type ipa_vendor_data_file, file_type, data_file_type;
 
-#diag sysfs files
+# diag sysfs files
 type sysfs_diag, fs_type, sysfs_type;
 
 # input files
@@ -83,9 +87,13 @@ type proc_irq, proc_type, fs_type;
 type sysfs_irq, sysfs_type, fs_type;
 type irqbalance_socket, file_type;
 
-# /proc/sys/kernel/*
-type proc_kernel_sched, proc_type, fs_type;
+# /proc/sys/*
+# marlin has proc_kernel_sched, but proc_sched is in AOSP already
+#type proc_kernel_sched, proc_type, fs_type;
+#type proc_sched, proc_type, fs_type;
 type proc_kernel_printk, proc_type, fs_type;
+# follow crosshatch naming:
+type proc_swappiness, proc_type, fs_type;
 
 # /sys/kernel/boot_wlan/boot_wlan
 type sysfs_boot_wlan, fs_type, sysfs_type;

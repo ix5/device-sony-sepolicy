@@ -31,10 +31,24 @@ userdebug_or_eng(`
   auditallow rild vnd_qcrilhook_hwservice:hwservice_manager { add find };
   auditallow rild hidl_base_hwservice:hwservice_manager { add find };
 ')
-# TODO: neverallow
+# TODO: This is a neverallow
 #allow rild hal_secure_element_hwservice:hwservice_manager add;
-# Try this instead?
+# Try this instead? see public/hal_secure_element.te
+# (already merged upstream)
 hal_server_domain(rild, hal_secure_element)
+userdebug_or_eng(`
+  auditallow hal_secure_element_client hal_secure_element_hwservice:hwservice_manager find;
+  # add_hwservice(hal_secure_element_server, hal_secure_element_hwservice)
+  auditallow hal_secure_element_server hal_secure_element_hwservice:hwservice_manager { add find };
+  auditallow hal_secure_element_server hidl_base_hwservice:hwservice_manager add;
+')
+# Doesn't work because it only grants {find} to rild:
+#hal_client_domain(rild, hal_secure_element)
+# define(`hal_client_domain', `
+# typeattribute $1 halclientdomain;
+# typeattribute $1 $2_client;
+# ')
+# allow hal_secure_element_client hal_secure_element_hwservice:hwservice_manager find;
 
 # Needed! (was already there)
 binder_call(rild, per_mgr)
@@ -58,10 +72,11 @@ binder_call(rild, qcrilam_app);
 #')
 
 # Needed!
-binder_call(rild, secure_element);
+# -> use hal_server_domain(rild, hal_secure_element) instead
+#binder_call(rild, secure_element);
 # avc: denied { call } for scontext=u:r:secure_element:s0:c44,c260,c512,c768 tcontext=u:r:rild:s0 tclass=binder
 # avc: denied { transfer } for comm="com.android.se" scontext=u:r:secure_element:s0:c44,c260,c512,c768 tcontext=u:r:rild:s0 tclass=binder
-allow secure_element rild:binder call;
+#allow secure_element rild:binder call;
 # avc: denied { call } for scontext=u:r:secure_element:s0:c44,c260,c512,c768 tcontext=u:r:rild:s0 tclass=binder
 # binder_call(secure_element, rild)
 

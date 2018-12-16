@@ -4,11 +4,21 @@ allow init configfs:file rw_file_perms;
 allow init configfs:lnk_file { create unlink };
 
 allow init { mnt_vendor_file vendor_firmware_file qdsp_file }:dir mounton;
+#auditallow init qdsp_file:dir mounton;
+# avc: granted { mounton } for comm="init" path="/system/vendor/dsp" dev="mmcblk0p55" ino=2620 scontext=u:r:init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=dir
 allow init vendor_firmware_file:filesystem { mount relabelfrom };
-# (these denies were from before the /mnt/vendor/persist transition!)
-# avc: denied { relabelfrom } for comm="init" scontext=u:r:init:s0 tcontext=u:object_r:firmware_file:s0 tclass=filesystem
-# avc: denied { associate } for comm="init" scontext=u:object_r:firmware_file:s0 tcontext=u:object_r:firmware_file:s0 tclass=filesystem
-# avc: denied { mount } for comm="init" name="/" dev="mmcblk0p31" ino=1 scontext=u:r:init:s0 tcontext=u:object_r:firmware_file:s0 tclass=filesystem
+
+# For mounting /vendor/dsp from fstab via init
+# avc: granted { relabelto } for comm="init" scontext=u:r:init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=filesystem
+# avc: granted { relabelfrom } for comm="init" scontext=u:r:init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=filesystem
+allow init qdsp_file:filesystem relabelfrom;
+allow init qdsp_file:filesystem relabelto;
+# avc: granted { mount } for comm="init" name="/" dev="mmcblk0p32" ino=2 scontext=u:r:init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=filesystem
+allow init qdsp_file:filesystem mount;
+# Not necessary when not using init.common.rc restorecon_recursive
+# and mount -o remount for (/vendor)/dsp
+allow init qdsp_file:filesystem remount;
+auditallow init qdsp_file:filesystem remount;
 # TODO: Remove all other file/dir/fs types apart from vendor_firmware_file and
 #       mnt_vendor_file eventually?
 # Should look like this then:

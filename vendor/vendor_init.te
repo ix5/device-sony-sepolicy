@@ -1,6 +1,5 @@
 typeattribute vendor_init data_between_core_and_vendor_violators;
 
-# TODO: These are from crosshatch
 allow vendor_init {
     audio_data_file
     bluetooth_data_file
@@ -12,28 +11,6 @@ allow vendor_init {
     system_data_file
     wifi_data_file
 }:dir create_dir_perms;
-# TODO: Narrow this down. So far on tone:
-# avc: granted { search } for comm="init" name="/" dev="rootfs" ino=2 scontext=u:r:vendor_init:s0 tcontext=u:object_r:rootfs:s0 tclass=dir
-# avc: granted { search } for comm="init" name="/" dev="mmcblk0p54" ino=2 scontext=u:r:vendor_init:s0 tcontext=u:object_r:system_data_file:s0 tclass=dir
-userdebug_or_eng(`
-     auditallow vendor_init {
-    # Should this be only for debugging?
-    #     adb_keys_file
-         audio_data_file
-         bluetooth_data_file
-         camera_data_file
-         dhcp_data_file
-         radio_vendor_data_file
-    # Confirmed needed:
-    #     rootfs
-         sensors_vendor_data_file
-    # Confirmed needed:
-    #     system_data_file
-    # For early crashes?
-    #     tombstone_data_file
-         wifi_data_file
-     }:dir create_dir_perms;
-')
 
 allow vendor_init radio_vendor_data_file:file create_file_perms;
 dontaudit vendor_init kernel:system module_request;
@@ -41,29 +18,31 @@ dontaudit vendor_init kernel:system module_request;
 #allow vendor_init proc:file write;
 # -> this used to be for all of proc:file, but can be narrowed down
 # TODO: Check if this suffices
-# avc: granted { write } for comm="init" path="/proc/sys/kernel/dmesg_restrict" dev="proc" ino=21185 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc_security:s0 tclass=file
-allow vendor_init proc_kernel_sched:file write;
+# -> seems ok, but test on yoshino, nile & tama
+# For more init.tone.pwr.rc tunables:
+# avc: denied { write } for comm="init" name="swappiness" dev="proc" ino=39287 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc_swappiness:s0 tclass=file
+allow vendor_init proc_swappiness:file write;
 # avc: granted { write } for comm="init" path="/proc/sys/kernel/printk" dev="proc" ino=21184 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc:s0 tclass=file
 allow vendor_init proc_kernel_printk:file write;
 # TODO: tama probably needs irqs, but unsure what elese
 allow vendor_init proc_irq:file write;
+# avc: granted { write } for comm="init" path="/proc/sys/kernel/dmesg_restrict" dev="proc" ino=21185 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc_security:s0 tclass=file
 allow vendor_init proc_security:file write;
+# TODO: init.tone.pwr.rc changes:
+allow vendor_init proc_sched:file write;
+# avc: denied { write } for comm="init" name="sched_cfs_boost" dev="proc" ino=31101 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=1
+# avc: denied { write } for name="sched_cfs_boost" dev="proc" ino=31101 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=1
+# avc: denied { write } for comm="init" name="swappiness" dev="proc" ino=39858 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=1
+# avc: denied { write } for name="swappiness" dev="proc" ino=39858 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=1
 
 # avc: granted { read } for comm="init" name="persist" dev="rootfs" ino=13269 scontext=u:r:vendor_init:s0 tcontext=u:object_r:persist_file:s0 tclass=lnk_file
-# TODO(c/772de603cae45bb479a9dc19d78daa1de4d88205)
-# vendor_init: permit access to persist_file
-# the init should be able to read the persist_file
-# Signed-off-by: Alin Jerpelea <alin.jerpelea@sony.com>
 allow vendor_init persist_file:lnk_file read;
 # avc: granted { read } for comm="init" name="dsp" dev="rootfs" ino=1212 scontext=u:r:vendor_init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=lnk_file
 allow vendor_init qdsp_file:lnk_file read;
-# TODO: This is a neverallow!
-# Nobody should be doing writes to /system & /vendor
-# These partitions are intended to be read-only and must never be
-# modified. Doing so would violate important Android security guarantees
-# and invalidate dm-verity signatures.
-#allow vendor_init qdsp_file:dir setattr;
-dontaudit vendor_init qdsp_file:dir setattr;
+auditallow vendor_init qdsp_file:lnk_file read;
+# avc: denied { getattr } for comm="init" name="/" dev="mmcblk0p32" ino=2 scontext=u:r:vendor_init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=filesystem
+allow vendor_init qdsp_file:filesystem getattr;
+auditallow vendor_init qdsp_file:filesystem getattr;
 
 # Allow the vendor init process to read and write default_smp_affinity:
 # avc: denied { write } for comm="init" name="default_smp_affinity" dev="proc" ino=4026531867 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc_irq:s0 tclass=file
@@ -77,8 +56,20 @@ allow vendor_init device:file { create write };
 
 # avc: denied { relabelfrom } for comm="init" name="persist" dev="rootfs" ino=1245 scontext=u:r:vendor_init:s0 tcontext=u:object_r:rootfs:s0 tclass=lnk_file
 # avc: granted { relabelfrom } for comm="init" name="dsp" dev="rootfs" ino=13246 scontext=u:r:vendor_init:s0 tcontext=u:object_r:rootfs:s0 tclass=lnk_file
+# -> can't reproduce this after change to /mnt/vendor/ binds
 allow vendor_init rootfs:lnk_file relabelfrom;
 # TODO: After change to /mnt/vendor/persist, is this still necessary?
+# -> seems not
 userdebug_or_eng(`
   auditallow vendor_init rootfs:lnk_file relabelfrom;
+')
+
+# TODO(b/dsp_symlink): Remove these ugly hacks
+allow vendor_init unlabeled:dir { read getattr setattr relabelfrom };
+auditallow vendor_init unlabeled:dir { read getattr setattr relabelfrom };
+allow vendor_init unlabeled:file { read getattr };
+auditallow vendor_init unlabeled:file { read getattr };
+userdebug_or_eng(`
+  auditallow vendor_init unlabeled:dir r_dir_perms;
+  auditallow vendor_init unlabeled:file r_file_perms;
 ')

@@ -1,23 +1,28 @@
 genfscon proc /irq                                    u:object_r:proc_irq:s0
-# TODO: Use wildcard? Doesn't seem to work for genfs_contexts
-#genfscon proc /sys/kernel/sched_(.*)?                 u:object_r:proc_kernel_sched:s0
-# Naming: follow marlin with proc_kernel_sched,
+genfscon proc /sys/vm/swappiness                      u:object_r:proc_swappiness:s0
+# TODO: Use wildcard in file_contexts instead?
+#genfscon proc /sys/kernel/sched_(.*)?                 u:object_r:proc_sched:s0
+# Naming: follow aosp with proc_sched
 # crosshatch only labels sched_boost and sched_autogroup_enabled
 # Definitely needed:
-genfscon proc /sys/kernel/sched_boost                 u:object_r:proc_kernel_sched:s0
-genfscon proc /sys/kernel/sched_downmigrate           u:object_r:proc_kernel_sched:s0
-genfscon proc /sys/kernel/sched_upmigrate             u:object_r:proc_kernel_sched:s0
-genfscon proc /sys/kernel/sched_migration_fixup       u:object_r:proc_kernel_sched:s0
-# Needed by Calvin's cluster freq PR:
-genfscon proc /sys/kernel/sched_group_upmigrate       u:object_r:proc_kernel_sched:s0
-genfscon proc /sys/kernel/sched_group_downmigrate     u:object_r:proc_kernel_sched:s0
+genfscon proc /sys/kernel/sched_boost                 u:object_r:proc_sched:s0
+genfscon proc /sys/kernel/sched_downmigrate           u:object_r:proc_sched:s0
+genfscon proc /sys/kernel/sched_upmigrate             u:object_r:proc_sched:s0
+genfscon proc /sys/kernel/sched_migration_fixup       u:object_r:proc_sched:s0
+# More init.tone.pwr.rc tunables:
+genfscon proc /sys/kernel/sched_group_upmigrate       u:object_r:proc_sched:s0
+genfscon proc /sys/kernel/sched_group_downmigrate     u:object_r:proc_sched:s0
+genfscon proc /sys/kernel/sched_cfs_boost             u:object_r:proc_sched:s0
+# These two don't exist on tone:
+#genfscon proc /sys/kernel/sched_select_prev_cpu_us    u:object_r:proc_sched:s0
+#genfscon proc /sys/kernel/sched_init_task_load        u:object_r:proc_sched:s0
 # Might be needed as well(from marlin):
-genfscon proc /sys/kernel/sched_freq_dec_notify       u:object_r:proc_kernel_sched:s0
-genfscon proc /sys/kernel/sched_freq_inc_notify       u:object_r:proc_kernel_sched:s0
-genfscon proc /sys/kernel/sched_init_task_load        u:object_r:proc_kernel_sched:s0
-genfscon proc /sys/kernel/sched_migration_cost_ns     u:object_r:proc_kernel_sched:s0
-genfscon proc /sys/kernel/sched_small_task            u:object_r:proc_kernel_sched:s0
-genfscon proc /sys/kernel/sched_spill_nr_run          u:object_r:proc_kernel_sched:s0
+genfscon proc /sys/kernel/sched_freq_dec_notify       u:object_r:proc_sched:s0
+genfscon proc /sys/kernel/sched_freq_inc_notify       u:object_r:proc_sched:s0
+genfscon proc /sys/kernel/sched_init_task_load        u:object_r:proc_sched:s0
+genfscon proc /sys/kernel/sched_migration_cost_ns     u:object_r:proc_sched:s0
+genfscon proc /sys/kernel/sched_small_task            u:object_r:proc_sched:s0
+genfscon proc /sys/kernel/sched_spill_nr_run          u:object_r:proc_sched:s0
 # From crosshatch(the only two labels):
 #genfscon proc /sys/kernel/sched_autogroup_enabled     u:object_r:proc_sysctl_autogroup:s0
 #genfscon proc /sys/kernel/sched_boost                 u:object_r:proc_sysctl_schedboost:s0
