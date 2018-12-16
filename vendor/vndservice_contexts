@@ -1,4 +1,7 @@
 display.qservice                        u:object_r:qdisplay_service:s0
+vendor.qcom.PeripheralManager           u:object_r:per_mgr_service:s0
+com.sony.qcrilam                        u:object_r:qcrilam_service:s0
 
-# TODO(b/vndbinder): Re-enable once per_mgr uses vendor binder
+# TODO(b/vnd_per_mgr): Re-enable once per_mgr uses vendor binder
+# -> seems fine now?
 # vendor.qcom.PeripheralManager           u:object_r:per_mgr_service:s0

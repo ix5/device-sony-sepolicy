@@ -1,10 +1,15 @@
+# Policy for the TimeKeep Java app. It listens to a BootReceiver
+# or TIME_SET event and calculates the offset between the rtc clock
+# in /sys/class/rtc0/since_epoch and the current device time and stores that
+# value in /data/vendor/time/ats_2 and as persist.sys.timeadjust.
 type timekeep_app, domain;
 
 app_domain(timekeep_app)
 
 # Needed to get access to /data/data/com.sony.timekeep
-# TODO: Seems it doesn't try to access its dir anyway
-dontaudit timekeep_app system_app_data_file:dir { getattr search };
+# Only getattr and search are requested since TimeKeep does not write to its own directory
+# /data/data/com.sony.timekeep only has two empty subdirs
+dontaudit timekeep_app app_data_file:dir { getattr search };
 
 # TODO: Can't find audits for this
 # Probably because it is a BootReceiver oneshot and can't be started in
@@ -14,29 +19,20 @@ userdebug_or_eng(`
   auditallow timekeep_app timekeep_service:service_manager { add find };
 ')
 
-# Needed!
 allow timekeep_app activity_service:service_manager find;
-# avc:  granted  { find } for service=activity pid=2414 uid=1000 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:activity_service:s0 tclass=service_manager
-
-# TODO: per-mgr is probably not needed
-#binder_call(timekeep_app, per_mgr)
-#auditallow timekeep_app per_mgr:binder { call transfer };
-#auditallow per_mgr timekeep_app:binder { transfer };
 
 # Read from /data/vendor/time/ats_2
 allow timekeep_app timekeep_vendor_data_file:dir create_dir_perms;
 allow timekeep_app timekeep_vendor_data_file:file create_file_perms;
 
-# avc: granted { search } for comm="m.sony.timekeep" name="rtc" dev="sysfs" ino=27336 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:sysfs_rtc:s0 tclass=dir
-allow timekeep_app sysfs_rtc:dir search;
-# avc: granted { read } for comm="m.sony.timekeep" name="rtc0" dev="sysfs" ino=41349 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:sysfs_rtc:s0 tclass=lnk_file
+# Read /sys/class/rtc/rtc0/since_epoch
+allow timekeep_app sysfs_rtc:dir { search };
 allow timekeep_app sysfs_rtc:{ file lnk_file } r_file_perms;
-# avc: denied { search } for name="400f000.qcom,spmi" dev="sysfs" ino=19045 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
 allow timekeep_app sysfs_msm_subsys:dir search;
 auditallow timekeep_app sysfs_msm_subsys:dir search;
 # TODO(b/sysfs_rtc): Remove once confirmed it was sysfs_rtc mislabeling
 # -> nope, still wants to search parent folders of linked dirs
 # avc: granted { search } for name="400f000.qcom,spmi" dev="sysfs" ino=19045 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
 
-# avc: granted { read } for comm="main" name="u:object_r:timekeep_prop:s0" dev="tmpfs" ino=18507 scontext=u:r:timekeep_app:s0 tcontext=u:object_r:timekeep_prop:s0 tclass=file
+# Set the persist.sys.timeadjust property
 set_prop(timekeep_app, timekeep_prop)

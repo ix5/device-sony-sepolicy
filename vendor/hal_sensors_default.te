@@ -2,17 +2,19 @@
 allow hal_sensors_default self:socket { create ioctl read write };
 allowxperm hal_sensors_default self:socket ioctl msm_sock_ipc_ioctls;
 
-r_dir_file(hal_sensors_default, sysfs_msm_subsys);
+# Still needed!
 # avc: denied { open } for comm="android.hardwar" path="/sys/bus/msm_subsys/devices" dev="sysfs" ino=17768 scontext=u:r:hal_sensors_default:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
 # avc: granted { read } for comm="android.hardwar" name="devices" dev="sysfs" ino=17768 scontext=u:r:hal_sensors_default:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
 # avc: denied { open } for comm="android.hardwar" path="/sys/devices/platform/soc/1c00000.qcom,ssc/subsys3/name" dev="sysfs" ino=49692 scontext=u:r:hal_sensors_default:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=file
+r_dir_file(hal_sensors_default, sysfs_msm_subsys);
+allow hal_sensors_default sysfs_esoc:dir r_dir_perms;
 
-# avc: granted { getattr } for comm="android.hardwar" path="/sys/bus/esoc/devices" dev="sysfs" ino=28289 scontext=u:r:hal_sensors_default:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
-allow hal_sensors_default sysfs_esoc:dir { getattr open read };
+# read and write factory calibration and sensor configuration data
+allow hal_sensors_default mnt_vendor_file:dir search;
+allow hal_sensors_default persist_file:dir search;
+allow hal_sensors_default persist_sensors_file:dir create_dir_perms;
+allow hal_sensors_default persist_sensors_file:file create_file_perms;
 
 # avc: granted { module_request } for comm="android.hardwar" kmod="net-pf-42" scontext=u:r:hal_sensors_default:s0 tcontext=u:r:kernel:s0 tclass=system
 # Follow crosshatch sepolicy and ignore:
 dontaudit hal_sensors_default kernel:system module_request;
-
-allow hal_sensors_default persist_file:dir search;
-allow hal_sensors_default persist_sensors_file:dir search;

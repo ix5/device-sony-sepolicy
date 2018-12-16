@@ -1,3 +1,1 @@
 type timekeep_service, service_manager_type;
-# TODO(b/vndbinder): Eventually, this should be a vndservice
-type qcrilam_service, service_manager_type;

@@ -3,30 +3,19 @@ type qcrilam_app, domain;
 app_domain(qcrilam_app)
 
 # Needed to get access to /data/data/com.sony.qcrilam
-# avc: granted { search } for comm="om.sony.qcrilam" name="com.sony.qcrilam" dev="mmcblk0p54" ino=311305 scontext=u:r:qcrilam_app:s0 tcontext=u:object_r:app_data_file:s0 tclass=dir
-# avc: granted { getattr } for path="/data/data/com.sony.qcrilam" dev="mmcblk0p54" ino=868390 scontext=u:r:qcrilam_app:s0 tcontext=u:object_r:app_data_file:s0 tclass=dir
 # Only getattr and search are requested since qcrilam does not write to its own directory
 # /data/data/com.sony.qcrilam only has two empty subdirs
-dontaudit qcrilam_app system_app_data_file:dir { getattr search };
+dontaudit qcrilam_app app_data_file:dir { getattr search };
 
-# avc: denied { find } for service=activity pid=2061 uid=1000 scontext=u:r:qcrilam_app:s0 tcontext=u:object_r:activity_service:s0 tclass=service_manager
+# Acccess to its own service and broadcasts
 allow qcrilam_app activity_service:service_manager find;
+# Find media.audio_flinger
+allow qcrilam_app audioserver_service:service_manager find;
 
-# TODO: Can't find audits for this
-#add_service(qcrilam_app, qcrilam_service)
-#auditallow qcrilam_app qcrilam_service:service_manager { add find };
-
-# TODO(vndbinder): Switch to vndbinder
-#vndbinder_use(qcrilam_app)
-
-# Needed!
-binder_use(qcrilam_app)
-# avc: granted { call } for comm="HwBinder:2061_1" scontext=u:r:qcrilam_app:s0 tcontext=u:r:servicemanager:s0 tclass=binder
-# avc: granted { call } for comm="re-initialized>" scontext=u:r:qcrilam_app:s0 tcontext=u:r:servicemanager:s0 tclass=binder
-# avc: granted { search } for comm="servicemanager" name="1603" dev="proc" ino=13148 scontext=u:r:servicemanager:s0 tcontext=u:r:qcrilam_app:s0 tclass=dir
 
 # TODO: Needed? Seems not, but include it for eventualities
 # Should be harmless since it's a very controlled environment
+# Find the vendor.qti.hardware.radio.am::IQcRilAudio HIDL service
 allow qcrilam_app vnd_qcrilhook_hwservice:hwservice_manager find;
 userdebug_or_eng(`
   auditallow qcrilam_app vnd_qcrilhook_hwservice:hwservice_manager find;
@@ -34,16 +23,26 @@ userdebug_or_eng(`
 # TODO(b/vendorize): Make this a vndservice and access via vndservice_manager
 #allow qcrilam_app vnd_qcrilhook_hwservice:vndservice_manager { find };
 
-# TODO: Needed?
+# Interact with rild
+binder_call(qcrilam_app, rild)
+
+# TODO: Can't find audits for this
+#add_service(qcrilam_app, qcrilam_service)
+#auditallow qcrilam_app qcrilam_service:service_manager { add find };
+
+# TODO: Needed? Seems not
 #binder_call(qcrilam_app, vnd_qcrilhook_hwservice)
 #auditallow qcrilam_app vnd_qcrilhook_hwservice:binder { call transfer };
 #auditallow vnd_qcrilhook_hwservice qcrilam_app:binder { transfer };
 
-# Needed!
-binder_call(qcrilam_app, rild)
-# avc: granted { call } for comm="om.sony.qcrilam" scontext=u:r:qcrilam_app:s0 tcontext=u:r:rild:s0 tclass=binder
-# avc: granted { transfer } for comm="om.sony.qcrilam" scontext=u:r:qcrilam_app:s0 tcontext=u:r:rild:s0 tclass=binder
-
-# Needed!
-# avc: denied { find } for service=media.audio_flinger pid=2061 uid=1000 scontext=u:r:qcrilam_app:s0 tcontext=u:object_r:audioserver_service:s0 tclass=service_manager
-allow qcrilam_app audioserver_service:service_manager find;
+# Needed?
+#binder_use(qcrilam_app)
+# avc: granted { call } for comm="HwBinder:2061_1" scontext=u:r:qcrilam_app:s0 tcontext=u:r:servicemanager:s0 tclass=binder
+# avc: granted { call } for comm="re-initialized>" scontext=u:r:qcrilam_app:s0 tcontext=u:r:servicemanager:s0 tclass=binder
+# avc: granted { search } for comm="servicemanager" name="1603" dev="proc" ino=13148 scontext=u:r:servicemanager:s0 tcontext=u:r:qcrilam_app:s0 tclass=dir
+#userdebug_or_eng(`
+#  allow qcrilam_app servicemanager:binder { call transfer };
+#  allow servicemanager qcrilam_app:dir search;
+#  allow servicemanager qcrilam_app:file { read open };
+#  allow servicemanager qcrilam_app:process getattr;
+#')

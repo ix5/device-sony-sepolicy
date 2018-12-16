@@ -1,4 +1,6 @@
 com.sony.timekeep.TimeKeep              u:object_r:timekeep_service:s0
-# TODO(b/vndbinder): Remove once per_mgr uses vendor binder
-vendor.qcom.PeripheralManager           u:object_r:per_mgr_service:s0
-com.sony.qcrilam.QcRilAmService         u:object_r:qcrilam_service:s0
+# TODO(b/vnd_per_mgr): Remove once per_mgr uses vendor binder
+# -> seems ok now?
+#vendor.qcom.PeripheralManager           u:object_r:per_mgr_service:s0
+# QcRilAm can live in vndservice_contexts
+#com.sony.qcrilam.QcRilAmService         u:object_r:qcrilam_service:s0

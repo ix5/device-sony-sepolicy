@@ -4,7 +4,10 @@ type per_mgr_exec, exec_type, vendor_file_type, file_type;
 
 init_daemon_domain(per_mgr);
 
+# TODO: Which?
 add_service(per_mgr, per_mgr_service)
+auditallow per_mgr per_mgr_service:service_manager { add find };
+# add_vndservice() equivalanet?
 
 # TODO(b/vndbinder): Remove once per_mgr uses vendor binder
 typeattribute per_mgr binder_in_vendor_violators;

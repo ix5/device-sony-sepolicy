@@ -1,6 +1,9 @@
 vndbinder_use(hal_camera_default);
 allow hal_camera_default qdisplay_service:service_manager find;
 
+allow hal_camera_default self:socket { create ioctl read write };
+allowxperm hal_camera self:socket ioctl { IPC_ROUTER_IOCTL_LOOKUP_SERVER IPC_ROUTER_IOCTL_BIND_CONTROL_PORT };
+
 allow hal_camera_default {
      fwk_display_hwservice
      hal_graphics_mapper_hwservice
@@ -12,6 +15,7 @@ binder_call(hal_camera_default, hal_graphics_allocator)
 binder_call(hal_camera_default, surfaceflinger)
 
 set_prop(hal_camera_default, camera_prop)
+set_prop(hal_camera_default, vendor_camera_prop)
 
 allow hal_camera_default vendor_camera_prop:file r_file_perms;
 
@@ -28,9 +32,12 @@ unix_socket_connect(hal_camera_default, cashsvr, cashsvr)
 allow hal_camera_default cashsvr_socket:dir search;
 allow hal_camera_default cashsvr_socket:sock_file write;
 
-# avc: denied { open } for path="/sys/devices/platform/soc/900000.qcom,mdss_rotator/video4linux/video0/name" dev="sysfs" ino=41736 scontext=u:r:hal_camera_default:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=file
+# avc: denied { open } for path="/sys/devices/platform/soc/900000.qcom,mdss_rotator/video4linux/video0/name" \
+#   dev="sysfs" ino=41736 scontext=u:r:hal_camera_default:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=file
 allow hal_camera_default sysfs_msm_subsys:dir r_dir_perms;
 allow hal_camera_default sysfs_msm_subsys:file r_file_perms;
+# TODO: Cannot reproduce access to sysfs_soc on tone, obsolete?
+r_dir_file(hal_camera_default, sysfs_soc)
 # avc: denied { open } for path="/sys/bus/esoc/devices" dev="sysfs" ino=28289 scontext=u:r:hal_camera_default:s0 tcontext=u:object_r:sysfs_esoc:s0 tclass=dir
 # /sys/bus/esoc/devices is now sysfs_esoc
 r_dir_file(hal_camera_default, sysfs_esoc)
@@ -38,20 +45,5 @@ r_dir_file(hal_camera_default, sysfs_esoc)
 allow hal_camera_default camera_vendor_data_file:dir rw_dir_perms;
 allow hal_camera_default camera_vendor_data_file:file create_file_perms;
 
-# avc: denied { create } for comm="android.hardwar" scontext=u:r:hal_camera_default:s0 tcontext=u:r:hal_camera_default:s0 tclass=socket
-# avc: denied { read } for comm="CAM_GYRO" scontext=u:r:hal_camera_default:s0 tcontext=u:r:hal_camera_default:s0 tclass=socket
-# avc: denied { write } for comm="CAM_GYRO" scontext=u:r:hal_camera_default:s0 tcontext=u:r:hal_camera_default:s0 tclass=socket
-allow hal_camera_default self:socket { create read write ioctl };
-# avc: denied { ioctl } for comm="CAM_GYRO" path="socket:[24420]" dev="sockfs" ino=24420 ioctlcmd=0xc304 \
-#   scontext=u:r:hal_camera_default:s0 tcontext=u:r:hal_camera_default:s0 tclass=socket permissive=0
-# avc: denied { ioctl } for path="socket:[23121]" dev="sockfs" ino=23121 ioctlcmd=0xc302 \
-#   scontext=u:r:hal_camera_default:s0 tcontext=u:r:hal_camera_default:s0 tclass=socket
-#  inum 23121 is /sys/devices/platform/psci/power/control and labeled u:object_r:sysfs:s0
-allowxperm hal_camera self:socket ioctl { IPC_ROUTER_IOCTL_LOOKUP_SERVER IPC_ROUTER_IOCTL_BIND_CONTROL_PORT };
-
+allow hal_camera_default kernel:system module_request;
 # avc: denied { set } for property=persist.vendor.camera.debug.logfile pid=596 uid=1047 gid=1005 scontext=u:r:hal_camera_default:s0 tcontext=u:object_r:vendor_camera_prop:s0 tclass=property_service
-set_prop(hal_camera_default, vendor_camera_prop)
-
-# avc: granted { module_request } for comm="android.hardwar" kmod="net-pf-42" scontext=u:r:hal_camera_default:s0 tcontext=u:r:kernel:s0 tclass=system
-# Follow crosshatch sepolicy and ignore
-dontaudit hal_camera_default kernel:system module_request;

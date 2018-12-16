@@ -5,18 +5,13 @@
 type timekeep, domain;
 type timekeep_exec, exec_type, vendor_file_type, file_type;
 
-# init_daemon_domain macro includes timekeep_exec and grants some transition
-# permissions
 init_daemon_domain(timekeep)
 
 # Grant permission to set system time and to set the real-time clock
 allow timekeep self:capability { fowner sys_time };
 
 # Write to /data/vendor/time/ats_2
-# avc: granted { search } for name="time" dev="mmcblk0p54" ino=245787 scontext=u:r:timekeep:s0 tcontext=u:object_r:timekeep_vendor_data_file:s0 tclass=dir
 allow timekeep timekeep_vendor_data_file:dir rw_dir_perms;
-# avc: granted { write open } for path="/data/vendor/time/ats_2" dev="mmcblk0p54" ino=245805 scontext=u:r:timekeep:s0 tcontext=u:object_r:timekeep_vendor_data_file:s0 tclass=file
-# avc: granted { getattr } for comm="timekeep" path="/data/vendor/time/ats_2" dev="mmcblk0p54" ino=245805 scontext=u:r:timekeep:s0 tcontext=u:object_r:timekeep_vendor_data_file:s0 tclass=file
 allow timekeep timekeep_vendor_data_file:file create_file_perms;
 
 # Set persist.sys.timeadjust

@@ -1,67 +1,28 @@
-# TODO(b/vndbinder): Remove once rild uses vendor binder
+# TODO(b/vndbinder): Remove once per_mgr/rild use vendor binder properly
 typeattribute rild binder_in_vendor_violators;
 
-# TODO(b/vndbinder): switch to vndbinder for rild
 vndbinder_use(rild)
 
-# Needed!
+# TODO(v/vnd_per_mgr): Needed with vendor per_mgr?
 binder_use(rild)
 # avc: denied { search } for comm="servicemanager" name="678" dev="proc" ino=19168 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=dir
 # avc: granted { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:servicemanager:s0 tclass=binder
 # avc: granted { search } for comm="servicemanager" name="attr" dev="proc" ino=26820 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=dir
 # avc: granted { read } for comm="servicemanager" name="current" dev="proc" ino=26821 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=file
 
-# Needed!
+# TODO(v/vnd_per_mgr): Needed with vendor per_mgr?
 hwbinder_use(rild)
 # avc: granted { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:hwservicemanager:s0 tclass=binder
 # avc: granted { transfer } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:hwservicemanager:s0 tclass=binder
 # avc: granted { transfer } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:hwservicemanager:s0 tclass=binder
 # avc: granted { search } for comm="hwservicemanage" name="780" dev="proc" ino=21162 scontext=u:r:hwservicemanager:s0 tcontext=u:r:rild:s0 tclass=dir
 
-# Needed!
-# avc:  granted  { find } for service=vendor.qcom.PeripheralManager pid=700 uid=1001 scontext=u:r:rild:s0 tcontext=u:object_r:per_mgr_service:s0 tclass=service_manager
+binder_call(rild, per_mgr)
+binder_call(rild, qcrilam_app);
+
 allow rild per_mgr_service:service_manager find;
 # included in:
 #use_per_mgr(rild)
-
-add_hwservice(rild, vnd_ims_radio_hwservice)
-# TODO: Added upstream, but is it actually needed? Seems not so on tone
-add_hwservice(rild, vnd_qcrilhook_hwservice)
-userdebug_or_eng(`
-  auditallow rild vnd_qcrilhook_hwservice:hwservice_manager { add find };
-  auditallow rild hidl_base_hwservice:hwservice_manager { add find };
-')
-# TODO: This is a neverallow
-#allow rild hal_secure_element_hwservice:hwservice_manager add;
-# Try this instead? see public/hal_secure_element.te
-# (already merged upstream)
-hal_server_domain(rild, hal_secure_element)
-userdebug_or_eng(`
-  auditallow hal_secure_element_client hal_secure_element_hwservice:hwservice_manager find;
-  # add_hwservice(hal_secure_element_server, hal_secure_element_hwservice)
-  auditallow hal_secure_element_server hal_secure_element_hwservice:hwservice_manager { add find };
-  auditallow hal_secure_element_server hidl_base_hwservice:hwservice_manager add;
-')
-# Doesn't work because it only grants {find} to rild:
-#hal_client_domain(rild, hal_secure_element)
-# define(`hal_client_domain', `
-# typeattribute $1 halclientdomain;
-# typeattribute $1 $2_client;
-# ')
-# allow hal_secure_element_client hal_secure_element_hwservice:hwservice_manager find;
-
-# Needed! (was already there)
-binder_call(rild, per_mgr)
-# avc: granted { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:per_mgr:s0 tclass=binder
-# avc: granted { transfer } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:per_mgr:s0 tclass=binder
-
-# Needed!
-# avc: denied { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:qcrilam_app:s0 tclass=binder
-#allow rild qcrilam_app:binder call;
-# This is not needed, but includes the above:
-# qcrilam_app already includes binder_call(rild, qcrilam_app),
-# thus rild has access to "allow rild qcrilam_app:binder transfer"
-binder_call(rild, qcrilam_app);
 
 # TODO: Needed? -> seems not
 #binder_call(rild, vnd_qcrilhook_hwservice);
@@ -71,23 +32,14 @@ binder_call(rild, qcrilam_app);
 #  auditallow rild vnd_qcrilhook_hwservice:fd use;
 #')
 
-# Needed!
-# -> use hal_server_domain(rild, hal_secure_element) instead
-#binder_call(rild, secure_element);
-# avc: denied { call } for scontext=u:r:secure_element:s0:c44,c260,c512,c768 tcontext=u:r:rild:s0 tclass=binder
-# avc: denied { transfer } for comm="com.android.se" scontext=u:r:secure_element:s0:c44,c260,c512,c768 tcontext=u:r:rild:s0 tclass=binder
-#allow secure_element rild:binder call;
-# avc: denied { call } for scontext=u:r:secure_element:s0:c44,c260,c512,c768 tcontext=u:r:rild:s0 tclass=binder
-# binder_call(secure_element, rild)
-
-# /data/vendor/radio/qcril.db and others
+# /data/vendor/radio/qcril.db etc.
 allow rild radio_vendor_data_file:dir create_dir_perms;
 allow rild radio_vendor_data_file:file create_file_perms;
 
 # odm/radio/qcril_database/qcril.db
 # TODO: convert to allowxperm for ioctl
-# -> get ioctl via auditd!
 allow rild vendor_file:file { ioctl lock };
+# -> get ioctl via auditd!
 userdebug_or_eng(`
   auditallow rild vendor_file:file { ioctl lock };
 ')
@@ -99,16 +51,27 @@ unix_socket_connect(rild, qmuxd, qmuxd)
 allow rild netmgrd_socket:dir search;
 unix_socket_connect(rild, netmgrd, netmgrd)
 
+add_hwservice(rild, vnd_ims_radio_hwservice)
+# TODO: Added upstream, but is it actually needed? Seems not so on tone
+add_hwservice(rild, vnd_qcrilhook_hwservice)
+userdebug_or_eng(`
+  auditallow rild vnd_qcrilhook_hwservice:hwservice_manager { add find };
+  auditallow rild hidl_base_hwservice:hwservice_manager { add find };
+')
+
+set_prop(rild, vendor_radio_prop)
+
 # avc: denied { ioctl } for comm="rild" path="socket:[52646]" dev="sockfs" ino=52646 ioctlcmd=0xc304 scontext=u:r:rild:s0 tcontext=u:r:rild:s0 tclass=socket
 # avc: denied { ioctl } for comm="rild" path="socket:[25459]" dev="sockfs" ino=25459 ioctlcmd=0xc302 scontext=u:r:rild:s0 tcontext=u:r:rild:s0 tclass=socket
 allow rild self:socket ioctl;
+# TODO: Can be narrowed down to 0xc302 and 0xc304?
 allowxperm rild self:socket ioctl msm_sock_ipc_ioctls;
 
-# avc: denied { set } for property=persist.vendor.radio.adb_log_on scontext=u:r:rild:s0 tcontext=u:object_r:vendor_default_prop:s0 tclass=property_service
-# avc: granted { read } for path="/dev/__properties__/u:object_r:vendor_radio_prop:s0" dev="tmpfs" ino=13592 scontext=u:r:rild:s0 tcontext=u:object_r:vendor_radio_prop:s0 tclass=file
-# avc: denied { open } for comm="rild" path="/dev/__properties__/u:object_r:vendor_radio_prop:s0" dev="tmpfs" ino=6661 scontext=u:r:rild:s0 tcontext=u:object_r:vendor_radio_prop:s0 tclass=file
-set_prop(rild, vendor_radio_prop)
-# TODO: Remove once nothing uses radio_prop
-# -> seems everything is fixed, ro.vendor.ril uses vendor_radio_prop now
-# avc:  denied  { set } for property=ro.vendor.ril.svlte1x pid=687 uid=1001 gid=1001 scontext=u:r:rild:s0 tcontext=u:object_r:vendor_default_prop:s0 tclass=property_service
-#set_prop(rild, radio_prop)
+hal_server_domain(rild, hal_secure_element)
+# TODO: Check on tama whether this actually works:
+userdebug_or_eng(`
+  auditallow hal_secure_element_client hal_secure_element_hwservice:hwservice_manager find;
+  # add_hwservice(hal_secure_element_server, hal_secure_element_hwservice)
+  auditallow hal_secure_element_server hal_secure_element_hwservice:hwservice_manager { add find };
+  auditallow hal_secure_element_server hidl_base_hwservice:hwservice_manager add;
+')

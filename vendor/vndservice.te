@@ -1,5 +1,8 @@
 type qdisplay_service,             vndservice_manager_type;
+type per_mgr_service,              vndservice_manager_type;
+type qcrilam_service,              vndservice_manager_type;
 
-# TODO(b/vndbinder): Revert once per_mgr uses vndbinder:
+# TODO(b/vnd_per_mgr): Revert once per_mgr uses vndbinder:
+# -> seems fine now?
 #type per_mgr_service,              vndservice_manager_type, service_manager_type;
-type per_mgr_service,              service_manager_type;
+#type per_mgr_service,              service_manager_type;
