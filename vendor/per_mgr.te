@@ -4,19 +4,22 @@ type per_mgr_exec, exec_type, vendor_file_type, file_type;
 
 init_daemon_domain(per_mgr);
 
-# TODO: Which?
-add_service(per_mgr, per_mgr_service)
-auditallow per_mgr per_mgr_service:service_manager { add find };
-# add_vndservice() equivalanet?
-
-# TODO(b/vndbinder): Remove once per_mgr uses vendor binder
-typeattribute per_mgr binder_in_vendor_violators;
-# avc:  denied  { find } for service=vendor.qcom.PeripheralManager pid=720 uid=1001 scontext=u:r:rild:s0 tcontext=u:object_r:default_android_service:s0 tclass=service_manager
-
-# TODO(v/vndbinder): Switch to vndservice
-vndbinder_use(per_mgr)
-
+# avc: granted { add } for service=vendor.qcom.PeripheralManager pid=606 uid=1000 scontext=u:r:per_mgr:s0 tcontext=u:object_r:per_mgr_service:s0 tclass=service_manager
 # avc: granted { find } for service=vendor.qcom.PeripheralManager pid=662 uid=1000 scontext=u:r:per_proxy:s0 tcontext=u:object_r:per_mgr_service:s0 tclass=service_manager
+add_service(per_mgr, per_mgr_service)
+
+# TODO(b/vndswitch): Remove once per_mgr uses vendor binder and
+# per_mgr_service is a vndservice_manager_type
+typeattribute per_mgr binder_in_vendor_violators;
+
+# TODO(b/vndswitch): Enable once per_proxy uses vendor binder
+#vndbinder_use(per_mgr)
+
+# avc: denied { call } for comm="pm-service" scontext=u:r:per_mgr:s0 tcontext=u:r:servicemanager:s0 tclass=binder
+# avc: denied { transfer } for comm="pm-service" scontext=u:r:per_mgr:s0 tcontext=u:r:servicemanager:s0 tclass=binder
+# avc: denied { search } for name="593" dev="proc" ino=20029 scontext=u:r:servicemanager:s0 tcontext=u:r:per_mgr:s0 tclass=dir
+# avc: denied { read } for comm="servicemanager" name="current" dev="proc" ino=19387 scontext=u:r:servicemanager:s0 tcontext=u:r:per_mgr:s0 tclass=file
+# TODO(b/vndswitch): Remove once per_proxy uses vendor binder
 binder_use(per_mgr)
 
 binder_call(per_mgr, hal_gnss)
@@ -24,11 +27,12 @@ binder_call(per_mgr, per_proxy)
 binder_call(per_mgr, rild)
 binder_call(per_mgr, wcnss_service)
 
-# TODO: Which denial/specific service? -> can't confirm this on tone
-allow per_mgr default_android_service:service_manager find;
-userdebug_or_eng(`
-  auditallow per_mgr default_android_service:service_manager find;
-')
+# FIXED: Which denial/specific service?
+# -> was a labeling issue for vendor.qcom.PeripheralManager, fixed now
+#allow per_mgr default_android_service:service_manager find;
+#userdebug_or_eng(`
+#  auditallow per_mgr default_android_service:service_manager find;
+#')
 
 allow per_mgr self:capability net_bind_service;
 
@@ -44,20 +48,22 @@ r_dir_file(per_mgr, sysfs_msm_subsys)
 # /sys/bus/esoc/devices is now sysfs_esoc
 allow per_mgr sysfs_esoc:dir { read open };
 # This is too broad, but test on tama etc:
-allow per_mgr sysfs:file { read open };
-userdebug_or_eng(`
-  auditallow per_mgr sysfs:file { read open };
-')
+#allow per_mgr sysfs:file { read open };
+#userdebug_or_eng(`
+#  auditallow per_mgr sysfs:file { read open };
+#')
 
-# Set the peripheral state property
-set_prop(per_mgr, per_mgr_state_prop);
+# Set the peripheral state property (seems unused on tone)
+#set_prop(per_mgr, per_mgr_state_prop);
 
-# avc: granted { search } for comm="pm-service" name="/" dev="tmpfs" ino=3653 scontext=u:r:per_mgr:s0 tcontext=u:object_r:device:s0 tclass=dir
+# avc: granted { search } for comm="pm-service" name="/" dev="tmpfs" ino=13798 scontext=u:r:per_mgr:s0 tcontext=u:object_r:device:s0 tclass=dir
 allow per_mgr device:dir search;
-allow per_mgr device:file { create write open };
-userdebug_or_eng(`
-  auditallow per_mgr device:file { create write open };
-')
+# Everything apart from {search} should be safe to remove
+#allow per_mgr device:file { create write open };
+#userdebug_or_eng(`
+#  auditallow per_mgr device:dir search;
+#  auditallow per_mgr device:file { create write open };
+#')
 
 # avc: denied { module_request } for comm="pm-service" kmod="net-pf-42" scontext=u:r:per_mgr:s0 tcontext=u:r:kernel:s0 tclass=system
 # Follow crosshatch sepolicy and ignore:
