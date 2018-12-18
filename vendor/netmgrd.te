@@ -67,4 +67,5 @@ dontaudit netmgrd self:system module_request;
 
 userdebug_or_eng(`
   allow netmgrd diag_device:chr_file { read write };
+  auditallow netmgrd diag_device:chr_file { read write };
 ')

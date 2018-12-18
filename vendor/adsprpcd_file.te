@@ -1,0 +1,11 @@
+# adsprpcd_file is in line with stock labeling on (/vendor)/dsp
+# TODO: The dsp partition is mounted using context=u:object_r:adsprpcd_file:s0 (leave this?)
+# TODO: Maybe move all this to adsprpcd.te
+
+# TODO: Maybe move all this to adsprpcd.te
+allow adsprpcd_file self:filesystem associate;
+# avc: denied { associate } for comm="init" scontext=u:object_r:adsprpcd_file:s0 tcontext=u:object_r:adsprpcd_file:s0 tclass=filesystem
+
+# TODO: Should be fine to grant, no sensitive data
+allow installd adsprpcd_file:filesystem quotaget;
+# avc: denied { quotaget } for comm="Binder:674_5" scontext=u:r:installd:s0 tcontext=u:object_r:adsprpcd_file:s0 tclass=filesystem

@@ -1,4 +1,0 @@
-# TODO: Maybe move all this to adsprpcd.te
-allow adsprpcd_file self:filesystem associate;
-
-dontaudit installd adsprpcd_file:filesystem quotaget;
