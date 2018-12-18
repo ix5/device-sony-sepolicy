@@ -38,12 +38,9 @@ allow hal_camera_default sysfs_msm_subsys:dir r_dir_perms;
 allow hal_camera_default sysfs_msm_subsys:file r_file_perms;
 # TODO: Cannot reproduce access to sysfs_soc on tone, obsolete?
 r_dir_file(hal_camera_default, sysfs_soc)
-# avc: denied { open } for path="/sys/bus/esoc/devices" dev="sysfs" ino=28289 scontext=u:r:hal_camera_default:s0 tcontext=u:object_r:sysfs_esoc:s0 tclass=dir
-# /sys/bus/esoc/devices is now sysfs_esoc
 r_dir_file(hal_camera_default, sysfs_esoc)
 
 allow hal_camera_default camera_vendor_data_file:dir rw_dir_perms;
 allow hal_camera_default camera_vendor_data_file:file create_file_perms;
 
 allow hal_camera_default kernel:system module_request;
-# avc: denied { set } for property=persist.vendor.camera.debug.logfile pid=596 uid=1047 gid=1005 scontext=u:r:hal_camera_default:s0 tcontext=u:object_r:vendor_camera_prop:s0 tclass=property_service
