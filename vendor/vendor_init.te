@@ -23,9 +23,11 @@ dontaudit vendor_init kernel:system module_request;
 # avc: denied { write } for comm="init" name="swappiness" dev="proc" ino=39287 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc_swappiness:s0 tclass=file
 allow vendor_init proc_swappiness:file write;
 # avc: granted { write } for comm="init" path="/proc/sys/kernel/printk" dev="proc" ino=21184 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc:s0 tclass=file
+# TODO: Should this only happen on debug builds?
 allow vendor_init proc_kernel_printk:file write;
-# TODO: tama probably needs irqs, but unsure what elese
-allow vendor_init proc_irq:file write;
+#userdebug_or_eng(`
+#  allow vendor_init proc_kernel_printk:file write;
+#')
 # Was there before:
 # avc: granted { write } for comm="init" path="/proc/sys/kernel/dmesg_restrict" dev="proc" ino=21185 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc_security:s0 tclass=file
 allow vendor_init proc_security:file write;
@@ -36,6 +38,9 @@ auditallow vendor_init proc_sched:file write;
 # avc: denied { write } for name="sched_cfs_boost" dev="proc" ino=31101 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=1
 # avc: denied { write } for comm="init" name="swappiness" dev="proc" ino=39858 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=1
 # avc: denied { write } for name="swappiness" dev="proc" ino=39858 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=1
+# Allow the vendor init process to read and write default_smp_affinity:
+# avc: denied { write } for comm="init" name="default_smp_affinity" dev="proc" ino=4026531867 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc_irq:s0 tclass=file
+allow vendor_init proc_irq:file rw_file_perms;
 
 # Was there before:
 # avc: granted { read } for comm="init" name="persist" dev="rootfs" ino=13269 scontext=u:r:vendor_init:s0 tcontext=u:object_r:persist_file:s0 tclass=lnk_file
@@ -46,10 +51,6 @@ auditallow vendor_init adsprpcd_file:lnk_file read;
 # avc: denied { getattr } for comm="init" name="/" dev="mmcblk0p32" ino=2 scontext=u:r:vendor_init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=filesystem
 allow vendor_init adsprpcd_file:filesystem getattr;
 auditallow vendor_init adsprpcd_file:filesystem getattr;
-
-# Allow the vendor init process to read and write default_smp_affinity:
-# avc: denied { write } for comm="init" name="default_smp_affinity" dev="proc" ino=4026531867 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc_irq:s0 tclass=file
-allow vendor_init proc_irq:file w_file_perms;
 
 # avc: granted { search } for comm="init" name="/" dev="tmpfs" ino=13499 scontext=u:r:vendor_init:s0 tcontext=u:object_r:device:s0 tclass=dir
 allow vendor_init device:dir search;
