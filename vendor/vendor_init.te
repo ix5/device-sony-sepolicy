@@ -26,15 +26,18 @@ allow vendor_init proc_swappiness:file write;
 allow vendor_init proc_kernel_printk:file write;
 # TODO: tama probably needs irqs, but unsure what elese
 allow vendor_init proc_irq:file write;
+# Was there before:
 # avc: granted { write } for comm="init" path="/proc/sys/kernel/dmesg_restrict" dev="proc" ino=21185 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc_security:s0 tclass=file
 allow vendor_init proc_security:file write;
 # TODO: init.tone.pwr.rc changes:
 allow vendor_init proc_sched:file write;
+auditallow vendor_init proc_sched:file write;
 # avc: denied { write } for comm="init" name="sched_cfs_boost" dev="proc" ino=31101 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=1
 # avc: denied { write } for name="sched_cfs_boost" dev="proc" ino=31101 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=1
 # avc: denied { write } for comm="init" name="swappiness" dev="proc" ino=39858 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=1
 # avc: denied { write } for name="swappiness" dev="proc" ino=39858 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc:s0 tclass=file permissive=1
 
+# Was there before:
 # avc: granted { read } for comm="init" name="persist" dev="rootfs" ino=13269 scontext=u:r:vendor_init:s0 tcontext=u:object_r:persist_file:s0 tclass=lnk_file
 allow vendor_init persist_file:lnk_file read;
 # avc: granted { read } for comm="init" name="dsp" dev="rootfs" ino=1212 scontext=u:r:vendor_init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=lnk_file
@@ -59,17 +62,17 @@ allow vendor_init device:file { create write };
 # -> can't reproduce this after change to /mnt/vendor/ binds
 allow vendor_init rootfs:lnk_file relabelfrom;
 # TODO: After change to /mnt/vendor/persist, is this still necessary?
-# -> seems not
+# -> Perhaps only for funnily labled old /persist pertitions
 userdebug_or_eng(`
   auditallow vendor_init rootfs:lnk_file relabelfrom;
 ')
 
 # TODO(b/dsp_symlink): Remove these ugly hacks
-allow vendor_init unlabeled:dir { read getattr setattr relabelfrom };
-auditallow vendor_init unlabeled:dir { read getattr setattr relabelfrom };
-allow vendor_init unlabeled:file { read getattr };
-auditallow vendor_init unlabeled:file { read getattr };
-userdebug_or_eng(`
-  auditallow vendor_init unlabeled:dir r_dir_perms;
-  auditallow vendor_init unlabeled:file r_file_perms;
-')
+#allow vendor_init unlabeled:dir { read getattr setattr relabelfrom };
+#auditallow vendor_init unlabeled:dir { read getattr setattr relabelfrom };
+#allow vendor_init unlabeled:file { read getattr };
+#auditallow vendor_init unlabeled:file { read getattr };
+#userdebug_or_eng(`
+#  auditallow vendor_init unlabeled:dir r_dir_perms;
+#  auditallow vendor_init unlabeled:file r_file_perms;
+#')

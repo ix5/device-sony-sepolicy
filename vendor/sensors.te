@@ -11,29 +11,29 @@ allow sensors self:capability {
 allow sensors self:socket create_socket_perms;
 allowxperm sensors self:socket ioctl msm_sock_ipc_ioctls;
 
-# TODO: All of this is quite broad
-# TODO: Re-enable, this is only temporary for permissive!
-#allow sensors persist_sensors_file:dir rw_dir_perms;
-#allow sensors persist_sensors_file:file create_file_perms;
-#allow sensors persist_file:dir { getattr search };
+allow sensors persist_sensors_file:dir rw_dir_perms;
+allow sensors persist_sensors_file:file create_file_perms;
+allow sensors persist_file:dir { getattr search };
 
 # avc: denied { getattr read open } for comm="sensors.qcom" path="/data/vendor/sensors" dev="mmcblk0p54" ino=245783 scontext=u:r:sensors:s0 tcontext=u:object_r:sensors_vendor_data_file:s0 tclass=dir
 allow sensors sensors_vendor_data_file:dir create_dir_perms;
 # avc: denied { getattr read write open } for comm="sensors.qcom" name="sns.reg" dev="mmcblk0p54" ino=245788 scontext=u:r:sensors:s0 tcontext=u:object_r:sensors_vendor_data_file:s0 tclass=file
 allow sensors sensors_vendor_data_file:file create_file_perms;
 
+# TODO: Seems not necessary any more:
 #allow sensors system_file:dir r_dir_perms;
+
 # avc: denied { ioctl } for comm="sensors.qcom" path="/dev/sensors" dev="tmpfs" ino=18589 ioctlcmd=0x6403 scontext=u:r:sensors:s0 tcontext=u:object_r:sensors_device:s0 tclass=chr_file
 allow sensors sensors_device:chr_file rw_file_perms;
-# TODO: use allowxperm
-#allowxperm ioctl 0x6403
+# TODO: Check if this is correct:
+userdebug_or_eng(`
+  auditallow sensors sensors_device:chr_file rw_file_perms;
+  allowxperm sensors sensors_device::chr_file ioctl 0x6403;
+')
 
+r_dir_file(sensors, sysfs_msm_subsys)
 # avc: denied { search } for comm="sensors.qcom" name="soc0" dev="sysfs" ino=49944 scontext=u:r:sensors:s0 tcontext=u:object_r:sysfs_soc:s0 tclass=dir
-allow sensors sysfs_soc:dir r_dir_perms;
-allow sensors sysfs_soc:file r_file_perms;
-#r_dir_file(sensors, sysfs_msm_subsys)
-allow sensors sysfs_msm_subsys:dir { search open read };
-allow sensors sysfs_msm_subsys:file { open read };
+r_dir_file(sensors, sysfs_soc)
 # TODO: Check if this is sufficient
 # avc: denied { read } for comm="sensors.qcom" name="devices" dev="sysfs" ino=28289 scontext=u:r:sensors:s0 tcontext=u:object_r:sysfs_esoc:s0 tclass=dir
 allow sensors sysfs_esoc:dir { search open read };
