@@ -9,6 +9,5 @@ net_domain(hal_imsrtp)
 hwbinder_use(hal_imsrtp)
 get_prop(hal_imsrtp, hwservicemanager_prop)
 add_hwservice(hal_imsrtp, hal_imsrtp_hwservice)
-#allow hal_imsrtp hidl_base_hwservice:hwservice_manager add;
 
 dontaudit hal_imsrtp kernel:system module_request;
