@@ -1,6 +1,6 @@
 # TODO: Maybe move all this to adsprpcd.te
-allow qdsp_file self:filesystem associate;
+#allow qdsp_file self:filesystem associate;
 # avc: denied { associate } for comm="init" scontext=u:object_r:qdsp_file:s0 tcontext=u:object_r:qdsp_file:s0 tclass=filesystem
-dontaudit installd qdsp_file:filesystem quotaget;
+#dontaudit installd qdsp_file:filesystem quotaget;
 # avc: denied { quotaget } for comm="Binder:674_5" scontext=u:r:installd:s0 tcontext=u:object_r:qdsp_file:s0 tclass=filesystem
 

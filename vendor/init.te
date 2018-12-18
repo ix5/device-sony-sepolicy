@@ -3,7 +3,7 @@ allow init tmpfs:lnk_file create;
 allow init configfs:file rw_file_perms;
 allow init configfs:lnk_file { create unlink };
 
-allow init { mnt_vendor_file vendor_firmware_file qdsp_file }:dir mounton;
+allow init { mnt_vendor_file vendor_firmware_file adsprpcd_file }:dir mounton;
 #auditallow init qdsp_file:dir mounton;
 # avc: granted { mounton } for comm="init" path="/system/vendor/dsp" dev="mmcblk0p55" ino=2620 scontext=u:r:init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=dir
 allow init vendor_firmware_file:filesystem { mount relabelfrom };
@@ -11,20 +11,20 @@ allow init vendor_firmware_file:filesystem { mount relabelfrom };
 # For mounting /vendor/dsp from fstab via init
 # avc: granted { relabelto } for comm="init" scontext=u:r:init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=filesystem
 # avc: granted { relabelfrom } for comm="init" scontext=u:r:init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=filesystem
-allow init qdsp_file:filesystem relabelfrom;
-allow init qdsp_file:filesystem relabelto;
+allow init adsprpcd_file:filesystem relabelfrom;
+allow init adsprpcd_file:filesystem relabelto;
 # avc: granted { mount } for comm="init" name="/" dev="mmcblk0p32" ino=2 scontext=u:r:init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=filesystem
-allow init qdsp_file:filesystem mount;
+allow init adsprpcd_file:filesystem mount;
 # Not necessary when not using init.common.rc restorecon_recursive
 # and mount -o remount for (/vendor)/dsp
-allow init qdsp_file:filesystem remount;
-auditallow init qdsp_file:filesystem remount;
+allow init adsprpcd_file:filesystem remount;
+auditallow init adsprpcd_file:filesystem remount;
 # TODO: Remove all other file/dir/fs types apart from vendor_firmware_file and
 #       mnt_vendor_file eventually?
 # Should look like this then:
 #allow init mnt_vendor_file:dir mounton;
 #allow init vendor_firmware_file:dir mounton;
-allow init qdsp_file:lnk_file read;
+allow init adsprpcd_file:lnk_file read;
 
 dontaudit init kernel:system module_request;
 

@@ -41,9 +41,8 @@ type ipacm_socket, file_type;
 #type qdsp_file, file_type, vendor_file_type, mlstrustedobject;
 #type qdsp_file, file_type;
 # TODO: Explore if contextmount_type can go
-type qdsp_file, file_type, vendor_file_type, contextmount_type, mlstrustedobject;
-# TODO: Remove me
-#type adsprpcd_file, file_type;
+#type qdsp_file, file_type, vendor_file_type, contextmount_type, mlstrustedobject;
+type adsprpcd_file, file_type, vendor_file_type, contextmount_type, mlstrustedobject;
 type tad_socket, file_type;
 type ims_socket, file_type;
 
