@@ -1,6 +1,4 @@
-# TODO: Can this socket ioctl be safely removed if the below allowxperm works?
-# -> seems ok
-#allow system_server self:socket ioctl;
+allow system_server self:socket ioctl;
 allowxperm system_server self:socket ioctl msm_sock_ipc_ioctls;
 
 binder_call(system_server, hal_camera_default)
@@ -17,13 +15,11 @@ allow system_server audioserver:file w_file_perms;
 allow system_server hal_audio_default:file w_file_perms;
 
 allow system_server netmgrd_socket:dir r_dir_perms;
+allow system_server self:socket ioctl;
+allowxperm system_server self:socket ioctl msm_sock_ipc_ioctls;
 
 # radio
 rw_dir_file(system_server, qmuxd_socket)
-
-# qcom
-# instead of use_per_mgr() macro
-#get_prop(system_server, per_mgr_state_prop);
 
 # rtc: hctosys gets acessed by AlarmManagerService via system_server
 # Felix: What is this??? AlarmManagerService: Unable to set rtc to 1544520598: Invalid argument
@@ -33,6 +29,9 @@ allow system_server sysfs_rtc:{ file lnk_file } r_file_perms;
 # TODO: Is this necessary? Probably yes.
 # avc: granted { syslog_read } for comm="Thread-9" scontext=u:r:system_server:s0 tcontext=u:r:kernel:s0 tclass=system
 allow system_server kernel:system syslog_read;
+userdebug_or_eng(`
+  auditallow system_server kernel:system syslog_read;
+')
 
 # avc: denied { read open } for comm="Binder:1181_7" path="/mnt/media_rw/0A3C-120F/Android/data" dev="mmcblk1p1" ino=75 scontext=u:r:system_server:s0 tcontext=u:object_r:vfat:s0 tclass=dir
 # private/system_server.te:
