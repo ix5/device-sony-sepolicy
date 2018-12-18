@@ -5,10 +5,6 @@ init_daemon_domain(init-qcom-devstart-sh)
 
 allow init-qcom-devstart-sh { vendor_file vendor_shell_exec vendor_toolbox_exec }:file rx_file_perms;
 
-# Set the sys.qcom.devup property
-set_prop(init-qcom-devstart-sh, system_prop)
-# TODO: transition to vendor.qcom.devup in all of sodp
-# TODO: Definitely make this a separate commit!
 # Set the vendor.qcom.devup property
 set_prop(init-qcom-devstart-sh, vendor_device_prop)
 
