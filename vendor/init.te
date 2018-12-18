@@ -8,27 +8,31 @@ allow init { mnt_vendor_file vendor_firmware_file adsprpcd_file }:dir mounton;
 allow init qdsp_file:dir mounton;
 # For any other eventualities:
 allow init unlabeled:dir mounton;
+auditallow init unlabeled:dir mounton;
 #auditallow init qdsp_file:dir mounton;
 # avc: granted { mounton } for comm="init" path="/system/vendor/dsp" dev="mmcblk0p55" ino=2620 scontext=u:r:init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=dir
 allow init vendor_firmware_file:filesystem { mount relabelfrom };
 
 # For mounting /vendor/dsp from fstab via init
-# avc: granted { relabelto } for comm="init" scontext=u:r:init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=filesystem
-# avc: granted { relabelfrom } for comm="init" scontext=u:r:init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=filesystem
-allow init adsprpcd_file:filesystem relabelfrom;
-allow init adsprpcd_file:filesystem relabelto;
-# avc: granted { mount } for comm="init" name="/" dev="mmcblk0p32" ino=2 scontext=u:r:init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=filesystem
-allow init adsprpcd_file:filesystem mount;
-# TOD: Not necessary when not using init.common.rc restorecon_recursive
+# avc: granted { relabelto } for comm="init" scontext=u:r:init:s0 tcontext=u:object_r:adsprpcd_file:s0 tclass=filesystem
+# avc: granted { relabelfrom } for comm="init" scontext=u:r:init:s0 tcontext=u:object_r:adsprpcd_file:s0 tclass=filesystem
+# avc: granted { mount } for comm="init" name="/" dev="mmcblk0p32" ino=2 scontext=u:r:init:s0 tcontext=u:object_r:adsprpcd_file:s0 tclass=filesystem
+allow init adsprpcd_file:filesystem { relabelfrom relabelto mount };
+# TODO: Not necessary when not using init.common.rc restorecon_recursive
 # and mount -o remount for (/vendor)/dsp
 #allow init adsprpcd_file:filesystem remount;
 #auditallow init adsprpcd_file:filesystem remount;
+#auditallow init adsprpcd_file:filesystem remount;
+# TODO: Seems not used, even on tone which mounts dsp under /system/vendor/dsp:
+allow init adsprpcd_file:lnk_file read;
+userdebug_or_eng(`
+  auditallow init adsprpcd_file:lnk_file read;
+')
 # TODO: Remove all other file/dir/fs types apart from vendor_firmware_file and
 #       mnt_vendor_file eventually?
 # Should look like this then:
 #allow init mnt_vendor_file:dir mounton;
 #allow init vendor_firmware_file:dir mounton;
-allow init adsprpcd_file:lnk_file read;
 
 dontaudit init kernel:system module_request;
 
@@ -36,6 +40,7 @@ dontaudit init kernel:system module_request;
 dontaudit init { sysfs_type proc_type }:file create;
 
 # avc: granted { execute } for comm="init" name="msm_irqbalance" dev="mmcblk0p53" ino=246 scontext=u:r:init:s0 tcontext=u:object_r:msm_irqbalance_exec:s0 tclass=file
+# TODO: Should this rather be an (auto-)type_transition?
 allow init msm_irqbalance_exec:file execute;
 
 # Allow the init process to read and write default_smp_affinity:
@@ -44,8 +49,12 @@ allow init proc_irq:file rw_file_perms;
 # avc: granted { getattr } for comm="init" path="/dev" dev="tmpfs" ino=12662 scontext=u:r:init:s0 tcontext=u:object_r:device:s0 tclass=dir
 # avc: granted { write } for comm="init" name="/" dev="tmpfs" ino=14067 scontext=u:r:init:s0 tcontext=u:object_r:device:s0 tclass=dir
 # avc: granted { mounton } for comm="init" path="/dev/usb-ffs/adb" dev="tmpfs" ino=20822 scontext=u:r:init:s0 tcontext=u:object_r:device:s0 tclass=dir
+# avc: granted { mounton } for comm="init" path="/dev/stune" dev="tmpfs" ino=19604 scontext=u:r:init:s0 tcontext=u:object_r:device:s0 tclass=dir
+# avc: granted { search } for name="top-app" dev="tmpfs" ino=18497 scontext=u:r:init:s0 tcontext=u:object_r:device:s0 tclass=dir
+# Mount and read/write to devices
 allow init device:dir { mounton rw_dir_perms };
 # avc: granted { write open } for comm="init" path="/dev/cpuset/system-background/tasks" dev="tmpfs" ino=2578 scontext=u:r:init:s0 tcontext=u:object_r:device:s0 tclass=file
+# /dev/cpuset/*
 allow init device:file rw_file_perms;
 
 allow init sysfs_msm_subsys:file { open setattr write };

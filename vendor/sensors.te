@@ -23,15 +23,14 @@ allow sensors sensors_vendor_data_file:file create_file_perms;
 # TODO: Seems not necessary any more:
 #allow sensors system_file:dir r_dir_perms;
 
-# avc: denied { ioctl } for comm="sensors.qcom" path="/dev/sensors" dev="tmpfs" ino=18589 ioctlcmd=0x6403 scontext=u:r:sensors:s0 tcontext=u:object_r:sensors_device:s0 tclass=chr_file
 # avc: granted { read open } for comm="sensors.qcom" path="/dev/sensors" dev="tmpfs" ino=2554 scontext=u:r:sensors:s0 tcontext=u:object_r:sensors_device:s0 tclass=chr_file
-allow sensors sensors_device:chr_file rw_file_perms;
-# TODO: Check if this is correct:
-userdebug_or_eng(`
-  auditallow sensors sensors_device:chr_file rw_file_perms;
-  # TODO: Check if this is correct and sufficient:
-  allowxperm sensors sensors_device:chr_file ioctl 0x6403;
-')
+allow sensors sensors_device:chr_file r_file_perms;
+# TODO: Cannot reproduce that ioctl on tone
+# avc: denied { ioctl } for comm="sensors.qcom" path="/dev/sensors" dev="tmpfs" ino=18589 ioctlcmd=0x6403 scontext=u:r:sensors:s0 tcontext=u:object_r:sensors_device:s0 tclass=chr_file
+#userdebug_or_eng(`
+#  # TODO: Check if this is correct and sufficient:
+#  allowxperm sensors sensors_device:chr_file ioctl 0x6403;
+#')
 
 r_dir_file(sensors, sysfs_msm_subsys)
 # avc: denied { search } for comm="sensors.qcom" name="soc0" dev="sysfs" ino=49944 scontext=u:r:sensors:s0 tcontext=u:object_r:sysfs_soc:s0 tclass=dir
