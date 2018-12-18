@@ -28,7 +28,7 @@ allow sensors sensors_device:chr_file rw_file_perms;
 # TODO: Check if this is correct:
 userdebug_or_eng(`
   auditallow sensors sensors_device:chr_file rw_file_perms;
-  allowxperm sensors sensors_device::chr_file ioctl 0x6403;
+  allowxperm sensors sensors_device:chr_file ioctl 0x6403;
 ')
 
 r_dir_file(sensors, sysfs_msm_subsys)
