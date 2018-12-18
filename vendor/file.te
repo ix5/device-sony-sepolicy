@@ -40,6 +40,8 @@ type ims_socket, file_type;
 # TODO: Explore if mlstrustedobject can go
 #       contextmount_type is required for fstab context=u:...
 type adsprpcd_file, file_type, vendor_file_type, contextmount_type, mlstrustedobject;
+# We switched from qdsp_file to adsprpcd_file. Keep this for compatibility.
+type qdsp_file, file_type;
 type vendor_firmware_file, file_type, vendor_file_type, contextmount_type;
 
 type persist_file, file_type, vendor_persist_type;

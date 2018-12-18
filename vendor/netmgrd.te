@@ -66,6 +66,6 @@ dontaudit netmgrd kernel:system module_request;
 dontaudit netmgrd self:system module_request;
 
 userdebug_or_eng(`
+  # avc: granted { read write } for comm="netmgrd" name="diag" dev="tmpfs" ino=1670 scontext=u:r:netmgrd:s0 tcontext=u:object_r:diag_device:s0 tclass=chr_file
   allow netmgrd diag_device:chr_file { read write };
-  auditallow netmgrd diag_device:chr_file { read write };
 ')
