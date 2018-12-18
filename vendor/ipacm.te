@@ -51,12 +51,7 @@ allow ipacm hwservicemanager_prop:file r_file_perms;
 # With tethering hardware acceleration and ipacm, tetheroffload HALs enabled:
 # avc: denied { call } for comm="android.io" scontext=u:r:system_server:s0 tcontext=u:r:ipacm:s0 tclass=binder
 # avc: denied { use } for comm="android.io" path="socket:[43705]" dev="sockfs" ino=43705 scontext=u:r:ipacm:s0 tcontext=u:r:system_server:s0 tclass=fd
-# avc: denied { use } for path="socket:[43705]" dev="sockfs" ino=43705 scontext=u:r:ipacm:s0 tcontext=u:r:system_server:s0 tclass=fd
 # avc: denied { read write } for comm="android.io" path="socket:[43705]" dev="sockfs" ino=43705 scontext=u:r:ipacm:s0 tcontext=u:r:system_server:s0 tclass=netlink_netfilter_socket
-# avc: denied { read write } for path="socket:[43705]" dev="sockfs" ino=43705 scontext=u:r:ipacm:s0 tcontext=u:r:system_server:s0 tclass=netlink_netfilter_socket
 # avc: denied { getattr } for comm="HwBinder:703_1" scontext=u:r:ipacm:s0 tcontext=u:r:system_server:s0 tclass=netlink_netfilter_socket
-# avc: denied { getattr } for scontext=u:r:ipacm:s0 tcontext=u:r:system_server:s0 tclass=netlink_netfilter_socket
 # avc: denied { setopt } for comm="HwBinder:703_1" scontext=u:r:ipacm:s0 tcontext=u:r:system_server:s0 tclass=netlink_netfilter_socket
-# avc: denied { setopt } for scontext=u:r:ipacm:s0 tcontext=u:r:system_server:s0 tclass=netlink_netfilter_socket
 # avc: denied { transfer } for comm="android.io" scontext=u:r:system_server:s0 tcontext=u:r:ipacm:s0 tclass=binder
-# avc: denied { transfer } for scontext=u:r:system_server:s0 tcontext=u:r:ipacm:s0 tclass=binder
