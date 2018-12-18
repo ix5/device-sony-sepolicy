@@ -1,7 +1,11 @@
 r_dir_file(ueventd, vendor_firmware_file)
 r_dir_file(ueventd, persist_file)
 
-allow ueventd input_device:lnk_file { relabelto };
+# TODO: Can't reproduce this
+allow ueventd input_device:lnk_file relabelto;
+userdebug_or_eng(`
+  auditallow ueventd input_device:lnk_file relabelto;
+')
 
 allow ueventd {
     { sysfs_type - usermodehelper }
