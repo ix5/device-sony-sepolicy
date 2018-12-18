@@ -2,6 +2,8 @@ dontaudit netd kernel:system module_request;
 dontaudit netd self:capability sys_module;
 dontaudit netd proc_net:dir write;
 
+# TODO: Which conditions?
+# From an earlier run, can't reproduce on tone any more
 # avc: denied { write } for comm="iptables-restor" name="etc" dev="mmcblk0p55" ino=446 scontext=u:r:netd:s0 tcontext=u:object_r:system_file:s0 tclass=dir
 # avc: denied { write } for name="etc" dev="mmcblk0p55" ino=446 scontext=u:r:netd:s0 tcontext=u:object_r:system_file:s0 tclass=dir
 # avc: denied { add_name } for comm="iptables-restor" name="xtables.lock" scontext=u:r:netd:s0 tcontext=u:object_r:system_file:s0 tclass=dir

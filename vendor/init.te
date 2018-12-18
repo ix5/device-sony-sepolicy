@@ -45,7 +45,7 @@ allow init device:dir { mounton rw_dir_perms };
 allow init device:file rw_file_perms;
 
 allow init sysfs_msm_subsys:file { open setattr write };
-# Enable_ramdumps:
+# enable_ramdumps:
 allow init sysfs_msm_subsys_restart:file rw_file_perms;
 
 allow init nativetest_data_file:dir { getattr open read };
