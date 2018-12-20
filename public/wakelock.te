@@ -1,0 +1,4 @@
+# FIXME: Remove this, only for testing!
+auditallow * sysfs_wake_lock:file rw_file_perms;
+#auditallow * sysfs_wake_lock:file r_file_perms;
+auditallow * self:global_capability2_class_set block_suspend;
