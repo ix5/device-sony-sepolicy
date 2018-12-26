@@ -1,17 +1,24 @@
 # TODO(b/vndswitch): Remove once per_mgr/rild exclusively use vendor binder
 # and do not try to add and interact with service_manager types
-typeattribute rild binder_in_vendor_violators;
+not_full_treble(`
+  typeattribute rild binder_in_vendor_violators;
+')
 
-vndbinder_use(rild)
+full_treble_only(`
+  vndbinder_use(rild)
+')
 
-# TODO(v/vndswitch): Needed with vendor per_mgr?
-binder_use(rild)
+# TODO(v/vndswitch): Needed with vendor per_mgr? -> Needed for now with non-vendor PeripheralManager
 # avc: denied { search } for comm="servicemanager" name="678" dev="proc" ino=19168 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=dir
 # avc: granted { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:servicemanager:s0 tclass=binder
 # avc: granted { search } for comm="servicemanager" name="attr" dev="proc" ino=26820 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=dir
 # avc: granted { read } for comm="servicemanager" name="current" dev="proc" ino=26821 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=file
+not_full_treble(`
+  binder_use(rild)
+')
 
 # TODO(v/vndswitch): Needed with vendor per_mgr?
+# -> seems not, upstream doesn't have this
 #hwbinder_use(rild)
 # avc: granted { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:hwservicemanager:s0 tclass=binder
 # avc: granted { transfer } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:hwservicemanager:s0 tclass=binder

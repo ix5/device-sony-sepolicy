@@ -6,8 +6,7 @@ persist.net.doxlat         u:object_r:net_radio_prop:s0
 sys.listeners.registered   u:object_r:tee_listener_prop:s0
 wc_transport.              u:object_r:wc_prop:s0
 persist.sys.timeadjust     u:object_r:timekeep_prop:s0
-# TODO: removed by oshmoun
-#adb.network.port.es        u:object_r:adbtcpes_prop:s0
+adb.network.port.es        u:object_r:adbtcpes_prop:s0
 persist.dispcal.setting    u:object_r:dispcal_prop:s0
 vendor.ims.                u:object_r:qcom_ims_prop:s0
 persist.vendor.ims.        u:object_r:qcom_ims_prop:s0

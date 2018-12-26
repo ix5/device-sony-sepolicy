@@ -1,0 +1,5 @@
+# Another android bug to work around: b/74331887
+
+allow platform_app nfc_data_file:dir r_dir_perms;
+auditallow platform_app nfc_data_file:dir r_dir_perms;
+# avc: denied { getattr } for comm="ndroid.systemui" path="/data/data/com.android.nfc" dev="mmcblk0p54" ino=868535 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:nfc_data_file:s0 tclass=dir permissive=1 b/74331887

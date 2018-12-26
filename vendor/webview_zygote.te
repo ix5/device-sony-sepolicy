@@ -1,3 +1,0 @@
-# Untrusted app webview processes
-# Better not do this!
-#allow webview_zygote zygote:unix_dgram_socket write;

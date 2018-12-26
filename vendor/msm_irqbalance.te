@@ -19,4 +19,5 @@ allow msm_irqbalance self:capability { setgid setuid };
 userdebug_or_eng(`
   auditallow msm_irqbalance self:capability { setgid setuid };
 ')
+
 dontaudit msm_irqbalance self:capability dac_override;

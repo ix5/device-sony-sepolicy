@@ -18,7 +18,7 @@ allow init vendor_firmware_file:filesystem { mount relabelfrom };
 # avc: granted { relabelto } for comm="init" scontext=u:r:init:s0 tcontext=u:object_r:adsprpcd_file:s0 tclass=filesystem
 # avc: granted { relabelfrom } for comm="init" scontext=u:r:init:s0 tcontext=u:object_r:adsprpcd_file:s0 tclass=filesystem
 # avc: granted { mount } for comm="init" name="/" dev="mmcblk0p32" ino=2 scontext=u:r:init:s0 tcontext=u:object_r:adsprpcd_file:s0 tclass=filesystem
-allow init adsprpcd_file:filesystem { relabelfrom relabelto mount };
+allow init adsprpcd_file:filesystem { relabelfrom relabelto mount remount };
 # TODO: Not necessary when not using init.common.rc restorecon_recursive
 # and mount -o remount for (/vendor)/dsp
 #allow init adsprpcd_file:filesystem remount;
@@ -59,6 +59,9 @@ allow init device:dir { mounton rw_dir_perms };
 allow init device:file rw_file_perms;
 
 allow init sysfs_msm_subsys:file { open setattr write };
+# Set memory parameters
+# mainly for omni
+allow init sysfs_memory:file { open setattr write };
 # enable_ramdumps:
 allow init sysfs_msm_subsys_restart:file rw_file_perms;
 

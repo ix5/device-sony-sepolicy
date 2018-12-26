@@ -49,7 +49,11 @@ auditallow vendor_init adsprpcd_file:lnk_file read;
 # TODO: Seems unused with new fstab mount contet
 # avc: denied { getattr } for comm="init" name="/" dev="mmcblk0p32" ino=2 scontext=u:r:vendor_init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=filesystem
 allow vendor_init adsprpcd_file:filesystem getattr;
-auditallow vendor_init adsprpcd_file:filesystem getattr;
+allow vendor_init adsprpcd_file:filesystem getattr;
+
+# avc: denied { setattr } for name="/" dev="mmcblk0p32" ino=2 scontext=u:r:vendor_init:s0 tcontext=u:object_r:adsprpcd_file:s0 tclass=dir
+auditallow vendor_init adsprpcd_file:dir setattr;
+auditallow vendor_init adsprpcd_file:dir setattr;
 
 # TODO: Seems not used any more, in regular init instead:
 # avc: granted { search } for comm="init" name="/" dev="tmpfs" ino=13499 scontext=u:r:vendor_init:s0 tcontext=u:object_r:device:s0 tclass=dir
