@@ -1,8 +1,6 @@
 # TODO(b/vndswitch): Remove once per_mgr/rild exclusively use vendor binder
 # and do not try to add and interact with service_manager types
-not_full_treble(`
-  typeattribute rild binder_in_vendor_violators;
-')
+typeattribute rild binder_in_vendor_violators;
 
 full_treble_only(`
   vndbinder_use(rild)
@@ -16,6 +14,7 @@ full_treble_only(`
 not_full_treble(`
   binder_use(rild)
 ')
+binder_use(rild)
 
 # TODO(v/vndswitch): Needed with vendor per_mgr?
 # -> seems not, upstream doesn't have this

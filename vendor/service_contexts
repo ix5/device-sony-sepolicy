@@ -1,7 +1,5 @@
 com.sony.timekeep.TimeKeep              u:object_r:timekeep_service:s0
 # TODO(b/vndswitch): Remove once per_mgr uses vendor binder
-not_full_treble(`
-  vendor.qcom.PeripheralManager           u:object_r:per_mgr_service:s0
-')
+vendor.qcom.PeripheralManager           u:object_r:per_mgr_service:s0
 # QcRilAm can live in vndservice_contexts
 #com.sony.qcrilam.QcRilAmService         u:object_r:qcrilam_service:s0

@@ -1,5 +1,3 @@
 type timekeep_service, service_manager_type;
 # TODO(b/vndswitch): Remove once per_mgr uses vendor binder
-not_full_treble(`
-  type per_mgr_service, service_manager_type;
-')
+type per_mgr_service, service_manager_type;
