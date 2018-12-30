@@ -45,31 +45,31 @@
 /dev/socket/ipacm_log_file                      u:object_r:ipacm_socket:s0
 
 # files in /odm
-/odm/bin/hw/android\.hardware\.keymaster@3\.0-service-qti u:object_r:hal_keymaster_qti_exec:s0
-/odm/bin/hw/android\.hardware\.gatekeeper@1\.0-service-qti u:object_r:hal_gatekeeper_qti_exec:s0
-/odm/bin/adsprpcd                               u:object_r:adsprpcd_exec:s0
-/odm/bin/cdsprpcd                               u:object_r:cdsprpcd_exec:s0
-/odm/bin/ims_rtp_daemon                         u:object_r:hal_imsrtp_exec:s0
-/odm/bin/imsdatadaemon                          u:object_r:ims_exec:s0
-/odm/bin/imsqmidaemon                           u:object_r:ims_exec:s0
-/odm/bin/irsc_util                              u:object_r:irsc_util_exec:s0
-/odm/bin/mlog_qmi_service                       u:object_r:mlog_qmi_exec:s0
-/odm/bin/msm_irqbalance                         u:object_r:msm_irqbalance_exec:s0
-/odm/bin/netmgrd                                u:object_r:netmgrd_exec:s0
-/odm/bin/pm-service                             u:object_r:per_mgr_exec:s0
-/odm/bin/pm-proxy                               u:object_r:per_proxy_exec:s0
-/odm/bin/pd-mapper                              u:object_r:pd_mapper_exec:s0
-/odm/bin/qmuxd                                  u:object_r:qmuxd_exec:s0
-/odm/bin/qseecomd                               u:object_r:tee_exec:s0
-/odm/bin/rmt_storage                            u:object_r:rmt_storage_exec:s0
-/odm/bin/sct_service                            u:object_r:sct_exec:s0
-/odm/bin/sensors\.qcom                          u:object_r:sensors_exec:s0
-/odm/bin/sscrpcd                                u:object_r:sscrpcd_exec:s0
-/odm/bin/tad_static                             u:object_r:tad_exec:s0
-/odm/bin/ta_qmi_service                         u:object_r:ta_qmi_exec:s0
-/odm/bin/tftp_server                            u:object_r:tad_exec:s0
-/odm/bin/cnss-daemon                            u:object_r:wcnss_service_exec:s0
-/odm/firmware(/.*)?                             u:object_r:vendor_firmware_file:s0
+/(vendor/)?odm/bin/hw/android\.hardware\.keymaster@3\.0-service-qti u:object_r:hal_keymaster_qti_exec:s0
+/(vendor/)?odm/bin/hw/android\.hardware\.gatekeeper@1\.0-service-qti u:object_r:hal_gatekeeper_qti_exec:s0
+/(vendor/)?odm/bin/adsprpcd                               u:object_r:adsprpcd_exec:s0
+/(vendor/)?odm/bin/cdsprpcd                               u:object_r:cdsprpcd_exec:s0
+/(vendor/)?odm/bin/ims_rtp_daemon                         u:object_r:hal_imsrtp_exec:s0
+/(vendor/)?odm/bin/imsdatadaemon                          u:object_r:ims_exec:s0
+/(vendor/)?odm/bin/imsqmidaemon                           u:object_r:ims_exec:s0
+/(vendor/)?odm/bin/irsc_util                              u:object_r:irsc_util_exec:s0
+/(vendor/)?odm/bin/mlog_qmi_service                       u:object_r:mlog_qmi_exec:s0
+/(vendor/)?odm/bin/msm_irqbalance                         u:object_r:msm_irqbalance_exec:s0
+/(vendor/)?odm/bin/netmgrd                                u:object_r:netmgrd_exec:s0
+/(vendor/)?odm/bin/pm-service                             u:object_r:per_mgr_exec:s0
+/(vendor/)?odm/bin/pm-proxy                               u:object_r:per_proxy_exec:s0
+/(vendor/)?odm/bin/pd-mapper                              u:object_r:pd_mapper_exec:s0
+/(vendor/)?odm/bin/qmuxd                                  u:object_r:qmuxd_exec:s0
+/(vendor/)?odm/bin/qseecomd                               u:object_r:tee_exec:s0
+/(vendor/)?odm/bin/rmt_storage                            u:object_r:rmt_storage_exec:s0
+/(vendor/)?odm/bin/sct_service                            u:object_r:sct_exec:s0
+/(vendor/)?odm/bin/sensors\.qcom                          u:object_r:sensors_exec:s0
+/(vendor/)?odm/bin/sscrpcd                                u:object_r:sscrpcd_exec:s0
+/(vendor/)?odm/bin/tad_static                             u:object_r:tad_exec:s0
+/(vendor/)?odm/bin/ta_qmi_service                         u:object_r:ta_qmi_exec:s0
+/(vendor/)?odm/bin/tftp_server                            u:object_r:tad_exec:s0
+/(vendor/)?odm/bin/cnss-daemon                            u:object_r:wcnss_service_exec:s0
+/(vendor/)?odm/firmware(/.*)?                             u:object_r:vendor_firmware_file:s0
 
 # files in /vendor
 /(system/vendor|vendor)/rfs(/.*)?                                                            u:object_r:rfs_system_file:s0
@@ -135,46 +135,46 @@
 ###############################################
 # same-process HAL files and their dependencies
 #
-/(system/vendor|vendor|odm)/lib(64)?/hw/gralloc\.msm89(52|96|98)\.so  u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/hw/gralloc\.sdm(660|845)\.so     u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/libqdMetaData\.so                u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/libqservice\.so                  u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/libqdutils\.so                   u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/libadreno_utils\.so              u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/libgsl\.so                       u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/hw/gralloc\.msm89(52|96|98)\.so  u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/hw/gralloc\.sdm(660|845)\.so     u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libqdMetaData\.so                u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libqservice\.so                  u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libqdutils\.so                   u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libadreno_utils\.so              u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libgsl\.so                       u:object_r:same_process_hal_file:s0
 
-/(system/vendor|vendor|odm)/lib(64)?/hw/vulkan\.msm89(52|96|98)\.so   u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/hw/vulkan\.sdm(660|845)\.so      u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/(egl/)?libEGL_adreno\.so         u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/(egl/)?libGLESv1_CM_adreno\.so   u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/(egl/)?libGLESv2_adreno\.so      u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/hw/vulkan\.msm89(52|96|98)\.so   u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/hw/vulkan\.sdm(660|845)\.so      u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/(egl/)?libEGL_adreno\.so         u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/(egl/)?libGLESv1_CM_adreno\.so   u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/(egl/)?libGLESv2_adreno\.so      u:object_r:same_process_hal_file:s0
 
 # libGLESv2_adreno depends on this
-/(system/vendor|vendor|odm)/lib(64)?/libllvm-glnext\.so               u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libllvm-glnext\.so               u:object_r:same_process_hal_file:s0
 
-/(system/vendor|vendor|odm)/lib(64)?/libdrmutils\.so                  u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/libdrm\.so                       u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libdrmutils\.so                  u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libdrm\.so                       u:object_r:same_process_hal_file:s0
 
 # libOpenCL and its dependencies
-/(system/vendor|vendor|odm)/lib(64)?/(egl/)?libq3dtools_adreno\.so    u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/libOpenCL\.so                    u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/(egl/)?libq3dtools_adreno\.so    u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libOpenCL\.so                    u:object_r:same_process_hal_file:s0
 
 # loaded by native loader (zygote) for all processes
-/(system/vendor|vendor|odm)/lib(64)?/libadsprpc\.so                   u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/libcdsprpc\.so                   u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/libsdsprpc\.so                   u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/libgrallocutils\.so              u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libadsprpc\.so                   u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libcdsprpc\.so                   u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libsdsprpc\.so                   u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libgrallocutils\.so              u:object_r:same_process_hal_file:s0
 
 # RenderScript dependencies.
 # To test: run cts -m CtsRenderscriptTestCases
-/(system/vendor|vendor|odm)/lib(64)?/libRSDriver_adreno\.so           u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/libCB\.so                        u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/libllvm-qgl\.so                  u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/libbccQTI\.so                    u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/libllvm-qcom\.so                 u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/librs_adreno\.so                 u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/librs_adreno_sha1\.so            u:object_r:same_process_hal_file:s0
-/(system/vendor|vendor|odm)/lib(64)?/libqti-perfd-client\.so          u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libRSDriver_adreno\.so           u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libCB\.so                        u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libllvm-qgl\.so                  u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libbccQTI\.so                    u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libllvm-qcom\.so                 u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/librs_adreno\.so                 u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/librs_adreno_sha1\.so            u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libqti-perfd-client\.so          u:object_r:same_process_hal_file:s0
 
 # data files
 /data/vendor/radio(/.*)?               u:object_r:radio_vendor_data_file:s0

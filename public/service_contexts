@@ -1,0 +1,4 @@
+# TODO(b/vndtimekeep): Move to vndservice
+# timekeep_service seems to never get executed, and the app runs fine
+#com.sony.timekeep                       u:object_r:timekeep_service:s0
+

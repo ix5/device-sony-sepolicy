@@ -15,9 +15,9 @@ dontaudit timekeep_app app_data_file:dir { getattr search };
 # Probably because it is a BootReceiver oneshot and can't be started in
 # background? Or because apps already have access to their own services?
 #add_service(timekeep_app, timekeep_service)
-userdebug_or_eng(`
-  auditallow timekeep_app timekeep_service:service_manager { add find };
-')
+#userdebug_or_eng(`
+#  auditallow timekeep_app timekeep_service:service_manager { add find };
+#')
 
 allow timekeep_app activity_service:service_manager find;
 

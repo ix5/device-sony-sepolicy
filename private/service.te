@@ -1,6 +1,5 @@
-# vendor/service.te and vendor/service_contexts are ignored
-# by sepolicy with FULL_TREBLE!
 # TODO(b/vndswitch): Revert once per_mgr uses vndbinder:
 # -> placeholder, because vendor sepolicy can't access private types
 # -> duplicated in private/service.te
 #type per_mgr_service,              service_manager_type;
+

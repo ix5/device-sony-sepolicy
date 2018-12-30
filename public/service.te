@@ -1,0 +1,4 @@
+# TODO(b/vndtimekeep): Move to vndservice
+# timekeep_service seems to never get executed, and the app runs fine
+#type timekeep_service, service_manager_type;
+type per_mgr_service,              service_manager_type;

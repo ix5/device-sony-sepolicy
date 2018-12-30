@@ -1,5 +1,6 @@
 type qdisplay_service,             vndservice_manager_type;
-# TODO(b/vndswitch): Revert once per_mgr uses vndbinder:
-#type per_mgr_service,              vndservice_manager_type;
+# Making per_mgr_service vndservice_manager_type will result in a neverallow
+# because accessing a vndservice_manager_type from a coredomain is a neverallow
+# see public/domain.te, line 692
 # type per_mgr_service,              vndservice_manager_type, service_manager_type;
 type qcrilam_service,              vndservice_manager_type;
