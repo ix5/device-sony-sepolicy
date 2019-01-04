@@ -63,6 +63,11 @@ auditallow vendor_init adsprpcd_file:dir setattr;
 # avc: granted { write } for comm="init" path="/dev/cpuset/foreground/cpus" dev="tmpfs" ino=21626 scontext=u:r:vendor_init:s0 tcontext=u:object_r:device:s0 tclass=file
 allow vendor_init device:file { create write };
 
+# battery stats for sony health hal
+# avc: granted { setattr } for comm="init" name="battery" dev="mmcblk0p44" ino=48 scontext=u:r:vendor_init:s0 tcontext=u:object_r:persist_battery_file:s0 tclass=dir
+# avc: granted { setattr } for name="battery" dev="mmcblk0p44" ino=48 scontext=u:r:vendor_init:s0 tcontext=u:object_r:persist_battery_file:s0 tclass=dir
+allow vendor_init persist_battery_file:dir create_dir_perms;
+
 # avc: denied { relabelfrom } for comm="init" name="persist" dev="rootfs" ino=1245 scontext=u:r:vendor_init:s0 tcontext=u:object_r:rootfs:s0 tclass=lnk_file
 # avc: granted { relabelfrom } for comm="init" name="dsp" dev="rootfs" ino=13246 scontext=u:r:vendor_init:s0 tcontext=u:object_r:rootfs:s0 tclass=lnk_file
 # -> can't reproduce this after change to /mnt/vendor/ binds

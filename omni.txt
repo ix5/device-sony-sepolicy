@@ -1,0 +1,10 @@
+avc: denied { mounton } for comm="init" path="/sys/kernel/debug" dev="debugfs" ino=1 scontext=u:r:init:s0 tcontext=u:object_r:debugfs:s0 tclass=dir permissive=1
+avc: granted { getattr } for comm="init" name="/" dev="mmcblk0p32" ino=2 scontext=u:r:vendor_init:s0 tcontext=u:object_r:adsprpcd_file:s0 tclass=filesystem
+avc: denied { setattr } for comm="init" name="/" dev="mmcblk0p32" ino=2 scontext=u:r:vendor_init:s0 tcontext=u:object_r:adsprpcd_file:s0 tclass=dir permissive=1
+avc: denied { remount } for comm="init" scontext=u:r:init:s0 tcontext=u:object_r:adsprpcd_file:s0 tclass=filesystem permissive=1
+avc: denied { setattr } for comm="init" name="scheduler" dev="sysfs" ino=45351 scontext=u:r:init:s0 tcontext=u:object_r:sysfs:s0 tclass=file permissive=1
+avc: denied { write } for comm="init" name="sleep_millisecs" dev="sysfs" ino=26834 scontext=u:r:init:s0 tcontext=u:object_r:sysfs:s0 tclass=file permissive=1
+avc: denied { open } for comm="init" path="/sys/kernel/mm/ksm/sleep_millisecs" dev="sysfs" ino=26834 scontext=u:r:init:s0 tcontext=u:object_r:sysfs:s0 tclass=file permissive=1
+avc: denied { dac_override } for comm="msm_irqbalance" capability=1 scontext=u:r:msm_irqbalance:s0 tcontext=u:r:msm_irqbalance:s0 tclass=capability permissive=1
+
+avc: denied { mounton } for comm="init" path="/sys/kernel/debug" dev="debugfs" ino=1 scontext=u:r:init:s0 tcontext=u:object_r:debugfs:s0 tclass=dir permissive=1
