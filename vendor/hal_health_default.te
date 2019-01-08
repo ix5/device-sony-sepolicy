@@ -3,7 +3,8 @@
 allow hal_health_default { sysfs_msm_subsys persist_file }:dir search;
 #allow hal_health_default persist_battery_file:file rw_file_perms;
 #rw_dir_file(hal_health_default, persist_battery_file)
-allow hal_health_default persist_battery_file:dir create_dir_perms;
+# -> move create_dir_perms to vendor_init
+#allow hal_health_default persist_battery_file:dir create_dir_perms;
 allow hal_health_default persist_battery_file:file create_file_perms;
 
 allow hal_health_default sysfs_batteryinfo:file r_file_perms;

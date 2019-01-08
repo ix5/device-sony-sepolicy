@@ -16,9 +16,13 @@ Even if no FULL_TREBLE is there, sepolicy should be ready
 - rtc permissions
 <!-- - cashsvr -->
 - input device names
+- timekeep service(isn't used)
+- HACK for split sepolicy for per_mgr
+- hal_health_default_exec, permissions
 <!-- - cameraserver -->
 <!-- - new props -->
 - ipacm socket
+  (create socket in /dev/socket/ipac_log_file)
 <!-- - wifi_vendor_data_file deprecation and hostapd(remove file as well), wpa(_supplicant) -->
 - proc_kernel_sched
 - printk(only vendor_init)
@@ -33,9 +37,14 @@ Even if no FULL_TREBLE is there, sepolicy should be ready
 - Get more logs for unproven denials
 - tama, loire are the opposite ends of spectrum, check both
 - init, vendor_init especially!
+- Find out how to better debug sepolicy, rebuild faster, adb sync?
+  How to reload on-device?
 
 # Later
 - Figure out cpuset problem
 - remove ioctls and replace with more specific allowxperm
 - cleanup unused policy
 - mounts, bind-mounts, persist etc
+- per_mgr: `dontaudit module_request`
+- pd_services: `sys:file read`
+- new per_mgr with vndbinder

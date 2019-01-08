@@ -1,2 +1,11 @@
 # Allow access to net_admin ioctls
 allowxperm bluetooth self:udp_socket ioctl priv_sock_ioctls;
+
+# TODO: Narrow this down for bluetooth?
+allow bluetooth vendor_file:file r_file_perms;
+allow bluetooth vendor_file:file execute;
+
+# avc: denied { read } for comm="droid.bluetooth" name="libaptX_encoder.so" dev="mmcblk0p53" ino=37 scontext=u:r:bluetooth:s0 tcontext=u:object_r:vendor_file:s0 tclass=file permissive=1
+# avc: denied { open } for comm="droid.bluetooth" path="/odm/lib64/libaptX_encoder.so" dev="mmcblk0p53" ino=37 scontext=u:r:bluetooth:s0 tcontext=u:object_r:vendor_file:s0 tclass=file permissive=1
+# avc: denied { getattr } for comm="droid.bluetooth" path="/odm/lib64/libaptX_encoder.so" dev="mmcblk0p53" ino=37 scontext=u:r:bluetooth:s0 tcontext=u:object_r:vendor_file:s0 tclass=file permissive=1
+# avc: denied { execute } for comm="droid.bluetooth" path="/odm/lib64/libaptX_encoder.so" dev="mmcblk0p53" ino=37 scontext=u:r:bluetooth:s0 tcontext=u:object_r:vendor_file:s0 tclass=file permissive=1
