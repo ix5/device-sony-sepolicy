@@ -16,74 +16,22 @@ allow vendor_init radio_vendor_data_file:file create_file_perms;
 
 dontaudit vendor_init kernel:system module_request;
 
-#allow vendor_init proc:file write;
-# -> this used to be for all of proc:file, but can be narrowed down
-# TODO: Check if this suffices
-# -> seems ok, but test on yoshino, nile & tama
-# For more init.tone.pwr.rc tunables:
-# avc: denied { write } for comm="init" name="swappiness" dev="proc" ino=39287 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc_swappiness:s0 tclass=file
 allow vendor_init proc_swappiness:file write;
-# Was there before:
 # avc: granted { write } for comm="init" path="/proc/sys/kernel/dmesg_restrict" dev="proc" ino=21185 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc_security:s0 tclass=file
 allow vendor_init proc_security:file write;
-# TODO: init.tone.pwr.rc changes:
-# avc: granted { write } for comm="init" path="/proc/sys/kernel/sched_boost" dev="proc" ino=37483 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc_sched:s0 tclass=file
 allow vendor_init proc_sched:file write;
 # Allow the vendor init process to write default_smp_affinity:
 # avc: denied { write } for comm="init" name="default_smp_affinity" dev="proc" ino=4026531867 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc_irq:s0 tclass=file
 allow vendor_init proc_irq:file write;
-# avc: granted { write } for comm="init" path="/proc/sys/kernel/printk" dev="proc" ino=21184 scontext=u:r:vendor_init:s0 tcontext=u:object_r:proc:s0 tclass=file
-# TODO: Should this only happen on debug builds?
 allow vendor_init proc_kernel_printk:file write;
-#userdebug_or_eng(`
-#  allow vendor_init proc_kernel_printk:file write;
-#')
 
-# Was there before:
 # avc: granted { read } for comm="init" name="persist" dev="rootfs" ino=13269 scontext=u:r:vendor_init:s0 tcontext=u:object_r:persist_file:s0 tclass=lnk_file
 allow vendor_init persist_file:lnk_file read;
-# TODO: Seems unused with new fstab mount contet
-# avc: granted { read } for comm="init" name="dsp" dev="rootfs" ino=1212 scontext=u:r:vendor_init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=lnk_file
-allow vendor_init adsprpcd_file:lnk_file read;
-auditallow vendor_init adsprpcd_file:lnk_file read;
-# TODO: Seems unused with new fstab mount contet
-# avc: denied { getattr } for comm="init" name="/" dev="mmcblk0p32" ino=2 scontext=u:r:vendor_init:s0 tcontext=u:object_r:qdsp_file:s0 tclass=filesystem
-allow vendor_init adsprpcd_file:filesystem getattr;
-allow vendor_init adsprpcd_file:filesystem getattr;
+# Create and chown /(mnt/vendor/)persist/battery/ folder for health HAL
+allow vendor_init persist_battery_file:dir create_dir_perms;
 
-# avc: denied { setattr } for name="/" dev="mmcblk0p32" ino=2 scontext=u:r:vendor_init:s0 tcontext=u:object_r:adsprpcd_file:s0 tclass=dir
-auditallow vendor_init adsprpcd_file:dir setattr;
-auditallow vendor_init adsprpcd_file:dir setattr;
 
-# TODO: Seems not used any more, in regular init instead:
-# avc: granted { search } for comm="init" name="/" dev="tmpfs" ino=13499 scontext=u:r:vendor_init:s0 tcontext=u:object_r:device:s0 tclass=dir
-#allow vendor_init device:dir search;
 # Crucial:
 # avc: granted { create } for comm="init" name="cpus" scontext=u:r:vendor_init:s0 tcontext=u:object_r:device:s0 tclass=file
 # avc: granted { write } for comm="init" path="/dev/cpuset/foreground/cpus" dev="tmpfs" ino=21626 scontext=u:r:vendor_init:s0 tcontext=u:object_r:device:s0 tclass=file
 allow vendor_init device:file { create write };
-
-# battery stats for sony health hal
-# avc: granted { setattr } for comm="init" name="battery" dev="mmcblk0p44" ino=48 scontext=u:r:vendor_init:s0 tcontext=u:object_r:persist_battery_file:s0 tclass=dir
-# avc: granted { setattr } for name="battery" dev="mmcblk0p44" ino=48 scontext=u:r:vendor_init:s0 tcontext=u:object_r:persist_battery_file:s0 tclass=dir
-allow vendor_init persist_battery_file:dir create_dir_perms;
-
-# avc: denied { relabelfrom } for comm="init" name="persist" dev="rootfs" ino=1245 scontext=u:r:vendor_init:s0 tcontext=u:object_r:rootfs:s0 tclass=lnk_file
-# avc: granted { relabelfrom } for comm="init" name="dsp" dev="rootfs" ino=13246 scontext=u:r:vendor_init:s0 tcontext=u:object_r:rootfs:s0 tclass=lnk_file
-# -> can't reproduce this after change to /mnt/vendor/ binds
-allow vendor_init rootfs:lnk_file relabelfrom;
-# TODO: After change to /mnt/vendor/persist and /vendor/dsp, is this still
-# necessary? -> Perhaps only for funnily labled old /persist pertitions
-userdebug_or_eng(`
-  auditallow vendor_init rootfs:lnk_file relabelfrom;
-')
-
-# TODO(b/dsp_symlink): Remove these ugly hacks
-#allow vendor_init unlabeled:dir { read getattr setattr relabelfrom };
-#auditallow vendor_init unlabeled:dir { read getattr setattr relabelfrom };
-#allow vendor_init unlabeled:file { read getattr };
-#auditallow vendor_init unlabeled:file { read getattr };
-#userdebug_or_eng(`
-#  auditallow vendor_init unlabeled:dir r_dir_perms;
-#  auditallow vendor_init unlabeled:file r_file_perms;
-#')

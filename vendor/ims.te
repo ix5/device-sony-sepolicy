@@ -17,7 +17,9 @@ unix_socket_connect(ims, qmuxd, qmuxd)
 # avc: granted { connectto } for comm="imsdatadaemon" path="/dev/socket/property_service" scontext=u:r:ims:s0 tcontext=u:r:init:s0 tclass=unix_stream_socket
 # avc: granted { write } for comm="imsdatadaemon" name="property_service" dev="tmpfs" ino=13656 scontext=u:r:ims:s0 tcontext=u:object_r:property_socket:s0 tclass=sock_file
 allow ims init:unix_stream_socket connectto;
+auditallow ims init:unix_stream_socket connectto;
 allow ims property_socket:sock_file write;
+auditallow ims property_socket:sock_file write;
 
 allow ims self:capability net_bind_service;
 
@@ -32,9 +34,6 @@ allowxperm ims self:udp_socket ioctl RMNET_IOCTL_EXTENDED;
 allow ims qmuxd_socket:dir create_dir_perms;
 allow ims qmuxd_socket:sock_file create_file_perms;
 
-# avc: granted { search } for comm="imsqmidaemon" name="msm_subsys" dev="sysfs" ino=17766 scontext=u:r:ims:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
-# avc: denied { open } for comm="imsqmidaemon" path="/sys/bus/msm_subsys/devices" dev="sysfs" ino=17768 scontext=u:r:ims:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir permissive=1
-allow ims sysfs_msm_subsys:dir search;
 r_dir_file(ims, sysfs_msm_subsys)
 r_dir_file(ims, sysfs_soc)
 

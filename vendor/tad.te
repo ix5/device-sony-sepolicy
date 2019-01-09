@@ -60,12 +60,12 @@ r_dir_file(tad, vendor_firmware_file)
 allow tad self:capability {
     setuid
     setgid
-    chown
     setpcap
     net_bind_service
 };
 userdebug_or_eng(`
   allow tad self:capability chown;
+  auditallow tad self:capability chown;
 ')
 
 #For access to the kmsg device

@@ -2,6 +2,7 @@
 type wcnss_service, domain;
 type wcnss_service_exec, exec_type, vendor_file_type, file_type;
 
+# TODO(b/vndswitch): Remove once per_mgr uses vendor binder:
 typeattribute wcnss_service binder_in_vendor_violators_fake;
 
 init_daemon_domain(wcnss_service)
@@ -14,8 +15,6 @@ full_treble_only(`
 
 binder_call(wcnss_service, per_mgr)
 
-# TODO(b/vndswitch): Remove once per_mgr uses vendor binder:
-typeattribute wcnss_service binder_in_vendor_violators;
 not_full_treble(`
   binder_use(wcnss_service)
 ')
@@ -35,49 +34,14 @@ allowxperm wcnss_service self:udp_socket ioctl { SIOCIWFIRSTPRIV_05 SIOCSIFFLAGS
 allow wcnss_service self:netlink_generic_socket create_socket_perms_no_ioctl;
 allow wcnss_service self:netlink_socket create_socket_perms_no_ioctl;
 
-allow wcnss_service vendor_firmware_file:{ file lnk_file } { read open getattr };
-userdebug_or_eng(`
-  auditallow wcnss_service vendor_firmware_file:lnk_file { read open getattr };
-')
+allow wcnss_service vendor_firmware_file:file { read open getattr };
 allow wcnss_service vendor_firmware_file:dir search;
 
-# TODO: Replace wifi_vendor_data_file by hostapd_data_file
-# and wpa_data_file AOSP types
-#allow wcnss_service wifi_vendor_data_file:dir create_dir_perms;
-#allow wcnss_service wifi_vendor_data_file:file create_file_perms;
-allow wcnss_service hostapd_data_file:dir rw_dir_perms;
-allow wcnss_service hostapd_data_file:file create_file_perms;
-allow wcnss_service wpa_data_file:dir rw_dir_perms;
-allow wcnss_service wpa_data_file:file create_file_perms;
-userdebug_or_eng(`
-  auditallow wcnss_service hostapd_data_file:dir rw_dir_perms;
-  auditallow wcnss_service hostapd_data_file:file create_file_perms;
-  auditallow wcnss_service wpa_data_file:dir rw_dir_perms;
-  auditallow wcnss_service wpa_data_file:file create_file_perms;
-')
-
-# TODO: Narrow this down
 r_dir_file(wcnss_service, sysfs_msm_subsys)
-userdebug_or_eng(`
-  auditallow wcnss_service sysfs_msm_subsys:file r_file_perms;
-  auditallow wcnss_service sysfs_msm_subsys:dir r_dir_perms;
-')
+r_dir_file(wcnss_service, wifi_vendor_data_file)
 
 allow wcnss_service sysfs_soc:dir search;
 allow wcnss_service sysfs_soc:file r_file_perms;
 
-# TODO: Which service exactly? Seems only needed on tama
-allow wcnss_service default_android_service:service_manager find;
-userdebug_or_eng(`
-  auditallow wcnss_service default_android_service:service_manager find;
-')
-
-# TODO: Cannot reproduce on tone
-binder_use(wcnss_service)
-# Might be sufficient:
-#allow wcnss_service servicemanager:binder call;
-userdebug_or_eng(`
-  auditallow wcnss_service servicemanager:binder { call transfer };
-')
-
-dontaudit wcnss_service kernel:system module_request;
+# TODO: Test on tama
+#dontaudit wcnss_service kernel:system module_request;

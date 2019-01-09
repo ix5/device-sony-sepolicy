@@ -4,24 +4,8 @@ hal_server_domain(hal_gnss_qti, hal_gnss)
 type hal_gnss_qti_exec, exec_type, vendor_file_type, file_type;
 init_daemon_domain(hal_gnss_qti)
 
-# avc: granted { search } for comm="Loc_hal" name="msm_subsys" dev="sysfs" ino=17766 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
-# avc: granted { read } for comm="Loc_hal" name="devices" dev="sysfs" ino=17768 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
-# avc: denied { open } for path="/sys/devices/platform/soc/1c00000.qcom,ssc/subsys3/name" dev="sysfs" ino=49693 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=file
-# avc: denied { read } for comm="Loc_hal" name="name" dev="sysfs" ino=49693 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=file
 r_dir_file(hal_gnss_qti, sysfs_msm_subsys)
-# /sys/bus/esoc/devices is now sysfs_esoc
-# avc: granted { getattr } for comm="Loc_hal" path="/sys/bus/esoc/devices" dev="sysfs" ino=28289 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_esoc:s0 tclass=dir
-# avc: granted { read } for comm="Loc_hal" name="devices" dev="sysfs" ino=28289 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:sysfs_esoc:s0 tclass=dir
 r_dir_file(hal_gnss_qti, sysfs_esoc)
-# TODO: Narrow this down (sysfs_msm_subsys might be enough)
-allow hal_gnss_qti sysfs:file { open read };
-userdebug_or_eng(`
-  auditallow hal_gnss_qti sysfs:file { open read };
-')
-# avc: granted { read write } for comm="Loc_hal" name="diag" dev="tmpfs" ino=18462 scontext=u:r:hal_gnss_qti:s0 tcontext=u:object_r:diag_device:s0 tclass=chr_file
-userdebug_or_eng(`
-  allow hal_gnss_qti diag_device:chr_file { read write };
-')
 
 vndbinder_use(hal_gnss_qti)
 
@@ -30,6 +14,10 @@ allow hal_gnss_qti sysfs_soc:file r_file_perms;
 allow hal_gnss_qti qmuxd_socket:dir w_dir_perms;
 allow hal_gnss_qti qmuxd_socket:sock_file create_file_perms;
 unix_socket_connect(hal_gnss_qti, qmuxd, qmuxd)
+
+userdebug_or_eng(`
+  allow hal_gnss_qti diag_device:chr_file { read write };
+')
 
 binder_call(hal_gnss_qti, per_mgr)
 

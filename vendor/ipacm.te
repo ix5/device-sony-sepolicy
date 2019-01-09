@@ -21,15 +21,9 @@ userdebug_or_eng(`
   auditallow ipacm self:socket { create read write };
 ')
 
-# avc: denied { write } for name="ipa" dev="mmcblk0p54" ino=213035 scontext=u:r:ipacm:s0 tcontext=u:object_r:vendor_data_file:s0 tclass=dir
-# avc: denied { add_name } for name="ipacm.pid" scontext=u:r:ipacm:s0 tcontext=u:object_r:vendor_data_file:s0 tclass=dir
-# avc: denied { create } for name="ipacm.pid" scontext=u:r:ipacm:s0 tcontext=u:object_r:vendor_data_file:s0 tclass=file
-# avc: denied { read write open } for path="/data/vendor/ipa/ipacm.pid" dev="mmcblk0p54" ino=213036 scontext=u:r:ipacm:s0 tcontext=u:object_r:vendor_data_file:s0 tclass=file
-# avc: denied { lock } for path="/data/vendor/ipa/ipacm.pid" dev="mmcblk0p54" ino=213036 scontext=u:r:ipacm:s0 tcontext=u:object_r:vendor_data_file:s0 tclass=file
 allow ipacm ipa_vendor_data_file:dir create_dir_perms;
 allow ipacm ipa_vendor_data_file:file create_file_perms;
 
-# avc: denied { read } for name="u:object_r:hwservicemanager_prop:s0" dev="tmpfs" ino=16651 scontext=u:r:ipacm:s0 tcontext=u:object_r:hwservicemanager_prop:s0 tclass=file permissive=0
 allow ipacm hwservicemanager_prop:file r_file_perms;
 
 # For reference:

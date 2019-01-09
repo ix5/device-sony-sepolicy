@@ -33,12 +33,7 @@ allow sensors sensors_device:chr_file r_file_perms;
 #')
 
 r_dir_file(sensors, sysfs_msm_subsys)
-# avc: denied { search } for comm="sensors.qcom" name="soc0" dev="sysfs" ino=49944 scontext=u:r:sensors:s0 tcontext=u:object_r:sysfs_soc:s0 tclass=dir
 r_dir_file(sensors, sysfs_soc)
-# TODO: Check if this is sufficient
-# avc: denied { read } for comm="sensors.qcom" name="devices" dev="sysfs" ino=28289 scontext=u:r:sensors:s0 tcontext=u:object_r:sysfs_esoc:s0 tclass=dir
-allow sensors sysfs_esoc:dir { search open read };
+r_dir_file(sensors, sysfs_esoc)
 
-# avc: granted { module_request } for comm="sensors.qcom" kmod="net-pf-42" scontext=u:r:sensors:s0 tcontext=u:r:kernel:s0 tclass=system
-# Follow crosshatch sepolicy and ignore:
 dontaudit sensors kernel:system { module_request };

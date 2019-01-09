@@ -3,6 +3,7 @@ allowxperm system_server self:socket ioctl msm_sock_ipc_ioctls;
 
 binder_call(system_server, hal_camera_default)
 # avc: denied { call } for comm="android.io" scontext=u:r:system_server:s0 tcontext=u:r:ipacm:s0 tclass=binder
+# TODO: Reproduce this!
 #allow system_server ipacm:binder call;
 
 allow system_server wlan_device:chr_file rw_file_perms;

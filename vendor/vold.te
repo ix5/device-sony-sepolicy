@@ -2,6 +2,7 @@ get_prop(vold, tee_listener_prop)
 
 # TODO: Is this necessary?
 # Cannot reproduce on tone
+# perhaps exfat kernel module? for omni?
 allow vold kernel:system module_request;
 userdebug_or_eng(`
   auditallow vold kernel:system module_request;

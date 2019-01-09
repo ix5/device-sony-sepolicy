@@ -38,3 +38,10 @@ allow system_app fs_bpf:dir search;
 allow system_app proc_pagetypeinfo:file r_file_perms;
 allow system_app sysfs_zram:dir search;
 allow system_app sysfs_zram:file r_file_perms;
+
+
+# What is this? From kagura -> probably dev options like above
+# avc: denied { call } for comm=4173796E635461736B202332 scontext=u:r:system_app:s0 tcontext=u:r:installd:s0 tclass=binder permissive=1
+# avc: denied { call } for comm=4173796E635461736B202332 scontext=u:r:system_app:s0 tcontext=u:r:netd:s0 tclass=binder permissive=1
+# avc: denied { call } for comm=4173796E635461736B202332 scontext=u:r:system_app:s0 tcontext=u:r:storaged:s0 tclass=binder permissive=1
+# avc: denied { call } for comm=4173796E635461736B202332 scontext=u:r:system_app:s0 tcontext=u:r:vold:s0 tclass=binder permissive=1

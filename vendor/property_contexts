@@ -19,13 +19,15 @@ vendor.usb.config               u:object_r:vendor_usb_config_prop:s0
 persist.vendor.usb.config       u:object_r:vendor_usb_config_prop:s0
 vendor.qcom.devup               u:object_r:vendor_device_prop:s0
 ro.vendor.bt.                   u:object_r:vendor_bluetooth_prop:s0
-vendor.cash.                    u:object_r:vendor_camera_prop:s0
+# TODO: Migrate cashsvr to vendor persist props
+#vendor.cash.                    u:object_r:vendor_camera_prop:s0
+persist.cash.                   u:object_r:vendor_camera_prop:s0
 persist.vendor.cash.            u:object_r:vendor_camera_prop:s0
 # for https://github.com/sonyxperiadev/vendor-broadcom-bt-fm
 # persist.vendor.service.bdroid.bdaddr
 persist.vendor.service.bdroid.  u:object_r:vendor_bluetooth_prop:s0
 # to be used eventually for custom max charge levels
-persist.vendor.charge.          u:object_r:vendor_charge_prop:s0
+#persist.vendor.charge.          u:object_r:vendor_charge_prop:s0
 # These seem unused:
 #vendor.peripheral.             u:object_r:per_mgr_state_prop:s0
 #vendor.ese.                    u:object_r:vendor_secure_element_prop:s0
