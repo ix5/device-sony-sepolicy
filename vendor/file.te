@@ -33,15 +33,11 @@ type qmuxd_socket, file_type;
 type netmgrd_socket, file_type;
 type powerhal_socket, file_type;
 type cashsvr_socket, file_type;
+type adsprpcd_file, file_type, vendor_file_type, mlstrustedobject;
 type ipacm_socket, file_type;
 type tad_socket, file_type;
 type ims_socket, file_type;
 
-# TODO: Explore if mlstrustedobject can go
-#       contextmount_type is required for fstab context=u:...
-type adsprpcd_file, file_type, vendor_file_type, contextmount_type, mlstrustedobject;
-# We switched from qdsp_file to adsprpcd_file. Keep this for compatibility.
-type qdsp_file, file_type;
 type vendor_firmware_file, file_type, vendor_file_type, contextmount_type;
 
 type persist_file, file_type, vendor_persist_type;

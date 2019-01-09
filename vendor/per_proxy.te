@@ -5,7 +5,7 @@ type per_proxy_exec, exec_type, vendor_file_type, file_type;
 init_daemon_domain(per_proxy)
 
 # TODO(b/vndswitch): Remove once per_proxy uses vendor binder
-typeattribute per_proxy binder_in_vendor_violators;
+typeattribute per_proxy binder_in_vendor_violators_fake;
 
 # TODO(b/vndswitch): Enable once per_proxy uses vendor binder
 full_treble_only(`

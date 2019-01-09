@@ -18,11 +18,9 @@ allow timekeep timekeep_vendor_data_file:file create_file_perms;
 # Set persist.sys.timeadjust
 set_prop(timekeep, timekeep_prop)
 
-# Needed because the open() call in timekeep.c will traverse parent
-# folders as well
-# avc: denied { search } for comm="timekeep" name="400f000.qcom,spmi" dev="sysfs" ino=19045 scontext=u:r:timekeep:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
-allow timekeep sysfs_msm_subsys:dir search;
-auditallow timekeep sysfs_msm_subsys:dir search;
 # Read /sys/class/rtc/rtc0/since_epoch
 allow timekeep sysfs_rtc:dir search;
 allow timekeep sysfs_rtc:{ file lnk_file } r_file_perms;
+# The open() call in timekeep.c will traverse parent folders
+# of the target path as well to resolve the symlink.
+allow timekeep sysfs_msm_subsys:dir search;

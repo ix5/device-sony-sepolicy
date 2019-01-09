@@ -2,6 +2,8 @@
 type wcnss_service, domain;
 type wcnss_service_exec, exec_type, vendor_file_type, file_type;
 
+typeattribute wcnss_service binder_in_vendor_violators_fake;
+
 init_daemon_domain(wcnss_service)
 net_domain(wcnss_service)
 

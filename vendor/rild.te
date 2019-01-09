@@ -1,6 +1,6 @@
 # TODO(b/vndswitch): Remove once per_mgr/rild exclusively use vendor binder
 # and do not try to add and interact with service_manager types
-typeattribute rild binder_in_vendor_violators;
+typeattribute rild binder_in_vendor_violators_fake;
 
 full_treble_only(`
   vndbinder_use(rild)

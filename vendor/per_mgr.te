@@ -10,7 +10,7 @@ add_service(per_mgr, per_mgr_service)
 
 # TODO(b/vndswitch): Remove once per_mgr uses vendor binder and
 # per_mgr_service is a vndservice_manager_type
-typeattribute per_mgr binder_in_vendor_violators;
+typeattribute per_mgr binder_in_vendor_violators_fake;
 # TODO(b/vndswitch): Enable once per_proxy uses vendor binder
 full_treble_only(`
   vndbinder_use(per_mgr)
