@@ -1,9 +1,5 @@
 # symlink /sdcard to backing block
 allow init tmpfs:lnk_file create;
-# TODO: Is this needed or was it sth weird with adsprpcd stuff?
-userdebug_or_eng(`
-  auditallow init tmpfs:lnk_file create;
-')
 allow init configfs:file rw_file_perms;
 allow init {tmpfs configfs }:lnk_file create_file_perms;
 
