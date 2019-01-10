@@ -14,16 +14,17 @@ set_prop(ims, qcom_ims_prop)
 # ')
 unix_socket_connect(ims, netmgrd, netmgrd)
 unix_socket_connect(ims, qmuxd, qmuxd)
+unix_socket_connect(ims, property, init)
 # TODO: Port this over to common
 # avc: granted { connectto } for comm="imsdatadaemon" path="/dev/socket/property_service" scontext=u:r:ims:s0 tcontext=u:r:init:s0 tclass=unix_stream_socket
 # avc: granted { connectto } for comm="imsdatadaemon" path="/dev/socket/property_service" scontext=u:r:ims:s0 tcontext=u:r:init:s0 tclass=unix_stream_socket
 # avc: granted { connectto } for path="/dev/socket/property_service" scontext=u:r:ims:s0 tcontext=u:r:init:s0 tclass=unix_stream_socket
-allow ims init:unix_stream_socket connectto;
+auditallow ims init:unix_stream_socket connectto;
 # avc: granted { write } for comm="imsdatadaemon" name="property_service" dev="tmpfs" ino=13656 scontext=u:r:ims:s0 tcontext=u:object_r:property_socket:s0 tclass=sock_file
 # avc: granted { write } for comm="imsdatadaemon" name="property_service" dev="tmpfs" ino=14097 scontext=u:r:ims:s0 tcontext=u:object_r:property_socket:s0 tclass=sock_file
 # avc: granted { write } for comm="imsqmidaemon" name="property_service" dev="tmpfs" ino=14097 scontext=u:r:ims:s0 tcontext=u:object_r:property_socket:s0 tclass=sock_file
 # avc: granted { write } for name="property_service" dev="tmpfs" ino=14097 scontext=u:r:ims:s0 tcontext=u:object_r:property_socket:s0 tclass=sock_file
-allow ims property_socket:sock_file write;
+auditallow ims property_socket:sock_file write;
 
 allow ims self:capability net_bind_service;
 

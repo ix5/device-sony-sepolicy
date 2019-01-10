@@ -66,10 +66,11 @@ type camera_vendor_data_file, file_type, data_file_type;
 type ipa_vendor_data_file, file_type, data_file_type;
 type wifi_vendor_data_file, file_type, data_file_type;
 
+# Can't be a vendor_file_type here
+#type bluetooth_vendor_file, file_type, data_file_type;
+
 # diag sysfs files
 type sysfs_diag, fs_type, sysfs_type;
-# follow qcom
-type sysfs_memory, fs_type, sysfs_type;
 
 # input files
 type idc_file, file_type, vendor_file_type;

@@ -12,18 +12,13 @@ add_service(per_mgr, per_mgr_service)
 # per_mgr_service is a vndservice_manager_type
 typeattribute per_mgr binder_in_vendor_violators_fake;
 # TODO(b/vndswitch): Enable once per_proxy uses vendor binder
-full_treble_only(`
-  vndbinder_use(per_mgr)
-')
+vndbinder_use(per_mgr)
 
 # avc: denied { call } for comm="pm-service" scontext=u:r:per_mgr:s0 tcontext=u:r:servicemanager:s0 tclass=binder
 # avc: denied { transfer } for comm="pm-service" scontext=u:r:per_mgr:s0 tcontext=u:r:servicemanager:s0 tclass=binder
 # avc: denied { search } for name="593" dev="proc" ino=20029 scontext=u:r:servicemanager:s0 tcontext=u:r:per_mgr:s0 tclass=dir
 # avc: denied { read } for comm="servicemanager" name="current" dev="proc" ino=19387 scontext=u:r:servicemanager:s0 tcontext=u:r:per_mgr:s0 tclass=file
 # TODO(b/vndswitch): Remove once per_proxy uses vendor binder
-not_full_treble(`
-  binder_use(per_mgr)
-')
 binder_use(per_mgr)
 
 binder_call(per_mgr, hal_gnss)

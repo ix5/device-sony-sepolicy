@@ -20,4 +20,5 @@ userdebug_or_eng(`
   auditallow msm_irqbalance self:capability { setgid setuid };
 ')
 
+# No sense porting this to common, wait until it's fixed
 dontaudit msm_irqbalance self:capability dac_override;

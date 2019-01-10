@@ -2,18 +2,13 @@
 # and do not try to add and interact with service_manager types
 typeattribute rild binder_in_vendor_violators_fake;
 
-full_treble_only(`
-  vndbinder_use(rild)
-')
+vndbinder_use(rild)
 
 # TODO(v/vndswitch): Needed with vendor per_mgr? -> Needed for now with non-vendor PeripheralManager
 # avc: denied { search } for comm="servicemanager" name="678" dev="proc" ino=19168 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=dir
 # avc: granted { call } for comm="rild" scontext=u:r:rild:s0 tcontext=u:r:servicemanager:s0 tclass=binder
 # avc: granted { search } for comm="servicemanager" name="attr" dev="proc" ino=26820 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=dir
 # avc: granted { read } for comm="servicemanager" name="current" dev="proc" ino=26821 scontext=u:r:servicemanager:s0 tcontext=u:r:rild:s0 tclass=file
-not_full_treble(`
-  binder_use(rild)
-')
 binder_use(rild)
 
 # TODO(v/vndswitch): Needed with vendor per_mgr?

@@ -1,5 +1,4 @@
 # symlink /sdcard to backing block
-allow init tmpfs:lnk_file create;
 allow init configfs:file rw_file_perms;
 allow init {tmpfs configfs }:lnk_file create_file_perms;
 
@@ -45,10 +44,6 @@ allow init device:dir { mounton rw_dir_perms };
 allow init device:file rw_file_perms;
 
 allow init sysfs_msm_subsys:file { open setattr write };
-# Set memory parameters
-# mainly for omni
-allow init sysfs_memory:file { open setattr write };
-auditallow init sysfs_memory:file { open setattr write };
 # enable_ramdumps:
 allow init sysfs_msm_subsys_restart:file rw_file_perms;
 

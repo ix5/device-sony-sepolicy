@@ -5,8 +5,8 @@ allow hal_health_default self:capability2 wake_alarm;
 
 # avc: denied { search } for comm="android.hardwar" name="vendor" dev="tmpfs" ino=3181 scontext=u:r:hal_health_default:s0 tcontext=u:object_r:mnt_vendor_file:s0 tclass=dir permissive=0
 # avc: denied { search } for comm="health@2.0-serv" name="vendor" dev="tmpfs" ino=3181 scontext=u:r:hal_health_default:s0 tcontext=u:object_r:mnt_vendor_file:s0 tclass=dir permissive=0
+# Resolve path in /mnt/vendor/
 allow hal_health_default mnt_vendor_file:dir search;
-
 # Write battery cycles and capacity to /{mnt/vendor/}persist/battery/
 allow hal_health_default persist_battery_file:dir rw_dir_perms;
 allow hal_health_default persist_battery_file:file create_file_perms;

@@ -4,5 +4,5 @@ allow hal_power_default powerhal_socket:sock_file create_file_perms;
 allow hal_power_default sysfs_devices_system_cpu:file w_file_perms;
 # avc: granted { write } for comm="power@1.0-servi" name="wakeup_gesture" dev="sysfs" ino=50623 scontext=u:r:hal_power_default:s0 tcontext=u:object_r:sysfs_input_wakeup:s0 tclass=file
 # avc: granted { write open } for comm="power@1.0-servi" path="/sys/devices/virtual/input/input5/wakeup_gesture" dev="sysfs" ino=50623 scontext=u:r:hal_power_default:s0 tcontext=u:object_r:sysfs_input_wakeup:s0 tclass=file
-# Of course only for builds that have a wakeup_gesture enabled kernel
+# Read wakeup sources
 allow hal_power_default sysfs_input_wakeup:file rw_file_perms;

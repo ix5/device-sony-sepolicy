@@ -9,15 +9,10 @@ init_daemon_domain(wcnss_service)
 net_domain(wcnss_service)
 
 # TODO(b/vndswitch): Enable once per_mgr uses vendor binder:
-full_treble_only(`
-  vndbinder_use(wcnss_service)
-')
+vndbinder_use(wcnss_service)
 
 binder_call(wcnss_service, per_mgr)
 
-not_full_treble(`
-  binder_use(wcnss_service)
-')
 binder_use(wcnss_service)
 
 allow wcnss_service per_mgr_service:service_manager find;

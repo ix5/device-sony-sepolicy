@@ -150,6 +150,11 @@
 /(system/vendor|vendor|odm|vendor/odm)/lib(64)?/(egl/)?libGLESv1_CM_adreno\.so   u:object_r:same_process_hal_file:s0
 /(system/vendor|vendor|odm|vendor/odm)/lib(64)?/(egl/)?libGLESv2_adreno\.so      u:object_r:same_process_hal_file:s0
 
+# Bluetooth codecs
+#/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libaptX_encoder\.so              u:object_r:bluetooth_vendor_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libaptX_encoder\.so              u:object_r:same_process_hal_file:s0
+/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libaptXHD_encoder\.so            u:object_r:same_process_hal_file:s0
+
 # libGLESv2_adreno depends on this
 /(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libllvm-glnext\.so               u:object_r:same_process_hal_file:s0
 

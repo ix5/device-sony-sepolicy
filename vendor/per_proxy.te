@@ -8,14 +8,9 @@ init_daemon_domain(per_proxy)
 typeattribute per_proxy binder_in_vendor_violators_fake;
 
 # TODO(b/vndswitch): Enable once per_proxy uses vendor binder
-full_treble_only(`
-  vndbinder_use(per_proxy)
-')
+vndbinder_use(per_proxy)
 
 # TODO(b/vndswitch): Remove once per_proxy uses vendor binder
-not_full_treble(`
-  binder_use(per_proxy)
-')
 binder_use(per_proxy)
 # avc: denied { call } for comm="pm-proxy" scontext=u:r:per_proxy:s0 tcontext=u:r:servicemanager:s0 tclass=binder
 # avc: denied { read } for comm="servicemanager" name="current" dev="proc" ino=22557 scontext=u:r:servicemanager:s0 tcontext=u:r:per_proxy:s0 tclass=file
