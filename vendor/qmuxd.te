@@ -5,6 +5,8 @@ net_domain(qmuxd)
 init_daemon_domain(qmuxd)
 
 # TODO: Is this necessary?
+# -> yes, on loire
+# avc: denied { module_request } for kmod="net-pf-42" scontext=u:r:qmuxd:s0 tcontext=u:r:kernel:s0 tclass=system permissive=1
 allow qmuxd kernel:system module_request;
 userdebug_or_eng(`
   auditallow qmuxd kernel:system module_request;

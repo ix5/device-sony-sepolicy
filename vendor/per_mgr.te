@@ -67,6 +67,8 @@ allow per_mgr device:dir search;
 # avc: denied { module_request } for comm="pm-service" kmod="net-pf-42" scontext=u:r:per_mgr:s0 tcontext=u:r:kernel:s0 tclass=system
 # Follow crosshatch sepolicy and ignore:
 dontaudit per_mgr kernel:system module_request;
+# -> loire:
+# pm-service: type=1400 audit(0.0:9): avc: denied { module_request } for kmod="net-pf-42" scontext=u:r:per_mgr:s0 tcontext=u:r:kernel:s0 tclass=system permissive=1
 
 # avc: denied { ioctl } for comm=504F5349582074696D65722030 path="/dev/binder" dev="tmpfs" ino=2588 ioctlcmd=0x6201 scontext=u:r:per_mgr:s0 tcontext=u:object_r:binder_device:s0 tclass=chr_file
 # avc: denied { ioctl } for path="/dev/binder" dev="tmpfs" ino=2588 ioctlcmd=0x6201 scontext=u:r:per_proxy:s0 tcontext=u:object_r:binder_device:s0 tclass=chr_file
