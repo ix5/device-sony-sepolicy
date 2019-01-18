@@ -1,3 +1,6 @@
 # Ignore these for now:
+# TODO(b/867711): Remove this once fixed upstream.
+# See https://r.android.com/867711
+# Temporarily block the dontaudit to see where it's coming from:
+#dontaudit webview_zygote zygote:unix_dgram_socket write;
 # avc: denied { write } for comm="webview_zygote" path="socket:[30083]" dev="sockfs" ino=30083 scontext=u:r:webview_zygote:s0 tcontext=u:r:zygote:s0 tclass=unix_dgram_socket
-dontaudit webview_zygote zygote:unix_dgram_socket write;

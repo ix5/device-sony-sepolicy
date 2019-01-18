@@ -1,13 +1,7 @@
-# another android bug to work around: b/77868789
-
+# TODO(b/77868789): Remove this once fixed upstream.
+# Happens while tethering
 allow dnsmasq netd:fifo_file getattr;
 allow dnsmasq netd:unix_stream_socket getattr;
-userdebug_or_eng(`
-  auditallow dnsmasq netd:fifo_file getattr;
-  auditallow dnsmasq netd:unix_stream_socket getattr;
-')
-
-# TODO: These are present in bug_map, what to do with them?
 # avc: denied { getattr } for comm="dnsmasq" path="pipe:[19380]" dev="pipefs" ino=19380 scontext=u:r:dnsmasq:s0 tcontext=u:r:netd:s0 tclass=fifo_file permissive=1 b/77868789
 # avc: denied { getattr } for path="pipe:[19380]" dev="pipefs" ino=19380 scontext=u:r:dnsmasq:s0 tcontext=u:r:netd:s0 tclass=fifo_file permissive=1 b/77868789
 # avc: denied { getattr } for comm="dnsmasq" path="socket:[19388]" dev="sockfs" ino=19388 scontext=u:r:dnsmasq:s0 tcontext=u:r:netd:s0 tclass=unix_stream_socket permissive=1 b/77868789

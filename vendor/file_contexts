@@ -82,6 +82,8 @@
 /(system/vendor|vendor)/bin/init\.qcom\.ipastart\.sh                                         u:object_r:init-qcom-ipastart-sh_exec:s0
 /(system/vendor|vendor)/bin/initlight                                                        u:object_r:initlight_exec:s0
 /(system/vendor|vendor)/bin/ipacm                                                            u:object_r:ipacm_exec:s0
+#/(system/vendor|vendor)/bin/ipacm                                                            u:object_r:hal_tetheroffload_default_exec:s0
+/(system/vendor|vendor)/bin/ipacm                                                            u:object_r:ipacm_exec:s0
 /(system/vendor|vendor)/bin/ucommsvr                                                         u:object_r:ucommsvr_exec:s0
 /(system/vendor|vendor)/bin/cashsvr                                                          u:object_r:cashsvr_exec:s0
 /(system/vendor|vendor)/bin/thermanager                                                      u:object_r:thermanager_exec:s0
@@ -151,7 +153,6 @@
 /(system/vendor|vendor|odm|vendor/odm)/lib(64)?/(egl/)?libGLESv2_adreno\.so      u:object_r:same_process_hal_file:s0
 
 # Bluetooth codecs
-#/(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libaptX_encoder\.so              u:object_r:bluetooth_vendor_file:s0
 /(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libaptX_encoder\.so              u:object_r:same_process_hal_file:s0
 /(system/vendor|vendor|odm|vendor/odm)/lib(64)?/libaptXHD_encoder\.so            u:object_r:same_process_hal_file:s0
 

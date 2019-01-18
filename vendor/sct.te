@@ -1,4 +1,4 @@
-# TODO: Explain what sct is!
+# Secure Config Transfer service
 type sct, domain;
 type sct_exec, exec_type, vendor_file_type, file_type;
 

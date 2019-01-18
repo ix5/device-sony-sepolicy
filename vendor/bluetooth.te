@@ -2,6 +2,8 @@
 allowxperm bluetooth self:udp_socket ioctl priv_sock_ioctls;
 
 # TODO: Narrow this down for bluetooth?
+# was most likely the libaptX_encoder files, remove...
+# -> nope!
 allow bluetooth vendor_file:file r_file_perms;
 userdebug_or_eng(`
   auditallow bluetooth vendor_file:file r_file_perms;

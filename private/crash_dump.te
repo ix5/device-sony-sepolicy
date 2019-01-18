@@ -1,2 +1,4 @@
-# audit(0.0:201): avc: denied { read } for name="vendor@overlay@framework-res__auto_generated_rro.apk@idmap" dev="dm-0" ino=915811 scontext=u:r:crash_dump:s0:c512,c768 tcontext=u:object_r:resourcecache_data_file:s0 tclass=file
+# TODO(b/867710): Remove this once fixed upstream.
+# See https://r.android.com/867710
 allow crash_dump resourcecache_data_file:file read;
+# audit(0.0:201): avc: denied { read } for name="vendor@overlay@framework-res__auto_generated_rro.apk@idmap" dev="dm-0" ino=915811 scontext=u:r:crash_dump:s0:c512,c768 tcontext=u:object_r:resourcecache_data_file:s0 tclass=file

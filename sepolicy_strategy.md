@@ -28,6 +28,9 @@ Even if no FULL_TREBLE is there, sepolicy should be ready
 - printk(only vendor_init)
 - init, vendor_init including mounts
 
+# Odd
+- `/odm/lib64/libaptX_encoder.so` can't get the correct label?
+
 # Meantime
 - Try to keep the thingy working in the meantime, make one giant commit and
   forcepush(and keep a different local branch)
