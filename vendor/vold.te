@@ -3,6 +3,8 @@ get_prop(vold, tee_listener_prop)
 # TODO: Is this necessary?
 # Cannot reproduce on tone
 # perhaps exfat kernel module? for omni?
+# -> nope, it was encryption on omni
+# avc: denied { module_request } for kmod="crypto-cryptd(__driver-cbc-aes-ce)" scontext=u:r:vold:s0 tcontext=u:r:kernel:s0 tclass=system permissive=1
 allow vold kernel:system module_request;
 userdebug_or_eng(`
   auditallow vold kernel:system module_request;
