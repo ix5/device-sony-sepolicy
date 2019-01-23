@@ -1,3 +1,5 @@
+# kanged from crosshatch, in case we decide to re-label ipacm
+
 # associate netdomain to use for accessing internet sockets
 net_domain(hal_tetheroffload_default)
 

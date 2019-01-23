@@ -15,9 +15,7 @@ allow sensors persist_sensors_file:dir rw_dir_perms;
 allow sensors persist_sensors_file:file create_file_perms;
 allow sensors persist_file:dir { getattr search };
 
-# avc: denied { getattr read open } for comm="sensors.qcom" path="/data/vendor/sensors" dev="mmcblk0p54" ino=245783 scontext=u:r:sensors:s0 tcontext=u:object_r:sensors_vendor_data_file:s0 tclass=dir
 allow sensors sensors_vendor_data_file:dir create_dir_perms;
-# avc: denied { getattr read write open } for comm="sensors.qcom" name="sns.reg" dev="mmcblk0p54" ino=245788 scontext=u:r:sensors:s0 tcontext=u:object_r:sensors_vendor_data_file:s0 tclass=file
 allow sensors sensors_vendor_data_file:file create_file_perms;
 
 # TODO: Seems not necessary any more:

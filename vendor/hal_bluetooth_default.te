@@ -15,12 +15,3 @@ r_dir_file(hal_bluetooth_default, persist_file)
 r_dir_file(hal_bluetooth_default, vendor_firmware_file)
 r_dir_file(hal_bluetooth_default, mnt_vendor_file)
 r_dir_rw_file(hal_bluetooth_default, sysfs_bluetooth)
-# /mnt/vendor/ is mnt_vendor_file
-# So it might be because it tries to search /mnt/vendor/persist/{bluetooth,*}
-# /mnt/vendor/persist itself is labeled persist_file, everything inside it
-# as well by default. {search} on parent folders should not happen.
-# TODO: Still cannot reproduce on tone though
-#allow hal_bluetooth_default mnt_vendor_file:dir search;
-#userdebug_or_eng(`
-#  auditallow hal_bluetooth_default mnt_vendor_file:dir search;
-#')

@@ -13,23 +13,20 @@ Even if no FULL_TREBLE is there, sepolicy should be ready
 <!-- - timekeep(one for .c, one for .java) -->
 <!-- - bluetooth properties, hal_bluetooth_default -->
 <!-- - rtc label -->
-- rtc permissions
+<!-- - rtc permissions -->
 <!-- - cashsvr -->
 - input device names
 - timekeep service(isn't used)
-- HACK for split sepolicy for per_mgr
-- hal_health_default_exec, permissions
+<!-- - HACK for split sepolicy for per_mgr -->
+<!-- - hal_health_default_exec, permissions -->
 <!-- - cameraserver -->
 <!-- - new props -->
-- ipacm socket
-  (create socket in /dev/socket/ipac_log_file)
+<!-- - ipacm socket -->
+<!--   (create socket in /dev/socket/ipac_log_file) -->
 <!-- - wifi_vendor_data_file deprecation and hostapd(remove file as well), wpa(_supplicant) -->
-- proc_kernel_sched
+<!-- - proc_kernel_sched -->
 - printk(only vendor_init)
-- init, vendor_init including mounts
-
-# Odd
-- `/odm/lib64/libaptX_encoder.so` can't get the correct label?
+<!-- - init, vendor_init including mounts -->
 
 # Meantime
 - Try to keep the thingy working in the meantime, make one giant commit and

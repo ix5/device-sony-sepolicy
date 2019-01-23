@@ -1,2 +1,1 @@
 allow hal_wifi_hostapd_default wifi_vendor_data_file:dir search;
-# avc: denied { search } for comm="hostapd" name="wifi" dev="mmcblk0p54" ino=294918 scontext=u:r:hal_wifi_hostapd_default:s0 tcontext=u:object_r:wifi_vendor_data_file:s0 tclass=dir

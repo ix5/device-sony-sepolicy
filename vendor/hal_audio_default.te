@@ -9,7 +9,7 @@ allow hal_audio_default sysfs_soc:dir r_dir_perms;
 allow hal_audio_default sysfs_soc:file r_file_perms;
 allow hal_audio_default hal_power_hwservice:hwservice_manager find;
 
-# crosshatch power hal
+# TODO: crosshatch power hal
 # auditd  : type=1400 audit(0.0:884): avc: denied { call } for comm="writer" scontext=u:r:hal_audio_default:s0 tcontext=u:r:hal_power_default:s0 tclass=binder permissive=1
 binder_use(hal_audio_default)
 binder_call(hal_audio_default, hal_power_default)

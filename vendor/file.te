@@ -62,12 +62,8 @@ type timekeep_vendor_data_file, file_type, data_file_type;
 type bluetooth_vendor_data_file, file_type, data_file_type;
 type audio_vendor_data_file, file_type, data_file_type;
 type camera_vendor_data_file, file_type, data_file_type;
-# Follow crosshatch:
 type ipa_vendor_data_file, file_type, data_file_type;
 type wifi_vendor_data_file, file_type, data_file_type;
-
-# Can't be a vendor_file_type here
-#type bluetooth_vendor_file, file_type, data_file_type;
 
 # diag sysfs files
 type sysfs_diag, fs_type, sysfs_type;
@@ -85,11 +81,7 @@ type sysfs_irq, sysfs_type, fs_type;
 type irqbalance_socket, file_type;
 
 # /proc/sys/*
-# marlin has proc_kernel_sched, but proc_sched is in AOSP already
-#type proc_kernel_sched, proc_type, fs_type;
-#type proc_sched, proc_type, fs_type;
 type proc_kernel_printk, proc_type, fs_type;
-# follow crosshatch naming:
 type proc_swappiness, proc_type, fs_type;
 
 # /sys/kernel/boot_wlan/boot_wlan

@@ -11,12 +11,6 @@ r_dir_rw_file(msm_irqbalance, proc_irq)
 allow msm_irqbalance sysfs_irq:file r_file_perms;
 allow msm_irqbalance proc_stat:file r_file_perms;
 allow msm_irqbalance proc_interrupts:file r_file_perms;
-# avc: denied { write } for comm="msm_irqbalance" name="74" dev="proc" ino=4026532246 scontext=u:r:msm_irqbalance:s0 tcontext=u:object_r:proc_irq:s0 tclass=dir
-# avc: denied { add_name } for comm="msm_irqbalance" name="smp_affinity" scontext=u:r:msm_irqbalance:s0 tcontext=u:object_r:proc_irq:s0 tclass=dir
-# avc: denied { create } for comm="msm_irqbalance" name="smp_affinity" scontext=u:r:msm_irqbalance:s0 tcontext=u:object_r:proc_irq:s0 tclass=file
-# TODO: Why the difference between proc_interrupts and proc_irq?????
-allow msm_irqbalance proc_irq:file r_file_perms;
-allow msm_irqbalance proc_irq:dir r_dir_perms;
 
 # msm_irqbalance wants (only!) dac_override, not setuid/gid, but that is not a
 # good idea and there is a neverallow that forbids this anyway

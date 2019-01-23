@@ -7,14 +7,9 @@ init_daemon_domain(per_proxy)
 # TODO(b/vndswitch): Remove once per_proxy uses vendor binder
 typeattribute per_proxy binder_in_vendor_violators_fake;
 
-# TODO(b/vndswitch): Enable once per_proxy uses vendor binder
 vndbinder_use(per_proxy)
-
 # TODO(b/vndswitch): Remove once per_proxy uses vendor binder
 binder_use(per_proxy)
-# avc: denied { call } for comm="pm-proxy" scontext=u:r:per_proxy:s0 tcontext=u:r:servicemanager:s0 tclass=binder
-# avc: denied { read } for comm="servicemanager" name="current" dev="proc" ino=22557 scontext=u:r:servicemanager:s0 tcontext=u:r:per_proxy:s0 tclass=file
-
 # TODO(b/vndswitch): This is unnecessary because binder_in_vendor_violators
 # already grants access to binder_device. Keep this comment until we sitch
 # PeripheralManager to vndbinder, at which point vndbinder_use will allow
@@ -23,20 +18,9 @@ binder_use(per_proxy)
 
 binder_call(per_proxy, per_mgr)
 
-# avc: granted { find } for service=vendor.qcom.PeripheralManager pid=637 uid=1000 scontext=u:r:per_proxy:s0 tcontext=u:object_r:per_mgr_service:s0 tclass=service_manager
 allow per_proxy per_mgr_service:service_manager find;
 # Might also expand this to add_service(per_mgr_service)
 
-# FIXED: Which denial/specific service?
-# -> was a labeling issue for vendor.qcom.PeripheralManager, fixed now
-#allow per_proxy default_android_service:service_manager find;
-#userdebug_or_eng(`
-#  auditallow per_proxy default_android_service:service_manager find;
-#')
-
-# FIXED: Check if needed
-# -> Needed
-# avc: granted { read } for comm="pm-proxy" name="devices" dev="sysfs" ino=17768 scontext=u:r:per_proxy:s0 tcontext=u:object_r:sysfs_msm_subsys:s0 tclass=dir
 r_dir_file(per_proxy, sysfs_msm_subsys)
 # avc: denied { read } for name="devices" dev="sysfs" ino=28289 scontext=u:r:per_proxy:s0 tcontext=u:object_r:sysfs_esoc:s0 tclass=dir
 allow per_proxy sysfs_esoc:dir { search open read };

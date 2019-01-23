@@ -5,32 +5,9 @@ init_daemon_domain(adsprpcd)
 
 allow adsprpcd ion_device:chr_file rw_file_perms;
 allow adsprpcd qdsp_device:chr_file r_file_perms;
-# avc: granted { search } for comm="adsprpcd" name="/" dev="tmpfs" ino=12611 scontext=u:r:adsprpcd:s0 tcontext=u:object_r:device:s0 tclass=dir
-# -> wants to search (for) dsp partition
-# avc: denied { search } for comm="addsprpcd" name="/" dev="mmcblk0p32" ino=2 scontext=u:r:adsprpcd:s0 tcontext=u:object_r:unlabeled:s0 tclass=dir
-# avc: denied { search } for name="/" dev="mmcblk0p32" ino=2 scontext=u:r:adsprpcd:s0 tcontext=u:object_r:unlabeled:s0 tclass=dir
-# avc: denied { search } for name="/" dev="mmcblk0p32" ino=2 scontext=u:r:adsprpcd:s0 tcontext=u:object_r:unlabeled:s0 tclass=dir
-# avc: denied { search } for comm="addsprpcd" name="/" dev="mmcblk0p32" ino=2 scontext=u:r:adsprpcd:s0 tcontext=u:object_r:unlabeled:s0 tclass=dir
-# TODO(b/dsp_symlink): Remove these ugly hacks
-#userdebug_or_eng(`
-#  allow adsprpcd unlabeled:dir r_dir_perms;
-#  allow adsprpcd unlabeled:file r_file_perms;
-#  auditallow adsprpcd unlabeled:dir r_dir_perms;
-#  auditallow adsprpcd unlabeled:file r_file_perms;
-#')
-#userdebug_or_eng(`
-#  allow adsprpcd qdsp_temp_link:dir r_dir_perms;
-#  allow adsprpcd qdsp_temp_link:file r_file_perms;
-#  auditallow adsprpcd unlabeled:dir r_dir_perms;
-#  auditallow adsprpcd unlabeled:file r_file_perms;
-#')
 
 allow adsprpcd system_file:dir r_dir_perms;
 allow adsprpcd vendor_file:dir r_dir_perms;
 
 # For reading dir/files on /dsp
 r_dir_file(adsprpcd, adsprpcd_file)
-
-# TODO: What is this?
-# -> most likely related to vendor_init not being allowed to relabel unlabeled files
-# avc: denied { getattr } for path="/system/vendor/dsp/capi_v2_voice_imc_tx.so.1" dev="mmcblk0p32" ino=27 scontext=u:r:adsprpcd:s0 tcontext=u:object_r:unlabeled:s0 tclass=file

@@ -3,3 +3,5 @@
 # TODO(b/vndswitch): Re-enable once per_mgr uses vendor binder
 # -> placeholder, because vendor sepolicy can't access private types
 vendor.qcom.PeripheralManager           u:object_r:per_mgr_service:s0
+# TODO: Check if timekeep is actually used, seems not
+#com.sony.timekeep                       u:object_r:timekeep_service:s0
