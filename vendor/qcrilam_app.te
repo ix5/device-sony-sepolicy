@@ -25,24 +25,3 @@ userdebug_or_eng(`
 
 # Interact with rild
 binder_call(qcrilam_app, rild)
-
-# TODO: Can't find audits for this
-#add_service(qcrilam_app, qcrilam_service)
-#auditallow qcrilam_app qcrilam_service:service_manager { add find };
-
-# TODO: Needed? Seems not
-#binder_call(qcrilam_app, vnd_qcrilhook_hwservice)
-#auditallow qcrilam_app vnd_qcrilhook_hwservice:binder { call transfer };
-#auditallow vnd_qcrilhook_hwservice qcrilam_app:binder { transfer };
-
-# Needed?
-#binder_use(qcrilam_app)
-# avc: granted { call } for comm="HwBinder:2061_1" scontext=u:r:qcrilam_app:s0 tcontext=u:r:servicemanager:s0 tclass=binder
-# avc: granted { call } for comm="re-initialized>" scontext=u:r:qcrilam_app:s0 tcontext=u:r:servicemanager:s0 tclass=binder
-# avc: granted { search } for comm="servicemanager" name="1603" dev="proc" ino=13148 scontext=u:r:servicemanager:s0 tcontext=u:r:qcrilam_app:s0 tclass=dir
-#userdebug_or_eng(`
-#  allow qcrilam_app servicemanager:binder { call transfer };
-#  allow servicemanager qcrilam_app:dir search;
-#  allow servicemanager qcrilam_app:file { read open };
-#  allow servicemanager qcrilam_app:process getattr;
-#')

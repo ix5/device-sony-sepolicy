@@ -14,6 +14,7 @@ set_prop(system_app, timekeep_prop)
 # For android setttings
 binder_call(system_app, per_mgr)
 binder_call(system_app, wificond)
+binder_call(system_app, update_engine)
 
 # avc: denied { call } for comm=4173796E635461736B202331 scontext=u:r:system_app:s0 tcontext=u:r:storaged:s0 tclass=binder
 # avc: denied { call } for comm=4173796E635461736B202333 scontext=u:r:system_app:s0 tcontext=u:r:storaged:s0 tclass=binder
