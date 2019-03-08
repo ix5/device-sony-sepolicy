@@ -11,6 +11,15 @@ use_per_mgr(per_mgr)
 
 binder_call(per_mgr, hal_gnss)
 
+with_legacy_per_mgr(`
+  not_full_treble(`
+    add_service(per_mgr, per_mgr_service)
+  ')
+')
+with_current_per_mgr(`
+  add_service(per_mgr, per_mgr_service)
+')
+
 allow per_mgr self:capability net_bind_service;
 
 allow per_mgr self:socket create_socket_perms;
