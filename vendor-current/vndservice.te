@@ -1,0 +1,3 @@
+with_current_per_mgr(`
+type per_mgr_service,              vndservice_manager_type;
+')

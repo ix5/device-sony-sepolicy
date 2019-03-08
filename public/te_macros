@@ -1,0 +1,6 @@
+#####################################
+# Wrapper for policy based on the value of
+# target_legacy_per_mgr
+#
+define(`with_legacy_per_mgr', ifelse(target_legacy_per_mgr, `true', $1))
+define(`with_current_per_mgr', ifelse(target_legacy_per_mgr, `true', , $1))

@@ -15,3 +15,41 @@ define(`r_dir_rw_file', `
 allow $1 $2:dir r_dir_perms;
 allow $1 $2:{ file lnk_file } rw_file_perms;
 ')
+
+#####################################
+# use_per_mgr(domain)
+# peripheral_manager
+# Allow clients to interact with peripheral
+# manager
+define(`use_per_mgr', `
+  with_legacy_per_mgr(`
+    use_legacy_per_mgr($1)
+  ')
+  with_current_per_mgr(`
+    use_current_per_mgr($1)
+  ')
+')
+
+# use_current_per_mgr(domain)
+# Allow usage of the regular vndbinder
+# PeripheralManager service
+define(`use_current_per_mgr', `
+  vndbinder_use($1);
+  binder_call(per_mgr, $1);
+  binder_call($1, per_mgr);
+  allow $1 per_mgr_service:service_manager find;
+')
+
+#####################################
+# use_legacy_per_mgr(domain)
+# Allow usage of the legacy non-vndbinder
+# PeripheralManager service
+define(`use_legacy_per_mgr', `
+  not_full_treble(`
+    typeattribute $1 binder_in_vendor_violators;
+    binder_use($1)
+    binder_call(per_mgr, $1);
+    binder_call($1, per_mgr);
+    allow $1 per_mgr_service:service_manager find;
+  ')
+')
