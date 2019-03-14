@@ -2,6 +2,15 @@
 type per_mgr, domain;
 type per_mgr_exec, exec_type, vendor_file_type, file_type;
 
+# Non-HAL expanded version of the "hal_attribute" macro:
+# TODO(b/q-compat): Use hal_attribute_hwservice, hal_attribute_hwservice_client
+attribute per_mgr_client;
+# The client attribute is only used in the vendor sepolicy and can be optimized
+# away by the policy compiler:
+expandattribute per_mgr_client false;
+allow per_mgr_client per_mgr_service:service_manager find;
+neverallow { domain -per_mgr -per_mgr_client } per_mgr_service:service_manager find;
+
 init_daemon_domain(per_mgr);
 
 vndbinder_use(per_mgr)

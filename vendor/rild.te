@@ -1,3 +1,5 @@
+hal_client_domain(rild, per_mgr)
+
 vndbinder_use(rild)
 
 binder_call(rild, per_mgr)
