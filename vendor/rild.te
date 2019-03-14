@@ -1,14 +1,4 @@
-# TODO(b/vndswitch): Remove once per_mgr uses vendor binder and
-# per_mgr_service is a vndservice_manager_type
-not_full_treble(`
-  typeattribute rild binder_in_vendor_violators;
-')
-
 vndbinder_use(rild)
-# TODO(b/vndswitch): Remove once per_mgr uses vendor binder
-not_full_treble(`
-  binder_use(rild)
-')
 
 binder_call(rild, per_mgr)
 binder_call(rild, qcrilam_app);
