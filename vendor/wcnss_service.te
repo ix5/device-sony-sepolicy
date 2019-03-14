@@ -2,7 +2,7 @@
 type wcnss_service, domain;
 type wcnss_service_exec, exec_type, vendor_file_type, file_type;
 
-hal_client_domain(wcnss_service, per_mgr)
+hal_client_domain(wcnss_service, hal_peripheral)
 init_daemon_domain(wcnss_service)
 net_domain(wcnss_service)
 

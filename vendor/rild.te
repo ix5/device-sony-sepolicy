@@ -1,4 +1,4 @@
-hal_client_domain(rild, per_mgr)
+hal_client_domain(rild, hal_peripheral)
 
 vndbinder_use(rild)
 
