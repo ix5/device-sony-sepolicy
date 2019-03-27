@@ -1,4 +1,3 @@
-binder_call(audioserver, bootanim)
-
+# Vendor-specifc policy for coredomain audioserver
 allow audioserver sysfs_soc:file r_file_perms;
 allow audioserver sysfs_soc:dir search;

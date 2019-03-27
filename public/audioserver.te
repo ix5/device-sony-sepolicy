@@ -1,0 +1,2 @@
+# System-specific policy for coredomain audioserver
+binder_call(audioserver, bootanim)

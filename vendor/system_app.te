@@ -1,11 +1,10 @@
+# Vendor-specifc policy for coredomain system_app
+
 # Needed for system_app to *write* non-core properties:
 # - persist.vendor.dispcal.setting
 # - persist.vendor.timeadjust
 # - vendor.adb.network.port.es
 typeattribute system_app system_writes_vendor_properties_violators;
-
-# SELinux status
-r_dir_file(system_app, selinuxfs)
 
 # ExtendedSettings props
 r_dir_rw_file(system_app, sysfs_graphics)
@@ -17,11 +16,6 @@ set_prop(system_app, vendor_dispcal_prop)
 # TimeKeep.java, so keep it in here
 set_prop(system_app, vendor_timekeep_prop)
 
-# For android setttings
-binder_call(system_app, per_mgr)
-binder_call(system_app, wificond)
-binder_call(system_app, update_engine)
-
 # This is a neverallow anyways, so ignore it
 dontaudit system_app perfprofd:binder call;
 
@@ -29,3 +23,6 @@ allow system_app fs_bpf:dir search;
 allow system_app proc_pagetypeinfo:file r_file_perms;
 allow system_app sysfs_zram:dir search;
 allow system_app sysfs_zram:file r_file_perms;
+
+# For android setttings
+binder_call(system_app, per_mgr)
