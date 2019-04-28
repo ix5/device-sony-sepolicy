@@ -14,7 +14,12 @@ allow hal_sensors_default sysfs_esoc:dir r_dir_perms;
 # read and write factory calibration and sensor configuration data
 allow hal_sensors_default mnt_vendor_file:dir search;
 allow hal_sensors_default persist_file:dir search;
-allow hal_sensors_default persist_sensors_file:dir create_dir_perms;
-allow hal_sensors_default persist_sensors_file:file create_file_perms;
+allow hal_sensors_default { persist_sensors_file sensors_persist_file }:dir create_dir_perms;
+allow hal_sensors_default { persist_sensors_file sensors_persist_file }:file create_file_perms;
+# Fix stock labels
+type_transition hal_sensors_default {
+  persist_file
+  sensors_persist_file
+}:{ dir file } persist_sensors_file;
 
 dontaudit hal_sensors_default kernel:system module_request;

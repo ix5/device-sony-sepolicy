@@ -15,9 +15,14 @@ userdebug_or_eng(`
 allow sensors self:socket create_socket_perms;
 allowxperm sensors self:socket ioctl msm_sock_ipc_ioctls;
 
-allow sensors persist_sensors_file:dir rw_dir_perms;
-allow sensors persist_sensors_file:file create_file_perms;
+allow sensors { persist_sensors_file sensors_persist_file }:dir rw_dir_perms;
+allow sensors { persist_sensors_file sensors_persist_file }:file create_file_perms;
 allow sensors persist_file:dir { getattr search };
+# Fix stock labels
+type_transition sensors {
+  persist_file
+  sensors_persist_file
+}:{ dir file } persist_sensors_file;
 
 # Search /data
 allow sensors system_data_file:dir getattr;
