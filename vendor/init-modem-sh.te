@@ -1,0 +1,9 @@
+# Script that syncs data from modem partition to /data/vendor/modem_config
+type init-qcom-modem-sh, domain;
+type init-qcom-modem-sh_exec, exec_type, vendor_file_type, file_type;
+
+init_daemon_domain(init-qcom-modem-sh)
+
+rw_dir_file(init-qcom-modem-sh, radio_vendor_data_file)
+
+r_dir_file(init-qcom-modem-sh, vendor_firmware_file)
