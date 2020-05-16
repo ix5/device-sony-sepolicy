@@ -248,3 +248,8 @@
 /(vendor|system/vendor)/usr/keylayout(/.*)?\.kl       u:object_r:vendor_keylayout_file:s0
 /(vendor|system/vendor)/usr/keychars(/.*)?\.kcm       u:object_r:vendor_keychars_file:s0
 /(vendor|system/vendor)/usr/idc(/.*)?\.idc            u:object_r:vendor_idc_file:s0
+
+# Stock modem config execs
+/odm/bin/sony-modem-switcher                                               u:object_r:modem-switcher_exec:s0
+/odm/bin/hw/vendor\.somc\.hardware\.modemswitcher@1\.0-service             u:object_r:hal_modemswitcher_default_exec:s0
+/odm/bin/hw/vendor\.somc\.hardware\.miscta@1\.0-service                    u:object_r:hal_miscta_default_exec:s0
