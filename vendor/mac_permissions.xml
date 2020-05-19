@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<policy>
+    <signer signature="@ODM_APPS">
+        <seinfo value="qcom_ims" />
+    </signer>
+</policy>

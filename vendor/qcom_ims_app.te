@@ -1,0 +1,19 @@
+# Qualcomm IMS applications in /odm
+
+# List:
+# - org.codeaurora.ims
+# - com.qualcomm.embms
+# - com.qti.qualcomm.datastatusnotification
+# - com.qti.dpmserviceapp
+# - com.qualcomm.qcrilmsgtunnel
+# - com.qualcomm.qti.uceShimService
+# - com.qualcomm.qti.uimGbaApp
+# - com.qualcomm.qti.lpa
+# - com.qualcomm.uimremoteclient
+# - com.qualcomm.uimremoteserver
+
+type qcom_ims_app, domain;
+
+app_domain(qcom_ims_app)
+
+# TODO: Service access, binder, ...
